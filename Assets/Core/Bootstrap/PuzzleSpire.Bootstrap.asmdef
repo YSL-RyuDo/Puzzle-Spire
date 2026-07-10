@@ -1,0 +1,19 @@
+{
+    "name": "PuzzleSpire.Bootstrap",
+    "rootNamespace": "",
+    "references": [
+        "GUID:a976b145b6835eb439ee428826f31250",
+        "GUID:c6c383eebf0990e479a853471b48bf4a",
+        "GUID:3c5e74d816c2b874f887263f7429d877",
+        "GUID:7f6d78bf81e09ce4ab1d2aaa9fd63d68"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

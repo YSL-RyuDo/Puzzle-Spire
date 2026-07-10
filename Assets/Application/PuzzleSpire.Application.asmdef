@@ -1,0 +1,16 @@
+{
+    "name": "PuzzleSpire.Application",
+    "rootNamespace": "",
+    "references": [
+        "GUID:a976b145b6835eb439ee428826f31250"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

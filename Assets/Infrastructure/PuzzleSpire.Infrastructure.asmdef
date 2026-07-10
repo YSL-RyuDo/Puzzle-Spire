@@ -1,0 +1,17 @@
+{
+    "name": "PuzzleSpire.Infrastructure",
+    "rootNamespace": "",
+    "references": [
+        "GUID:a976b145b6835eb439ee428826f31250",
+        "GUID:c6c383eebf0990e479a853471b48bf4a"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
