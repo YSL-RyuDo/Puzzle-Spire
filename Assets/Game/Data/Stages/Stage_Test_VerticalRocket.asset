@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96c127555431aee4ab786f02cc8365fa, type: 3}
+  m_Name: Stage_Test_VerticalRocket
+  m_EditorClassIdentifier: PuzzleSpire.Bootstrap::PuzzleSpire.Bootstrap.StageData
+  _stageId: Stage_Test_VerticalRocket
+  _width: 1
+  _height: 5
+  _randomSeed: 12345
+  _availableColors: 00000000
+  _moveLimit: 99
+  _targetColor: 0
+  _targetAmount: 999
+  _layoutRows: []

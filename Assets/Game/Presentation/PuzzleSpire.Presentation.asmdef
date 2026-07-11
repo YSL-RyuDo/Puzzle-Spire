@@ -1,0 +1,20 @@
+{
+    "name": "PuzzleSpire.Presentation",
+    "rootNamespace": "",
+    "references": [
+        "GUID:a976b145b6835eb439ee428826f31250",
+        "GUID:c6c383eebf0990e479a853471b48bf4a",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:ab2ab0c6b6952f84e8e6b9df77cc2b5e",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
