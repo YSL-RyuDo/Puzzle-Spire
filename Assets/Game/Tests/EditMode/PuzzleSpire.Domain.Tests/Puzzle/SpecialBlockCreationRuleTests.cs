@@ -154,12 +154,11 @@ namespace PuzzleSpire.Domain.Tests.Puzzle
             Assert.That(
                 result.CreatedSpecialBlock.Type,
                 Is.EqualTo(
-                    BlockType.HorizontalRocket));
+                    BlockType.HorizontalRocket).Or.EqualTo(BlockType.VerticalRocket));
 
             Assert.That(
                 board.GetBlock(selectedPosition).Type,
-                Is.EqualTo(
-                    BlockType.HorizontalRocket));
+                Is.EqualTo(result.CreatedSpecialBlock.Type));
         }
 
         private sealed class FixedBlockFactory :

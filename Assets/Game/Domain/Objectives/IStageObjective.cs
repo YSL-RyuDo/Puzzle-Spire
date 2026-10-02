@@ -4,14 +4,16 @@ namespace PuzzleSpire.Domain.Puzzle
     {
         string ObjectiveId { get; }
 
-        int CurrentAmount { get; }
-
         int TargetAmount { get; }
+
+        int CurrentAmount { get; }
 
         int RemainingAmount { get; }
 
         bool IsCompleted { get; }
 
         bool Apply(PuzzleTurnResult turnResult);
+
+        void Reset();
     }
 }

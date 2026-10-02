@@ -41,7 +41,9 @@ namespace PuzzleSpire.Domain.Tests.Puzzle
             bool consumed =
                 session.TryConsumeMove(result);
 
-            Assert.That(consumed, Is.True);
+            Assert.That(
+                consumed,
+                Is.True);
 
             Assert.That(
                 session.RemainingMoves,
@@ -64,11 +66,17 @@ namespace PuzzleSpire.Domain.Tests.Puzzle
             bool consumed =
                 session.TryConsumeMove(result);
 
-            Assert.That(consumed, Is.False);
+            Assert.That(
+                consumed,
+                Is.False);
 
             Assert.That(
                 session.RemainingMoves,
                 Is.EqualTo(20));
+
+            Assert.That(
+                session.UsedMoves,
+                Is.EqualTo(0));
         }
 
         [Test]
@@ -77,11 +85,13 @@ namespace PuzzleSpire.Domain.Tests.Puzzle
             PuzzleSession session =
                 new PuzzleSession(5);
 
-            int receivedRemainingMoves = -1;
+            int receivedRemainingMoves =
+                -1;
 
             session.RemainingMovesChanged +=
                 remainingMoves =>
-                    receivedRemainingMoves = remainingMoves;
+                    receivedRemainingMoves =
+                        remainingMoves;
 
             session.TryConsumeMove(
                 CreateResolvedTurnResult());
@@ -92,7 +102,7 @@ namespace PuzzleSpire.Domain.Tests.Puzzle
         }
 
         [Test]
-        public void TryConsumeMove_WhenNoMovesRemain_ThrowsException()
+        public void TryConsumeMove_WhenNoMovesRemain_ReturnsFalse()
         {
             PuzzleSession session =
                 new PuzzleSession(1);
@@ -100,10 +110,31 @@ namespace PuzzleSpire.Domain.Tests.Puzzle
             PuzzleTurnResult result =
                 CreateResolvedTurnResult();
 
-            session.TryConsumeMove(result);
+            bool firstConsumed =
+                session.TryConsumeMove(result);
 
-            Assert.Throws<InvalidOperationException>(
-                () => session.TryConsumeMove(result));
+            bool secondConsumed =
+                session.TryConsumeMove(result);
+
+            Assert.That(
+                firstConsumed,
+                Is.True);
+
+            Assert.That(
+                secondConsumed,
+                Is.False);
+
+            Assert.That(
+                session.RemainingMoves,
+                Is.EqualTo(0));
+
+            Assert.That(
+                session.UsedMoves,
+                Is.EqualTo(1));
+
+            Assert.That(
+                session.HasMovesRemaining,
+                Is.False);
         }
 
         [Test]

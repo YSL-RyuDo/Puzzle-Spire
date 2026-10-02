@@ -80,6 +80,11 @@ namespace PuzzleSpire.Domain.Puzzle
                 RemovedBlockInfo removedBlock =
                     turnResult.RemovedBlocks[i];
 
+                if (!removedBlock.ParticipatesInColorObjective)
+                {
+                    continue;
+                }
+
                 if (removedBlock.Color == TargetColor)
                 {
                     removedTargetCount++;
@@ -100,7 +105,13 @@ namespace PuzzleSpire.Domain.Puzzle
                     CurrentAmount
                     + removedTargetCount);
 
-            return CurrentAmount != previousAmount;
+            return CurrentAmount
+                != previousAmount;
+        }
+
+        public void Reset()
+        {
+            CurrentAmount = 0;
         }
     }
 }

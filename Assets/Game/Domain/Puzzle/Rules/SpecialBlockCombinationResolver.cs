@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace PuzzleSpire.Domain.Puzzle
 {
@@ -19,8 +20,7 @@ namespace PuzzleSpire.Domain.Puzzle
         {
             if (board == null)
             {
-                throw new ArgumentNullException(
-                    nameof(board));
+                throw new ArgumentNullException(nameof(board));
             }
 
             combination = null;
@@ -34,183 +34,209 @@ namespace PuzzleSpire.Domain.Puzzle
                 board.GetBlock(selectedPosition);
 
             if (selectedBlock == null
-                || selectedBlock.Type == BlockType.Normal)
+                || !selectedBlock.Type.IsSpecial())
             {
                 return false;
             }
 
-            SpecialBlockCombination bestCombination =
-                null;
+            List<SpecialBlockMember> members =
+                FindConnectedSpecialMembers(
+                    board,
+                    selectedPosition);
 
-            int bestPriority = int.MinValue;
-
-            for (int i = 0;
-                 i < Directions.Length;
-                 i++)
-            {
-                GridPosition direction =
-                    Directions[i];
-
-                GridPosition adjacentPosition =
-                    new GridPosition(
-                        selectedPosition.X + direction.X,
-                        selectedPosition.Y + direction.Y);
-
-                if (!board.IsPlayable(adjacentPosition))
-                {
-                    continue;
-                }
-
-                Block adjacentBlock =
-                    board.GetBlock(adjacentPosition);
-
-                if (adjacentBlock == null
-                    || adjacentBlock.Type
-                    == BlockType.Normal)
-                {
-                    continue;
-                }
-
-                SpecialBlockCombinationType combinationType =
-                    GetCombinationType(
-                        selectedBlock.Type,
-                        adjacentBlock.Type);
-
-                int priority =
-                    GetPriority(combinationType);
-
-                if (priority <= bestPriority)
-                {
-                    continue;
-                }
-
-                bestPriority = priority;
-
-                bestCombination =
-                    new SpecialBlockCombination(
-                        combinationType,
-                        selectedPosition,
-                        selectedBlock,
-                        adjacentPosition,
-                        adjacentBlock);
-            }
-
-            if (bestCombination == null)
+            if (members.Count < 2)
             {
                 return false;
             }
 
-            combination = bestCombination;
+            SpecialBlockCombinationType combinationType =
+                GetCombinationType(members);
+
+            combination =
+                new SpecialBlockCombination(
+                    combinationType,
+                    selectedPosition,
+                    members);
+
             return true;
+        }
+
+        private static List<SpecialBlockMember>
+            FindConnectedSpecialMembers(
+                Board board,
+                GridPosition startPosition)
+        {
+            Queue<GridPosition> queue =
+                new Queue<GridPosition>();
+
+            HashSet<GridPosition> visited =
+                new HashSet<GridPosition>();
+
+            List<SpecialBlockMember> members =
+                new List<SpecialBlockMember>();
+
+            queue.Enqueue(startPosition);
+            visited.Add(startPosition);
+
+            while (queue.Count > 0)
+            {
+                GridPosition currentPosition =
+                    queue.Dequeue();
+
+                Block currentBlock =
+                    board.GetBlock(currentPosition);
+
+                if (currentBlock == null
+                    || !currentBlock.Type.IsSpecial())
+                {
+                    continue;
+                }
+
+                members.Add(
+                    new SpecialBlockMember(
+                        currentPosition,
+                        currentBlock));
+
+                for (int i = 0; i < Directions.Length; i++)
+                {
+                    GridPosition direction = Directions[i];
+
+                    GridPosition nextPosition =
+                        new GridPosition(
+                            currentPosition.X + direction.X,
+                            currentPosition.Y + direction.Y);
+
+                    if (!board.IsPlayable(nextPosition)
+                        || !visited.Add(nextPosition))
+                    {
+                        continue;
+                    }
+
+                    Block nextBlock =
+                        board.GetBlock(nextPosition);
+
+                    if (nextBlock == null
+                        || !nextBlock.Type.IsSpecial())
+                    {
+                        continue;
+                    }
+
+                    queue.Enqueue(nextPosition);
+                }
+            }
+
+            members.Sort(
+                (left, right) =>
+                {
+                    if (left.Position == startPosition)
+                    {
+                        return -1;
+                    }
+
+                    if (right.Position == startPosition)
+                    {
+                        return 1;
+                    }
+
+                    int leftDistance =
+                        GetManhattanDistance(
+                            left.Position,
+                            startPosition);
+
+                    int rightDistance =
+                        GetManhattanDistance(
+                            right.Position,
+                            startPosition);
+
+                    int distanceComparison =
+                        leftDistance.CompareTo(rightDistance);
+
+                    if (distanceComparison != 0)
+                    {
+                        return distanceComparison;
+                    }
+
+                    int yComparison =
+                        left.Position.Y.CompareTo(
+                            right.Position.Y);
+
+                    if (yComparison != 0)
+                    {
+                        return yComparison;
+                    }
+
+                    return left.Position.X.CompareTo(
+                        right.Position.X);
+                });
+
+            return members;
         }
 
         private static SpecialBlockCombinationType
             GetCombinationType(
-                BlockType first,
-                BlockType second)
+                IReadOnlyList<SpecialBlockMember> members)
         {
-            bool firstColorBomb =
-                first == BlockType.ColorBomb;
+            int colorBombCount = 0;
+            bool hasBomb = false;
+            bool hasRocket = false;
 
-            bool secondColorBomb =
-                second == BlockType.ColorBomb;
+            for (int i = 0; i < members.Count; i++)
+            {
+                BlockType type = members[i].Type;
 
-            bool firstBomb =
-                first == BlockType.Bomb;
+                if (type == BlockType.ColorBomb)
+                {
+                    colorBombCount++;
+                }
+                else if (type == BlockType.Bomb)
+                {
+                    hasBomb = true;
+                }
+                else if (type.IsRocket())
+                {
+                    hasRocket = true;
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException(
+                        nameof(type),
+                        type,
+                        "Unknown special block type.");
+                }
+            }
 
-            bool secondBomb =
-                second == BlockType.Bomb;
-
-            bool firstRocket =
-                IsRocket(first);
-
-            bool secondRocket =
-                IsRocket(second);
-
-            if (firstColorBomb && secondColorBomb)
+            if (colorBombCount >= 2)
             {
                 return SpecialBlockCombinationType
                     .ColorBombColorBomb;
             }
 
-            if (firstColorBomb || secondColorBomb)
+            if (colorBombCount == 1)
             {
-                BlockType otherType =
-                    firstColorBomb
-                        ? second
-                        : first;
-
-                if (otherType == BlockType.Bomb)
-                {
-                    return SpecialBlockCombinationType
-                        .ColorBombBomb;
-                }
-
-                return SpecialBlockCombinationType
-                    .ColorBombRocket;
+                return hasBomb
+                    ? SpecialBlockCombinationType.ColorBombBomb
+                    : SpecialBlockCombinationType.ColorBombRocket;
             }
 
-            if (firstBomb && secondBomb)
+            if (hasBomb && hasRocket)
             {
-                return SpecialBlockCombinationType
-                    .BombBomb;
+                return SpecialBlockCombinationType.RocketBomb;
             }
 
-            if ((firstBomb && secondRocket)
-                || (secondBomb && firstRocket))
+            if (hasBomb)
             {
-                return SpecialBlockCombinationType
-                    .RocketBomb;
+                return SpecialBlockCombinationType.BombBomb;
             }
 
-            return SpecialBlockCombinationType
-                .RocketRocket;
+            return SpecialBlockCombinationType.RocketRocket;
         }
 
-        private static int GetPriority(
-            SpecialBlockCombinationType type)
+        private static int GetManhattanDistance(
+            GridPosition first,
+            GridPosition second)
         {
-            switch (type)
-            {
-                case SpecialBlockCombinationType
-                    .ColorBombColorBomb:
-                    return 600;
-
-                case SpecialBlockCombinationType
-                    .ColorBombBomb:
-                    return 500;
-
-                case SpecialBlockCombinationType
-                    .ColorBombRocket:
-                    return 400;
-
-                case SpecialBlockCombinationType
-                    .BombBomb:
-                    return 300;
-
-                case SpecialBlockCombinationType
-                    .RocketBomb:
-                    return 200;
-
-                case SpecialBlockCombinationType
-                    .RocketRocket:
-                    return 100;
-
-                default:
-                    throw new ArgumentOutOfRangeException(
-                        nameof(type),
-                        type,
-                        "Unknown combination type.");
-            }
-        }
-
-        private static bool IsRocket(
-            BlockType type)
-        {
-            return type
-                == BlockType.HorizontalRocket
-                || type
-                == BlockType.VerticalRocket;
+            return Math.Abs(first.X - second.X)
+                + Math.Abs(first.Y - second.Y);
         }
     }
 }

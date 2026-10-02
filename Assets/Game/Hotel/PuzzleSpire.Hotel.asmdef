@@ -1,0 +1,5 @@
+{
+  "name": "PuzzleSpire.Hotel",
+  "references": ["PuzzleSpire.Domain", "Unity.ugui", "Unity.InputSystem", "Unity.RenderPipelines.Universal.Runtime", "Unity.RenderPipelines.Core.Runtime"],
+  "autoReferenced": true
+}

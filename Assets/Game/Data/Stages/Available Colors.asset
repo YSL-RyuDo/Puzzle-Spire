@@ -16,8 +16,48 @@ MonoBehaviour:
   _width: 9
   _height: 9
   _randomSeed: 12345
+  _layoutRows:
+  - OOOOOOOOO
+  - OOOOOOOOO
+  - OOOOOOOOO
+  - OOOOOOOOO
+  - OOOOOOOOO
+  - OOOOOOOOO
+  - OOOOOOOOO
+  - OOOOOOOOO
+  - OOOOOOOOO
   _availableColors: 000000000100000002000000
-  _moveLimit: 999
+  _moveLimit: 15
+  _useColorObjective: 1
   _targetColor: 0
-  _targetAmount: 999
-  _layoutRows: []
+  _targetAmount: 2
+  _boxTargetAmount: 9
+  _iceTargetAmount: 0
+  _obstaclePlacements:
+  - _x: 4
+    _y: 4
+    _definition: {fileID: 11400000, guid: 29163834ae7e31c4badce69ab0b86897, type: 2}
+  - _x: 4
+    _y: 3
+    _definition: {fileID: 11400000, guid: 29163834ae7e31c4badce69ab0b86897, type: 2}
+  - _x: 3
+    _y: 3
+    _definition: {fileID: 11400000, guid: 29163834ae7e31c4badce69ab0b86897, type: 2}
+  - _x: 4
+    _y: 2
+    _definition: {fileID: 11400000, guid: 29163834ae7e31c4badce69ab0b86897, type: 2}
+  - _x: 5
+    _y: 3
+    _definition: {fileID: 11400000, guid: 29163834ae7e31c4badce69ab0b86897, type: 2}
+  - _x: 2
+    _y: 5
+    _definition: {fileID: 11400000, guid: 29163834ae7e31c4badce69ab0b86897, type: 2}
+  - _x: 2
+    _y: 4
+    _definition: {fileID: 11400000, guid: 29163834ae7e31c4badce69ab0b86897, type: 2}
+  - _x: 2
+    _y: 3
+    _definition: {fileID: 11400000, guid: 29163834ae7e31c4badce69ab0b86897, type: 2}
+  - _x: 2
+    _y: 2
+    _definition: {fileID: 11400000, guid: 29163834ae7e31c4badce69ab0b86897, type: 2}

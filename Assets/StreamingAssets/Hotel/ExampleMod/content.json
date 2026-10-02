@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "stages": [
+    {
+      "id": "stage_01",
+      "title": "열쇠 보관함",
+      "width": 7,
+      "height": 7,
+      "moves": 35,
+      "seed": 1186,
+      "colors": 4,
+      "targetColor": 0,
+      "targetAmount": 8,
+      "boxes": 0,
+      "ice": 0,
+      "layout": [
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO"
+      ],
+      "obstacles": []
+    },
+    {
+      "id": "moonlight_bonus",
+      "title": "달빛 연습장 · 보너스",
+      "width": 7,
+      "height": 7,
+      "moves": 30,
+      "seed": 7781,
+      "colors": 4,
+      "targetColor": 2,
+      "targetAmount": 18,
+      "boxes": 2,
+      "ice": 0,
+      "layout": [
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO"
+      ],
+      "obstacles": [
+        {
+          "x": 2,
+          "y": 2,
+          "type": "box",
+          "durability": 1
+        },
+        {
+          "x": 4,
+          "y": 2,
+          "type": "box",
+          "durability": 1
+        }
+      ]
+    }
+  ]
+}

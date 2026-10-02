@@ -12,6 +12,7 @@ namespace PuzzleSpire.Presentation.Puzzle
         private PuzzleStateMachine _stateMachine;
         private PuzzleSession _puzzleSession;
         private ObjectiveSystem _objectiveSystem;
+        private PuzzleTurnResult _pendingTurnResult;
 
         private bool _isAnimating;
 
@@ -21,6 +22,7 @@ namespace PuzzleSpire.Presentation.Puzzle
         public bool CanAcceptInput =>
             IsInitialized
             && !_isAnimating
+            && _pendingTurnResult == null
             && _stateMachine != null
             && _stateMachine.CanAcceptInput
             && _puzzleSession != null
@@ -60,6 +62,7 @@ namespace PuzzleSpire.Presentation.Puzzle
                 ?? throw new ArgumentNullException(
                     nameof(objectiveSystem));
 
+            _pendingTurnResult = null;
             _isAnimating = false;
             IsInitialized = true;
         }
@@ -71,7 +74,8 @@ namespace PuzzleSpire.Presentation.Puzzle
                 return;
             }
 
-            if (!_board.IsPlayable(position) || _board.IsEmpty(position))
+            if (!_board.IsPlayable(position)
+                || _board.IsEmpty(position))
             {
                 return;
             }
@@ -91,13 +95,7 @@ namespace PuzzleSpire.Presentation.Puzzle
                     return;
                 }
 
-                _objectiveSystem.Apply(result);
-                _puzzleSession.TryConsumeMove(result);
-
-                Debug.Log(
-                    $"제거 {result.RemovedCount}, " +
-                    $"남은 이동 " +
-                    $"{_puzzleSession.RemainingMoves}");
+                _pendingTurnResult = result;
 
                 _boardView.PlayTurnAnimation(
                     result,
@@ -105,6 +103,7 @@ namespace PuzzleSpire.Presentation.Puzzle
             }
             catch
             {
+                _pendingTurnResult = null;
                 _isAnimating = false;
                 throw;
             }
@@ -112,28 +111,72 @@ namespace PuzzleSpire.Presentation.Puzzle
 
         private void HandleTurnAnimationCompleted()
         {
+            PuzzleTurnResult completedTurn =
+                _pendingTurnResult;
+
+            _pendingTurnResult = null;
             _isAnimating = false;
 
+            if (completedTurn == null)
+            {
+                Debug.LogError(
+                    "턴 애니메이션은 완료됐지만 " +
+                    "처리할 PuzzleTurnResult가 없습니다.");
+
+                return;
+            }
+
+            if (!completedTurn.WasResolved)
+            {
+                return;
+            }
+
+            // 1. 제거된 블록을 목표에 먼저 반영
+            _objectiveSystem.Apply(completedTurn);
+
+            // 2. 정상적으로 처리된 턴의 이동 횟수 차감
+            _puzzleSession.TryConsumeMove(completedTurn);
+
+            Debug.Log(
+                $"TURN COMPLETE | " +
+                $"REMOVED {completedTurn.RemovedCount} | " +
+                $"MOVES {_puzzleSession.RemainingMoves}");
+
+            // 3. 마지막 이동에서 목표를 달성할 수 있으므로
+            // 반드시 실패보다 클리어를 먼저 검사
             if (_objectiveSystem.AllCompleted)
             {
                 _stateMachine.TransitionTo(
                     PuzzleState.Cleared);
 
-                Debug.Log("스테이지 클리어");
+                Debug.Log("STAGE CLEAR");
+
                 return;
             }
 
+            // 4. 목표 미달성 + 이동 횟수 0이면 실패
             if (!_puzzleSession.HasMovesRemaining)
             {
                 _stateMachine.TransitionTo(
                     PuzzleState.Failed);
 
-                Debug.Log("스테이지 실패");
+                Debug.Log("STAGE FAILED");
+
+                return;
+            }
+
+            // 5. 아직 게임이 끝나지 않았으면 다음 입력 대기
+            if (_stateMachine.CurrentState
+                != PuzzleState.WaitingForInput)
+            {
+                _stateMachine.TransitionTo(
+                    PuzzleState.WaitingForInput);
             }
         }
 
         private void OnDisable()
         {
+            _pendingTurnResult = null;
             _isAnimating = false;
         }
     }

@@ -120,6 +120,18 @@ namespace PuzzleSpire.Presentation.Puzzle
                     builder.Append(
                         colorObjective.TargetAmount);
                 }
+                else if (objective is RemoveBoxObjective)
+                {
+                    builder.Append("BOXES  ");
+
+                    builder.Append(
+                        objective.CurrentAmount);
+
+                    builder.Append(" / ");
+
+                    builder.Append(
+                        objective.TargetAmount);
+                }
                 else
                 {
                     builder.Append(

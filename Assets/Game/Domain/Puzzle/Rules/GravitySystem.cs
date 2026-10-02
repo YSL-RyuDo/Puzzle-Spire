@@ -5,19 +5,26 @@ namespace PuzzleSpire.Domain.Puzzle
 {
     public sealed class GravitySystem
     {
-        public IReadOnlyList<GravityMove> Apply(Board board)
+        public IReadOnlyList<GravityMove> Apply(
+            Board board)
         {
             if (board == null)
             {
-                throw new ArgumentNullException(nameof(board));
+                throw new ArgumentNullException(
+                    nameof(board));
             }
 
             List<GravityMove> moves =
                 new List<GravityMove>();
 
-            for (int x = 0; x < board.Width; x++)
+            for (int x = 0;
+                 x < board.Width;
+                 x++)
             {
-                ApplyToColumn(board, x, moves);
+                ApplyToColumn(
+                    board,
+                    x,
+                    moves);
             }
 
             return moves;
@@ -28,40 +35,18 @@ namespace PuzzleSpire.Domain.Puzzle
             int columnX,
             List<GravityMove> moves)
         {
-            List<GridPosition> playablePositions =
-                CollectPlayablePositions(
-                    board,
-                    columnX);
+            List<GridPosition> segment =
+                new List<GridPosition>(
+                    board.Height);
 
-            List<BlockEntry> blocks =
-                CollectBlocks(
-                    board,
-                    playablePositions);
-
-            RemoveBlocksFromOriginalPositions(
-                board,
-                blocks);
-
-            PlaceBlocksAtLowestPlayablePositions(
-                board,
-                playablePositions,
-                blocks,
-                moves);
-        }
-
-        private static List<GridPosition>
-            CollectPlayablePositions(
-                Board board,
-                int columnX)
-        {
-            List<GridPosition> playablePositions =
-                new List<GridPosition>();
-
-            // Y = 0부터 시작하므로 아래쪽부터 수집됩니다.
-            for (int y = 0; y < board.Height; y++)
+            for (int y = 0;
+                 y < board.Height;
+                 y++)
             {
                 GridPosition position =
-                    new GridPosition(columnX, y);
+                    new GridPosition(
+                        columnX,
+                        y);
 
                 Cell cell =
                     board.GetCell(position);
@@ -71,25 +56,47 @@ namespace PuzzleSpire.Domain.Puzzle
                     continue;
                 }
 
-                playablePositions.Add(position);
+                if (!cell.CanContainBlock)
+                {
+                    CompactSegment(
+                        board,
+                        segment,
+                        moves);
+
+                    segment.Clear();
+                    continue;
+                }
+
+                segment.Add(position);
             }
 
-            return playablePositions;
+            CompactSegment(
+                board,
+                segment,
+                moves);
         }
 
-        private static List<BlockEntry> CollectBlocks(
+        private static void CompactSegment(
             Board board,
-            IReadOnlyList<GridPosition> playablePositions)
+            IReadOnlyList<GridPosition>
+                positions,
+            List<GravityMove> moves)
         {
+            if (positions.Count == 0)
+            {
+                return;
+            }
+
             List<BlockEntry> blocks =
-                new List<BlockEntry>();
+                new List<BlockEntry>(
+                    positions.Count);
 
             for (int i = 0;
-                 i < playablePositions.Count;
+                 i < positions.Count;
                  i++)
             {
                 GridPosition position =
-                    playablePositions[i];
+                    positions[i];
 
                 Block block =
                     board.GetBlock(position);
@@ -105,50 +112,30 @@ namespace PuzzleSpire.Domain.Puzzle
                         position));
             }
 
-            return blocks;
-        }
-
-        private static void
-            RemoveBlocksFromOriginalPositions(
-                Board board,
-                IReadOnlyList<BlockEntry> blocks)
-        {
-            for (int i = 0; i < blocks.Count; i++)
+            for (int i = 0;
+                 i < blocks.Count;
+                 i++)
             {
-                BlockEntry entry = blocks[i];
-
                 board.RemoveBlock(
-                    entry.OriginalPosition);
+                    blocks[i].OriginalPosition);
             }
-        }
 
-        private static void
-            PlaceBlocksAtLowestPlayablePositions(
-                Board board,
-                IReadOnlyList<GridPosition> playablePositions,
-                IReadOnlyList<BlockEntry> blocks,
-                List<GravityMove> moves)
-        {
-            for (int i = 0; i < blocks.Count; i++)
+            for (int i = 0;
+                 i < blocks.Count;
+                 i++)
             {
-                BlockEntry entry = blocks[i];
+                BlockEntry entry =
+                    blocks[i];
 
-                GridPosition targetPosition =
-                    playablePositions[i];
-
-                // 안전장치
-                if (!board.IsPlayable(targetPosition))
-                {
-                    throw new InvalidOperationException(
-                        $"Gravity attempted to place a block " +
-                        $"on a Void Cell: {targetPosition}");
-                }
+                GridPosition destination =
+                    positions[i];
 
                 board.PlaceBlock(
-                    targetPosition,
+                    destination,
                     entry.Block);
 
-                if (entry.OriginalPosition == targetPosition)
+                if (entry.OriginalPosition
+                    == destination)
                 {
                     continue;
                 }
@@ -157,7 +144,7 @@ namespace PuzzleSpire.Domain.Puzzle
                     new GravityMove(
                         entry.Block,
                         entry.OriginalPosition,
-                        targetPosition));
+                        destination));
             }
         }
 
@@ -165,17 +152,22 @@ namespace PuzzleSpire.Domain.Puzzle
         {
             public Block Block { get; }
 
-            public GridPosition OriginalPosition { get; }
+            public GridPosition OriginalPosition
+            {
+                get;
+            }
 
             public BlockEntry(
                 Block block,
                 GridPosition originalPosition)
             {
-                Block = block
+                Block =
+                    block
                     ?? throw new ArgumentNullException(
                         nameof(block));
 
-                OriginalPosition = originalPosition;
+                OriginalPosition =
+                    originalPosition;
             }
         }
     }

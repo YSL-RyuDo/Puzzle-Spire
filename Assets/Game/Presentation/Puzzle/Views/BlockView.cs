@@ -15,6 +15,7 @@ namespace PuzzleSpire.Presentation.Puzzle
         private SpriteRenderer _spriteRenderer;
 
         private SpriteRenderer _specialIndicator;
+        private BlockType? _previewType;
 
         public GridPosition Position { get; private set; }
 
@@ -47,11 +48,122 @@ namespace PuzzleSpire.Presentation.Puzzle
                 ?? throw new ArgumentNullException(
                     nameof(block));
 
+            _previewType = null;
+
             EnsureSpriteRenderer();
             EnsureSpecialIndicator();
 
             ApplyVisual();
             RefreshObjectName();
+        }
+
+        public void PreviewSpecialType(
+            BlockType specialType)
+        {
+            if (Block == null)
+            {
+                throw new InvalidOperationException(
+                    "BlockView is not initialized.");
+            }
+
+            if (specialType == BlockType.Normal)
+            {
+                throw new ArgumentException(
+                    "Preview type must be a special block.",
+                    nameof(specialType));
+            }
+
+            _previewType = specialType;
+            ApplyVisual();
+        }
+
+        public Tween CreateSpecialTransformationTween(
+            BlockType transformedType)
+        {
+            Sequence sequence =
+                DOTween.Sequence();
+
+            sequence.AppendCallback(
+                () => PreviewSpecialType(transformedType));
+
+            switch (transformedType)
+            {
+                case BlockType.HorizontalRocket:
+                    sequence.Append(
+                        transform.DOPunchScale(
+                            new Vector3(
+                                0.26f,
+                                0.035f,
+                                0f),
+                            0.11f,
+                            5,
+                            0.7f));
+                    break;
+
+                case BlockType.VerticalRocket:
+                    sequence.Append(
+                        transform.DOPunchScale(
+                            new Vector3(
+                                0.035f,
+                                0.26f,
+                                0f),
+                            0.11f,
+                            5,
+                            0.7f));
+                    break;
+
+                case BlockType.Bomb:
+                    sequence.Join(
+                        transform.DOPunchScale(
+                            new Vector3(
+                                0.18f,
+                                0.18f,
+                                0f),
+                            0.13f,
+                            5,
+                            0.65f));
+
+                    sequence.Join(
+                        transform.DOPunchRotation(
+                            new Vector3(
+                                0f,
+                                0f,
+                                12f),
+                            0.13f,
+                            5,
+                            0.65f));
+                    break;
+
+                case BlockType.ColorBomb:
+                    sequence.Join(
+                        transform.DORotate(
+                            new Vector3(
+                                0f,
+                                0f,
+                                180f),
+                            0.16f,
+                            RotateMode.FastBeyond360)
+                            .SetRelative());
+
+                    sequence.Join(
+                        transform.DOPunchScale(
+                            new Vector3(
+                                0.24f,
+                                0.24f,
+                                0f),
+                            0.16f,
+                            5,
+                            0.6f));
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException(
+                        nameof(transformedType),
+                        transformedType,
+                        "Unsupported transformed block type.");
+            }
+
+            return sequence;
         }
 
         public Tween CreateSpecialCreationTween(
@@ -145,7 +257,7 @@ namespace PuzzleSpire.Presentation.Puzzle
         }
 
         public Tween CreateSpecialActivationTween(
-    BlockType blockType)
+            BlockType blockType)
         {
             Sequence sequence =
                 DOTween.Sequence();
@@ -237,24 +349,60 @@ namespace PuzzleSpire.Presentation.Puzzle
 
         private void ApplyVisual()
         {
-            ApplyMainColor();
-            ApplySpecialIndicator();
+            BlockType displayedType =
+                _previewType ?? Block.Type;
+
+            ApplyMainColor(displayedType);
+            ApplySpecialIndicator(displayedType);
         }
 
-        private void ApplyMainColor()
+        private void ApplyMainColor(
+            BlockType displayedType)
         {
-            if (Block.Type == BlockType.ColorBomb)
+            switch (displayedType)
             {
-                _spriteRenderer.color =
-                    new Color32(
-                        35,
-                        38,
-                        52,
-                        255);
+                case BlockType.Normal:
+                    ApplyNormalBlockColor();
+                    return;
 
-                return;
+                case BlockType.HorizontalRocket:
+                case BlockType.VerticalRocket:
+                    _spriteRenderer.color =
+                        new Color32(
+                            70,
+                            190,
+                            235,
+                            255);
+                    return;
+
+                case BlockType.Bomb:
+                    _spriteRenderer.color =
+                        new Color32(
+                            88,
+                            72,
+                            58,
+                            255);
+                    return;
+
+                case BlockType.ColorBomb:
+                    _spriteRenderer.color =
+                        new Color32(
+                            35,
+                            38,
+                            52,
+                            255);
+                    return;
+
+                default:
+                    throw new ArgumentOutOfRangeException(
+                        nameof(displayedType),
+                        displayedType,
+                        "Unknown block type.");
             }
+        }
 
+        private void ApplyNormalBlockColor()
+        {
             switch (Block.Color)
             {
                 case BlockColor.Red:
@@ -288,10 +436,11 @@ namespace PuzzleSpire.Presentation.Puzzle
             }
         }
 
-        private void ApplySpecialIndicator()
+        private void ApplySpecialIndicator(
+            BlockType displayedType)
         {
             bool showIndicator =
-                Block.Type != BlockType.Normal;
+                displayedType != BlockType.Normal;
 
             _specialIndicator.gameObject.SetActive(
                 showIndicator);
@@ -307,7 +456,7 @@ namespace PuzzleSpire.Presentation.Puzzle
             _specialIndicator.transform.localRotation =
                 Quaternion.identity;
 
-            switch (Block.Type)
+            switch (displayedType)
             {
                 case BlockType.HorizontalRocket:
                     _specialIndicator.color =
@@ -369,8 +518,8 @@ namespace PuzzleSpire.Presentation.Puzzle
 
                 default:
                     throw new ArgumentOutOfRangeException(
-                        nameof(Block.Type),
-                        Block.Type,
+                        nameof(displayedType),
+                        displayedType,
                         "Unknown block type.");
             }
         }

@@ -10,19 +10,14 @@ namespace PuzzleSpire.Domain.Puzzle
             IReadOnlyList<GridPosition> initialPositions,
             GridPosition? protectedPosition = null)
         {
-            HashSet<GridPosition> protectedPositions =
-                new HashSet<GridPosition>();
+            var protectedPositions = new HashSet<GridPosition>();
 
             if (protectedPosition.HasValue)
             {
-                protectedPositions.Add(
-                    protectedPosition.Value);
+                protectedPositions.Add(protectedPosition.Value);
             }
 
-            return ResolveInternal(
-                board,
-                initialPositions,
-                protectedPositions);
+            return ResolveInternal(board, initialPositions, protectedPositions);
         }
 
         public SpecialBlockEffectResult Resolve(
@@ -32,18 +27,13 @@ namespace PuzzleSpire.Domain.Puzzle
         {
             if (protectedPositions == null)
             {
-                throw new ArgumentNullException(
-                    nameof(protectedPositions));
+                throw new ArgumentNullException(nameof(protectedPositions));
             }
-
-            HashSet<GridPosition> protectedPositionSet =
-                new HashSet<GridPosition>(
-                    protectedPositions);
 
             return ResolveInternal(
                 board,
                 initialPositions,
-                protectedPositionSet);
+                new HashSet<GridPosition>(protectedPositions));
         }
 
         private static SpecialBlockEffectResult ResolveInternal(
@@ -53,40 +43,25 @@ namespace PuzzleSpire.Domain.Puzzle
         {
             if (board == null)
             {
-                throw new ArgumentNullException(
-                    nameof(board));
+                throw new ArgumentNullException(nameof(board));
             }
 
             if (initialPositions == null)
             {
-                throw new ArgumentNullException(
-                    nameof(initialPositions));
+                throw new ArgumentNullException(nameof(initialPositions));
             }
 
-            List<GridPosition> affectedPositions =
-                new List<GridPosition>();
+            var affectedPositions = new List<GridPosition>();
+            var affectedPositionSet = new HashSet<GridPosition>();
+            var activationQueue = new Queue<GridPosition>();
+            var queuedPositions = new HashSet<GridPosition>();
+            var activatedPositions = new HashSet<GridPosition>();
+            var activations = new List<SpecialBlockActivation>();
+            var impactEvents = new List<ObstacleImpactEvent>();
 
-            HashSet<GridPosition> affectedPositionSet =
-                new HashSet<GridPosition>();
-
-            Queue<GridPosition> activationQueue =
-                new Queue<GridPosition>();
-
-            HashSet<GridPosition> queuedPositions =
-                new HashSet<GridPosition>();
-
-            HashSet<GridPosition> activatedPositions =
-                new HashSet<GridPosition>();
-
-            List<SpecialBlockActivation> activations =
-                new List<SpecialBlockActivation>();
-
-            for (int i = 0;
-                 i < initialPositions.Count;
-                 i++)
+            for (int i = 0; i < initialPositions.Count; i++)
             {
-                GridPosition position =
-                    initialPositions[i];
+                GridPosition position = initialPositions[i];
 
                 TryAddAffectedPosition(
                     board,
@@ -106,20 +81,16 @@ namespace PuzzleSpire.Domain.Puzzle
 
             while (activationQueue.Count > 0)
             {
-                GridPosition specialPosition =
-                    activationQueue.Dequeue();
+                GridPosition specialPosition = activationQueue.Dequeue();
 
-                if (!activatedPositions.Add(
-                        specialPosition))
+                if (!activatedPositions.Add(specialPosition))
                 {
                     continue;
                 }
 
-                Block specialBlock =
-                    board.GetBlock(specialPosition);
+                Block specialBlock = board.GetBlock(specialPosition);
 
-                if (specialBlock == null
-                    || specialBlock.Type == BlockType.Normal)
+                if (specialBlock == null || specialBlock.Type == BlockType.Normal)
                 {
                     continue;
                 }
@@ -132,17 +103,16 @@ namespace PuzzleSpire.Domain.Puzzle
                         activations.Count));
 
                 List<GridPosition> effectPositions =
-                    CollectEffectPositions(
-                        board,
-                        specialPosition,
-                        specialBlock);
+                    CollectEffectPositions(board, specialPosition, specialBlock);
 
-                for (int i = 0;
-                     i < effectPositions.Count;
-                     i++)
+                impactEvents.Add(
+                    new ObstacleImpactEvent(
+                        ObstacleImpactKind.Direct,
+                        effectPositions));
+
+                for (int i = 0; i < effectPositions.Count; i++)
                 {
-                    GridPosition effectPosition =
-                        effectPositions[i];
+                    GridPosition effectPosition = effectPositions[i];
 
                     TryAddAffectedPosition(
                         board,
@@ -163,93 +133,70 @@ namespace PuzzleSpire.Domain.Puzzle
 
             return new SpecialBlockEffectResult(
                 affectedPositions,
-                activations);
+                activations,
+                Array.Empty<SpecialBlockTransformation>(),
+                Array.Empty<SpecialBlockMerge>(),
+                impactEvents);
         }
 
-        private static List<GridPosition>
-            CollectEffectPositions(
-                Board board,
-                GridPosition origin,
-                Block specialBlock)
+        private static List<GridPosition> CollectEffectPositions(
+            Board board,
+            GridPosition origin,
+            Block specialBlock)
         {
-            List<GridPosition> positions =
-                new List<GridPosition>();
+            var positions = new List<GridPosition>();
 
             switch (specialBlock.Type)
             {
                 case BlockType.HorizontalRocket:
-                    for (int x = 0;
-                         x < board.Width;
-                         x++)
+                    for (int x = 0; x < board.Width; x++)
                     {
-                        positions.Add(
-                            new GridPosition(
-                                x,
-                                origin.Y));
+                        AddPlayablePosition(board, new GridPosition(x, origin.Y), positions);
                     }
-
                     break;
 
                 case BlockType.VerticalRocket:
-                    for (int y = 0;
-                         y < board.Height;
-                         y++)
+                    for (int y = 0; y < board.Height; y++)
                     {
-                        positions.Add(
-                            new GridPosition(
-                                origin.X,
-                                y));
+                        AddPlayablePosition(board, new GridPosition(origin.X, y), positions);
                     }
-
                     break;
 
                 case BlockType.Bomb:
-                    for (int offsetX = -1;
-                         offsetX <= 1;
-                         offsetX++)
+                    for (int offsetX = -1; offsetX <= 1; offsetX++)
                     {
-                        for (int offsetY = -1;
-                             offsetY <= 1;
-                             offsetY++)
+                        for (int offsetY = -1; offsetY <= 1; offsetY++)
                         {
-                            positions.Add(
-                                new GridPosition(
-                                    origin.X + offsetX,
-                                    origin.Y + offsetY));
+                            AddPlayablePosition(
+                                board,
+                                new GridPosition(origin.X + offsetX, origin.Y + offsetY),
+                                positions);
                         }
                     }
-
                     break;
 
                 case BlockType.ColorBomb:
-                    for (int x = 0;
-                         x < board.Width;
-                         x++)
+                    for (int x = 0; x < board.Width; x++)
                     {
-                        for (int y = 0;
-                             y < board.Height;
-                             y++)
+                        for (int y = 0; y < board.Height; y++)
                         {
-                            GridPosition position =
-                                new GridPosition(x, y);
+                            GridPosition position = new GridPosition(x, y);
 
                             if (!board.IsPlayable(position))
                             {
                                 continue;
                             }
 
-                            Block block =
-                                board.GetBlock(position);
+                            Block block = board.GetBlock(position);
 
-                            if (block != null
-                                && block.Color
-                                == specialBlock.Color)
+                            if (block != null &&
+                                block.ParticipatesInColorMatch &&
+                                block.Color == specialBlock.Color)
                             {
                                 positions.Add(position);
                             }
                         }
                     }
-
                     break;
 
                 default:
@@ -262,6 +209,17 @@ namespace PuzzleSpire.Domain.Puzzle
             return positions;
         }
 
+        private static void AddPlayablePosition(
+            Board board,
+            GridPosition position,
+            List<GridPosition> positions)
+        {
+            if (board.IsPlayable(position))
+            {
+                positions.Add(position);
+            }
+        }
+
         private static void TryAddAffectedPosition(
             Board board,
             GridPosition position,
@@ -269,27 +227,22 @@ namespace PuzzleSpire.Domain.Puzzle
             List<GridPosition> affectedPositions,
             HashSet<GridPosition> affectedPositionSet)
         {
-            if (protectedPositions.Contains(position))
+            if (protectedPositions.Contains(position) || !board.IsPlayable(position))
             {
                 return;
             }
 
-            if (!board.IsPlayable(position))
+            Cell cell = board.GetCell(position);
+
+            if (!cell.HasBlock && !cell.HasAnyObstacle())
             {
                 return;
             }
 
-            if (board.GetBlock(position) == null)
+            if (affectedPositionSet.Add(position))
             {
-                return;
+                affectedPositions.Add(position);
             }
-
-            if (!affectedPositionSet.Add(position))
-            {
-                return;
-            }
-
-            affectedPositions.Add(position);
         }
 
         private static void TryQueueSpecialBlock(
@@ -300,36 +253,24 @@ namespace PuzzleSpire.Domain.Puzzle
             HashSet<GridPosition> queuedPositions,
             HashSet<GridPosition> activatedPositions)
         {
-            if (protectedPositions.Contains(position))
+            if (protectedPositions.Contains(position) ||
+                !board.IsPlayable(position) ||
+                activatedPositions.Contains(position))
             {
                 return;
             }
 
-            if (!board.IsPlayable(position))
+            Block block = board.GetBlock(position);
+
+            if (block == null || block.Type == BlockType.Normal)
             {
                 return;
             }
 
-            if (activatedPositions.Contains(position))
+            if (queuedPositions.Add(position))
             {
-                return;
+                activationQueue.Enqueue(position);
             }
-
-            Block block =
-                board.GetBlock(position);
-
-            if (block == null
-                || block.Type == BlockType.Normal)
-            {
-                return;
-            }
-
-            if (!queuedPositions.Add(position))
-            {
-                return;
-            }
-
-            activationQueue.Enqueue(position);
         }
     }
 }

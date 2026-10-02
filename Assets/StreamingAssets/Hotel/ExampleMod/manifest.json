@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "moonlight.example",
+  "name": "달빛 연습장",
+  "version": "1.0.0",
+  "author": "Puzzle Spire",
+  "description": "첫 스테이지를 여유롭게 바꾸고 새 연습 스테이지와 청록 블록 스킨을 추가하는 예제 MOD.",
+  "contentFile": "content.json",
+  "images": [
+    {
+      "key": "block.0",
+      "file": "red-block.png"
+    }
+  ]
+}

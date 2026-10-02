@@ -1,0 +1,1205 @@
+{
+  "schemaVersion": 1,
+  "title": "잔월 호텔",
+  "locations": [
+    {
+      "id": "lobby",
+      "name": "호텔 로비",
+      "subtitle": "비가 그친 뒤, 오래된 시계가 다시 움직인다.",
+      "unlockAfter": "",
+      "image": "background.lobby"
+    },
+    {
+      "id": "corridor",
+      "name": "3층 복도",
+      "subtitle": "불 꺼진 객실 사이로 전화벨이 울린다.",
+      "unlockAfter": "register",
+      "image": "background.corridor"
+    },
+    {
+      "id": "archive",
+      "name": "기록 보관실",
+      "subtitle": "잊힌 방에도 누군가의 이름이 남아 있다.",
+      "unlockAfter": "phone_riddle",
+      "image": "background.archive"
+    }
+  ],
+  "characters": [
+    {
+      "id": "you",
+      "name": "서윤",
+      "role": "우연히 사건을 맡은 여행자",
+      "color": "#D9B978"
+    },
+    {
+      "id": "front",
+      "name": "하린",
+      "role": "기억력이 좋은 프런트 직원",
+      "color": "#71BDB4"
+    },
+    {
+      "id": "keeper",
+      "name": "도식",
+      "role": "호텔의 물건을 돌보는 관리 직원",
+      "color": "#D59C78"
+    },
+    {
+      "id": "guest",
+      "name": "문 선생",
+      "role": "오랫동안 머문 투숙객",
+      "color": "#B1A4C7"
+    }
+  ],
+  "clues": [
+    {
+      "id": "handover",
+      "title": "세탁물 인계표",
+      "description": "17:00 흰 수건 인계. 17:10 파란 바구니 복도 이동. 17:20 빈 카트 반환. 인계표 모서리에 작은 황동 자국이 있다."
+    },
+    {
+      "id": "basket",
+      "title": "파란 바구니의 흔적",
+      "description": "파란 천 틈에서 303호 열쇠가 나왔다. 바구니 바닥에는 객실 번호 대신 ‘달’이 새겨진 태그도 있었다."
+    },
+    {
+      "id": "moon_tag",
+      "title": "달 모양 객실 태그",
+      "description": "앞면에는 초승달, 뒷면에는 ‘사람을 기다리는 방’이라는 글귀가 새겨져 있다. 현재 객실 안내에는 없는 표식이다."
+    },
+    {
+      "id": "phone_log",
+      "title": "시험 통화 기록",
+      "description": "매일 18:00, 관리실에서 3층 빈 객실로 시험 신호가 전송된다. 수화기를 들면 즉시 끊긴다."
+    },
+    {
+      "id": "voice_note",
+      "title": "전화기 밑의 메모",
+      "description": "‘전시를 다시 여는 날, 달의 방에도 불을 켜 주세요.’ 누군가 오래전에 남긴 부탁이다."
+    },
+    {
+      "id": "old_plan",
+      "title": "옛 호텔 안내도",
+      "description": "3층 끝의 방은 객실이 아니라 작은 공동 서재였다. 투숙객과 직원이 편지와 그림을 나누던 곳이다."
+    },
+    {
+      "id": "photo",
+      "title": "서재 앞에서 찍은 사진",
+      "description": "젊은 문 선생과 직원들이 초승달 표식 아래 서 있다. 뒤에는 ‘수리 후에도 약속은 남습니다’라고 쓰여 있다."
+    },
+    {
+      "id": "letter",
+      "title": "부치지 못한 초대장",
+      "description": "서재를 다시 열면 옛 친구들을 초대하려던 문 선생의 편지. 호텔의 폐업이 아니라 수리 때문에 방이 닫혔다는 설명이 적혀 있다."
+    }
+  ],
+  "nodes": [
+    {
+      "id": "arrival",
+      "chapter": "01 · 사라진 303호 열쇠",
+      "location": "lobby",
+      "title": "프런트의 하린",
+      "purpose": "하린에게 체크인을 요청하자.",
+      "kind": "dialogue",
+      "contentId": "",
+      "x": 0.7,
+      "y": 0.5,
+      "requires": [],
+      "rewards": [],
+      "before": [
+        {
+          "speaker": "front",
+          "text": "잔월 호텔에 오신 걸 환영해요. 서윤 님, 예약 확인했어요. 다만 작은 문제가……."
+        },
+        {
+          "speaker": "you",
+          "text": "제 방이 사라진 건 아니겠죠?"
+        },
+        {
+          "speaker": "front",
+          "text": "방은 있어요. 303호 열쇠만 없어요. 아까까지 보관함에 있었는데요."
+        },
+        {
+          "speaker": "you",
+          "text": "그럼 없어진 게 아니라, 어딘가로 옮겨졌겠네요. 마지막으로 본 곳부터 살펴볼게요."
+        }
+      ],
+      "after": []
+    },
+    {
+      "id": "keys",
+      "chapter": "01 · 사라진 303호 열쇠",
+      "location": "lobby",
+      "title": "열쇠 보관함",
+      "purpose": "보관함 주변을 정리해 열쇠가 이동한 흔적을 찾자.",
+      "kind": "stage",
+      "contentId": "stage_01",
+      "x": 0.72,
+      "y": 0.28,
+      "requires": [
+        "arrival"
+      ],
+      "rewards": [],
+      "before": [
+        {
+          "speaker": "you",
+          "text": "같은 색 블록이 두 개 이상 붙어 있으면 클릭해서 정리할 수 있어요. 왼쪽 목표를 채워 보죠."
+        },
+        {
+          "speaker": "front",
+          "text": "큰 묶음은 특별한 블록이 돼요. 5개는 로켓, 7개는 폭탄, 9개는 색 제거 블록이에요."
+        }
+      ],
+      "after": [
+        {
+          "speaker": "you",
+          "text": "열쇠 고리가 있던 자리에 흰 실이 걸려 있네요."
+        },
+        {
+          "speaker": "front",
+          "text": "조금 전에 여기서 새 수건을 확인했어요."
+        }
+      ]
+    },
+    {
+      "id": "register",
+      "chapter": "01 · 사라진 303호 열쇠",
+      "location": "lobby",
+      "title": "세탁물 인계 기록",
+      "purpose": "흰 실과 관련된 기록을 확인하자.",
+      "kind": "stage",
+      "contentId": "stage_02",
+      "x": 0.64,
+      "y": 0.43,
+      "requires": [
+        "keys"
+      ],
+      "rewards": [
+        "handover"
+      ],
+      "before": [],
+      "after": [
+        {
+          "speaker": "front",
+          "text": "도식 씨가 수건을 받아 3층으로 올라갔어요. 인계표는 여기 있어요."
+        },
+        {
+          "speaker": "you",
+          "text": "열쇠가 수건에 걸렸을지도 모르겠네요. 물건이 이동한 순서를 확인해 봐요."
+        }
+      ]
+    },
+    {
+      "id": "route_riddle",
+      "chapter": "01 · 사라진 303호 열쇠",
+      "location": "lobby",
+      "title": "인계표의 순서",
+      "purpose": "수건이 어디로 갔는지 기록을 맞춰 보자.",
+      "kind": "riddle",
+      "contentId": "route",
+      "x": 0.64,
+      "y": 0.43,
+      "requires": [
+        "register"
+      ],
+      "rewards": [],
+      "before": [],
+      "after": [
+        {
+          "speaker": "you",
+          "text": "파란 바구니가 마지막 단서예요. 3층 복도로 가 봐야겠어요."
+        }
+      ]
+    },
+    {
+      "id": "keeper",
+      "chapter": "01 · 사라진 303호 열쇠",
+      "location": "corridor",
+      "title": "도식에게 물어보기",
+      "purpose": "복도로 나온 바구니의 위치를 확인하자.",
+      "kind": "dialogue",
+      "contentId": "",
+      "x": 0.72,
+      "y": 0.56,
+      "requires": [
+        "route_riddle"
+      ],
+      "rewards": [],
+      "before": [
+        {
+          "speaker": "keeper",
+          "text": "아, 파란 바구니요? 수건은 객실에 넣고 바구니는 복도 끝에 뒀어요."
+        },
+        {
+          "speaker": "you",
+          "text": "혹시 작은 황동 열쇠를 보셨나요?"
+        },
+        {
+          "speaker": "keeper",
+          "text": "바구니에서 짤랑 소리가 나기는 했죠. 제 허리의 열쇠인 줄 알았는데!"
+        }
+      ],
+      "after": []
+    },
+    {
+      "id": "basket_search",
+      "chapter": "01 · 사라진 303호 열쇠",
+      "location": "corridor",
+      "title": "파란 바구니",
+      "purpose": "상자를 정리하고 바구니 안쪽을 확인하자.",
+      "kind": "stage",
+      "contentId": "stage_03",
+      "x": 0.62,
+      "y": 0.76,
+      "requires": [
+        "keeper"
+      ],
+      "rewards": [
+        "basket"
+      ],
+      "before": [
+        {
+          "speaker": "you",
+          "text": "상자는 옆 블록을 없애거나 특수 블록으로 치면 열려요. 목표에 있는 상자도 확인해 주세요."
+        }
+      ],
+      "after": [
+        {
+          "speaker": "you",
+          "text": "수건 사이에 303호 열쇠가 끼어 있어요. 예상대로였네요."
+        },
+        {
+          "speaker": "keeper",
+          "text": "다행이군요. 그런데 바닥에 남은 저 태그는 우리 객실 열쇠가 아닌데요?"
+        }
+      ]
+    },
+    {
+      "id": "tag_search",
+      "chapter": "01 · 사라진 303호 열쇠",
+      "location": "corridor",
+      "title": "바구니 바닥",
+      "purpose": "열쇠와 함께 발견된 오래된 물건을 살펴보자.",
+      "kind": "stage",
+      "contentId": "stage_04",
+      "x": 0.62,
+      "y": 0.76,
+      "requires": [
+        "basket_search"
+      ],
+      "rewards": [
+        "moon_tag"
+      ],
+      "before": [],
+      "after": [
+        {
+          "speaker": "you",
+          "text": "초승달이 새겨진 태그예요. 번호 대신 글귀가 있네요. 사람을 기다리는 방……."
+        },
+        {
+          "speaker": "guest",
+          "text": "그 표식을 아직도 갖고 있었군요. 달의 방이랍니다."
+        },
+        {
+          "speaker": "you",
+          "text": "어느 객실인가요?"
+        },
+        {
+          "speaker": "guest",
+          "text": "지금 안내도에는 없을 거예요. 열쇠는 먼저 하린 씨에게 돌려주시죠."
+        }
+      ]
+    },
+    {
+      "id": "key_return",
+      "chapter": "01 · 사라진 303호 열쇠",
+      "location": "lobby",
+      "title": "열쇠 돌려주기",
+      "purpose": "첫 사건을 마무리하고 달의 방을 물어보자.",
+      "kind": "dialogue",
+      "contentId": "",
+      "x": 0.7,
+      "y": 0.5,
+      "requires": [
+        "tag_search"
+      ],
+      "rewards": [],
+      "before": [
+        {
+          "speaker": "front",
+          "text": "찾으셨군요! 수건에 열쇠가 따라갔다니, 보관함 위치를 옮겨야겠어요."
+        },
+        {
+          "speaker": "you",
+          "text": "이 달 태그도 같이 있었어요. 혹시 아세요?"
+        },
+        {
+          "speaker": "front",
+          "text": "처음 봐요. 그런데 3층 빈 객실에서 매일 전화벨이 울린다는 이야기는 있어요. 오래된 물건과 관련 있을까요?"
+        },
+        {
+          "speaker": "you",
+          "text": "소문보다 기록부터 확인해 볼게요."
+        }
+      ],
+      "after": []
+    },
+    {
+      "id": "switchboard",
+      "chapter": "02 · 빈 객실의 전화",
+      "location": "lobby",
+      "title": "전화 교환 기록",
+      "purpose": "전화벨이 울리는 시각의 기록을 찾자.",
+      "kind": "stage",
+      "contentId": "stage_05",
+      "x": 0.69,
+      "y": 0.44,
+      "requires": [
+        "key_return"
+      ],
+      "rewards": [
+        "phone_log"
+      ],
+      "before": [],
+      "after": [
+        {
+          "speaker": "front",
+          "text": "18시마다 같은 번호로 신호가 나가네요. 발신지는 관리실이에요."
+        },
+        {
+          "speaker": "you",
+          "text": "객실에서 걸려 온 전화라고 했는데, 기록은 반대군요."
+        }
+      ]
+    },
+    {
+      "id": "hall_trace",
+      "chapter": "02 · 빈 객실의 전화",
+      "location": "corridor",
+      "title": "빈 객실 앞",
+      "purpose": "누군가 출입했는지 주변을 확인하자.",
+      "kind": "stage",
+      "contentId": "stage_06",
+      "x": 0.32,
+      "y": 0.44,
+      "requires": [
+        "switchboard"
+      ],
+      "rewards": [],
+      "before": [
+        {
+          "speaker": "you",
+          "text": "얼음 표시는 같은 칸의 블록을 없애면 깨져요. 색 목표와 함께 정리해 보죠."
+        }
+      ],
+      "after": [
+        {
+          "speaker": "keeper",
+          "text": "문은 계속 잠겨 있었어요. 저는 복도 전구를 바꾸느라 여기 있었고요."
+        },
+        {
+          "speaker": "you",
+          "text": "사람이 들어갔다는 흔적은 없네요. 전화기 자체를 확인해 볼게요."
+        }
+      ]
+    },
+    {
+      "id": "phone_base",
+      "chapter": "02 · 빈 객실의 전화",
+      "location": "corridor",
+      "title": "빈 객실의 전화기",
+      "purpose": "전화기 주변을 정리하고 남겨진 기록을 찾자.",
+      "kind": "stage",
+      "contentId": "stage_07",
+      "x": 0.87,
+      "y": 0.56,
+      "requires": [
+        "hall_trace"
+      ],
+      "rewards": [
+        "voice_note"
+      ],
+      "before": [],
+      "after": [
+        {
+          "speaker": "you",
+          "text": "받침 밑에 메모가 있어요. 달의 방에도 불을 켜 달라고 적혀 있네요."
+        },
+        {
+          "speaker": "keeper",
+          "text": "이 전화는 오래된 교환기에 연결돼 있어요. 자동 점검 기능도 남아 있을 겁니다."
+        }
+      ]
+    },
+    {
+      "id": "phone_riddle",
+      "chapter": "02 · 빈 객실의 전화",
+      "location": "corridor",
+      "title": "전화벨의 정체",
+      "purpose": "관찰한 사실과 기록을 함께 해석하자.",
+      "kind": "riddle",
+      "contentId": "phone",
+      "x": 0.87,
+      "y": 0.56,
+      "requires": [
+        "phone_base"
+      ],
+      "rewards": [],
+      "before": [],
+      "after": [
+        {
+          "speaker": "you",
+          "text": "유령 전화가 아니라 설비 시험이었네요."
+        },
+        {
+          "speaker": "keeper",
+          "text": "내일은 점검 설정을 바꿔 두죠. 달의 방은 보관실의 옛 안내도를 보면 알 수 있을 거예요."
+        }
+      ]
+    },
+    {
+      "id": "archive_entry",
+      "chapter": "03 · 사람을 기다리는 방",
+      "location": "archive",
+      "title": "쌓인 보관 상자",
+      "purpose": "안내도가 있는 서랍까지 길을 정리하자.",
+      "kind": "stage",
+      "contentId": "stage_08",
+      "x": 0.32,
+      "y": 0.69,
+      "requires": [
+        "phone_riddle"
+      ],
+      "rewards": [],
+      "before": [],
+      "after": [
+        {
+          "speaker": "keeper",
+          "text": "여긴 예전 호텔 물건들을 모아 둔 곳이에요. 버리자는 말이 나올 때마다 문 선생이 조금만 더 두자고 하셨죠."
+        }
+      ]
+    },
+    {
+      "id": "plan",
+      "chapter": "03 · 사람을 기다리는 방",
+      "location": "archive",
+      "title": "옛 안내도 서랍",
+      "purpose": "달 표식이 어디에 쓰였는지 찾아보자.",
+      "kind": "stage",
+      "contentId": "stage_09",
+      "x": 0.68,
+      "y": 0.55,
+      "requires": [
+        "archive_entry"
+      ],
+      "rewards": [
+        "old_plan"
+      ],
+      "before": [],
+      "after": [
+        {
+          "speaker": "you",
+          "text": "이 안내도에도 초승달이 있어요. 누구나 편지와 책을 남길 수 있는 방이라고 적혀 있네요."
+        }
+      ]
+    },
+    {
+      "id": "room_riddle",
+      "chapter": "03 · 사람을 기다리는 방",
+      "location": "archive",
+      "title": "달의 방의 용도",
+      "purpose": "태그와 안내도가 가리키는 장소를 알아내자.",
+      "kind": "riddle",
+      "contentId": "room",
+      "x": 0.68,
+      "y": 0.55,
+      "requires": [
+        "plan"
+      ],
+      "rewards": [],
+      "before": [],
+      "after": [
+        {
+          "speaker": "you",
+          "text": "객실이 아니라 서재였어요. 번호가 없는 이유도 설명돼요."
+        },
+        {
+          "speaker": "guest",
+          "text": "맞아요. 여행자들이 잠깐씩 자기 이야기를 남기던 곳이었죠."
+        }
+      ]
+    },
+    {
+      "id": "photos",
+      "chapter": "03 · 사람을 기다리는 방",
+      "location": "archive",
+      "title": "사진 보관함",
+      "purpose": "서재를 기억하는 사진을 찾자.",
+      "kind": "stage",
+      "contentId": "stage_10",
+      "x": 0.85,
+      "y": 0.38,
+      "requires": [
+        "room_riddle"
+      ],
+      "rewards": [
+        "photo"
+      ],
+      "before": [],
+      "after": [
+        {
+          "speaker": "you",
+          "text": "사진 속 이분…… 문 선생님이시죠?"
+        },
+        {
+          "speaker": "guest",
+          "text": "제가 처음 이 호텔에 머물던 날이에요. 저기 서 있는 친구가 서재를 제안했죠. 언젠가 다시 모이자고 약속했어요."
+        }
+      ]
+    },
+    {
+      "id": "letters",
+      "chapter": "03 · 사람을 기다리는 방",
+      "location": "archive",
+      "title": "묶인 편지",
+      "purpose": "사진 뒤의 약속이 어떻게 되었는지 확인하자.",
+      "kind": "stage",
+      "contentId": "stage_11",
+      "x": 0.75,
+      "y": 0.5,
+      "requires": [
+        "photos"
+      ],
+      "rewards": [
+        "letter"
+      ],
+      "before": [],
+      "after": [
+        {
+          "speaker": "guest",
+          "text": "누수 때문에 문을 닫았어요. 수리가 끝나면 모두를 부르려고 초대장을 썼는데…… 시간이 너무 흘렀군요."
+        },
+        {
+          "speaker": "you",
+          "text": "아직 보내지 않았다는 건, 지금 보낼 수도 있다는 뜻이죠."
+        }
+      ]
+    },
+    {
+      "id": "timeline_riddle",
+      "chapter": "03 · 사람을 기다리는 방",
+      "location": "archive",
+      "title": "남은 기록 연결하기",
+      "purpose": "사진과 편지로 닫힌 방의 사연을 정리하자.",
+      "kind": "riddle",
+      "contentId": "timeline",
+      "x": 0.68,
+      "y": 0.55,
+      "requires": [
+        "letters"
+      ],
+      "rewards": [],
+      "before": [],
+      "after": [
+        {
+          "speaker": "you",
+          "text": "사라진 객실이나 숨겨진 손님은 없었어요. 다시 열기로 한 서재와, 그 약속을 기억하는 사람이 있었죠."
+        },
+        {
+          "speaker": "front",
+          "text": "작게라도 다시 열면 어떨까요? 로비 책장을 먼저 옮길 수 있어요."
+        },
+        {
+          "speaker": "keeper",
+          "text": "누수는 오래전에 고쳤습니다. 남은 건 상자 몇 개와 간판뿐이죠."
+        }
+      ]
+    },
+    {
+      "id": "last_boxes",
+      "chapter": "03 · 사람을 기다리는 방",
+      "location": "archive",
+      "title": "서재에 남은 상자",
+      "purpose": "다시 열 날을 위해 마지막 상자를 정리하자.",
+      "kind": "stage",
+      "contentId": "stage_12",
+      "x": 0.32,
+      "y": 0.69,
+      "requires": [
+        "timeline_riddle"
+      ],
+      "rewards": [],
+      "before": [],
+      "after": [
+        {
+          "speaker": "guest",
+          "text": "태그를 제게 주시겠어요? 이번에는 숨겨 두지 않고 문에 걸어 놓을게요."
+        }
+      ]
+    },
+    {
+      "id": "ending",
+      "chapter": "EPILOGUE · 다시 쓰는 초대장",
+      "location": "lobby",
+      "title": "달의 방, 다시 열다",
+      "purpose": "사람을 기다리는 방에 새 약속을 남기자.",
+      "kind": "ending",
+      "contentId": "",
+      "x": 0.5,
+      "y": 0.5,
+      "requires": [
+        "last_boxes"
+      ],
+      "rewards": [],
+      "before": [
+        {
+          "speaker": "front",
+          "text": "303호 열쇠입니다. 체크인이 조금 길어졌네요."
+        },
+        {
+          "speaker": "you",
+          "text": "덕분에 호텔을 제대로 알게 됐어요."
+        },
+        {
+          "speaker": "guest",
+          "text": "서재의 첫 페이지에 이름을 남겨 주겠어요?"
+        },
+        {
+          "speaker": "you",
+          "text": "서윤. 열쇠 하나를 찾으러 왔다가, 기다리던 방 하나를 찾음."
+        },
+        {
+          "speaker": "keeper",
+          "text": "다음에는 열쇠를 잃어버리지 않고 초대하겠습니다."
+        },
+        {
+          "speaker": "front",
+          "text": "잔월 호텔의 달의 방은, 오늘부터 다시 열려 있습니다."
+        }
+      ],
+      "after": []
+    }
+  ],
+  "stages": [
+    {
+      "id": "stage_01",
+      "title": "열쇠 보관함",
+      "width": 7,
+      "height": 7,
+      "moves": 24,
+      "seed": 1186,
+      "colors": 4,
+      "targetColor": 0,
+      "targetAmount": 12,
+      "boxes": 0,
+      "ice": 0,
+      "layout": [
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO"
+      ],
+      "obstacles": []
+    },
+    {
+      "id": "stage_02",
+      "title": "인계 기록",
+      "width": 7,
+      "height": 7,
+      "moves": 24,
+      "seed": 1323,
+      "colors": 4,
+      "targetColor": 1,
+      "targetAmount": 12,
+      "boxes": 0,
+      "ice": 0,
+      "layout": [
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO"
+      ],
+      "obstacles": []
+    },
+    {
+      "id": "stage_03",
+      "title": "바구니 주변",
+      "width": 7,
+      "height": 7,
+      "moves": 24,
+      "seed": 1460,
+      "colors": 4,
+      "targetColor": 2,
+      "targetAmount": 18,
+      "boxes": 2,
+      "ice": 0,
+      "layout": [
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO"
+      ],
+      "obstacles": [
+        {
+          "x": 2,
+          "y": 2,
+          "type": "box",
+          "durability": 1
+        },
+        {
+          "x": 4,
+          "y": 2,
+          "type": "box",
+          "durability": 1
+        }
+      ]
+    },
+    {
+      "id": "stage_04",
+      "title": "남은 물건",
+      "width": 7,
+      "height": 7,
+      "moves": 24,
+      "seed": 1597,
+      "colors": 4,
+      "targetColor": 3,
+      "targetAmount": 18,
+      "boxes": 2,
+      "ice": 0,
+      "layout": [
+        "XOOOOOX",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "XOOOOOX"
+      ],
+      "obstacles": [
+        {
+          "x": 2,
+          "y": 2,
+          "type": "box",
+          "durability": 1
+        },
+        {
+          "x": 4,
+          "y": 2,
+          "type": "box",
+          "durability": 1
+        }
+      ]
+    },
+    {
+      "id": "stage_05",
+      "title": "전화 교환표",
+      "width": 7,
+      "height": 7,
+      "moves": 28,
+      "seed": 1734,
+      "colors": 4,
+      "targetColor": 0,
+      "targetAmount": 18,
+      "boxes": 0,
+      "ice": 0,
+      "layout": [
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO"
+      ],
+      "obstacles": []
+    },
+    {
+      "id": "stage_06",
+      "title": "복도의 흔적",
+      "width": 7,
+      "height": 7,
+      "moves": 28,
+      "seed": 1871,
+      "colors": 4,
+      "targetColor": 1,
+      "targetAmount": 18,
+      "boxes": 0,
+      "ice": 3,
+      "layout": [
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO"
+      ],
+      "obstacles": [
+        {
+          "x": 1,
+          "y": 4,
+          "type": "ice",
+          "durability": 1
+        },
+        {
+          "x": 3,
+          "y": 4,
+          "type": "ice",
+          "durability": 1
+        },
+        {
+          "x": 5,
+          "y": 4,
+          "type": "ice",
+          "durability": 1
+        }
+      ]
+    },
+    {
+      "id": "stage_07",
+      "title": "전화기 받침",
+      "width": 7,
+      "height": 7,
+      "moves": 28,
+      "seed": 2008,
+      "colors": 4,
+      "targetColor": 2,
+      "targetAmount": 18,
+      "boxes": 0,
+      "ice": 3,
+      "layout": [
+        "XOOOOOX",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "XOOOOOX"
+      ],
+      "obstacles": [
+        {
+          "x": 1,
+          "y": 4,
+          "type": "ice",
+          "durability": 1
+        },
+        {
+          "x": 3,
+          "y": 4,
+          "type": "ice",
+          "durability": 1
+        },
+        {
+          "x": 5,
+          "y": 4,
+          "type": "ice",
+          "durability": 1
+        }
+      ]
+    },
+    {
+      "id": "stage_08",
+      "title": "보관실 입구",
+      "width": 7,
+      "height": 7,
+      "moves": 28,
+      "seed": 2145,
+      "colors": 4,
+      "targetColor": 3,
+      "targetAmount": 18,
+      "boxes": 2,
+      "ice": 0,
+      "layout": [
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO"
+      ],
+      "obstacles": [
+        {
+          "x": 2,
+          "y": 2,
+          "type": "box",
+          "durability": 1
+        },
+        {
+          "x": 4,
+          "y": 2,
+          "type": "box",
+          "durability": 1
+        }
+      ]
+    },
+    {
+      "id": "stage_09",
+      "title": "안내도 서랍",
+      "width": 7,
+      "height": 7,
+      "moves": 28,
+      "seed": 2282,
+      "colors": 4,
+      "targetColor": 0,
+      "targetAmount": 18,
+      "boxes": 2,
+      "ice": 0,
+      "layout": [
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO"
+      ],
+      "obstacles": [
+        {
+          "x": 2,
+          "y": 2,
+          "type": "box",
+          "durability": 1
+        },
+        {
+          "x": 4,
+          "y": 2,
+          "type": "box",
+          "durability": 1
+        }
+      ]
+    },
+    {
+      "id": "stage_10",
+      "title": "사진 보관함",
+      "width": 7,
+      "height": 7,
+      "moves": 28,
+      "seed": 2419,
+      "colors": 4,
+      "targetColor": 1,
+      "targetAmount": 18,
+      "boxes": 0,
+      "ice": 3,
+      "layout": [
+        "XOOOOOX",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "XOOOOOX"
+      ],
+      "obstacles": [
+        {
+          "x": 1,
+          "y": 4,
+          "type": "ice",
+          "durability": 1
+        },
+        {
+          "x": 3,
+          "y": 4,
+          "type": "ice",
+          "durability": 1
+        },
+        {
+          "x": 5,
+          "y": 4,
+          "type": "ice",
+          "durability": 1
+        }
+      ]
+    },
+    {
+      "id": "stage_11",
+      "title": "편지 묶음",
+      "width": 7,
+      "height": 7,
+      "moves": 28,
+      "seed": 2556,
+      "colors": 4,
+      "targetColor": 2,
+      "targetAmount": 18,
+      "boxes": 0,
+      "ice": 3,
+      "layout": [
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO"
+      ],
+      "obstacles": [
+        {
+          "x": 1,
+          "y": 4,
+          "type": "ice",
+          "durability": 1
+        },
+        {
+          "x": 3,
+          "y": 4,
+          "type": "ice",
+          "durability": 1
+        },
+        {
+          "x": 5,
+          "y": 4,
+          "type": "ice",
+          "durability": 1
+        }
+      ]
+    },
+    {
+      "id": "stage_12",
+      "title": "서재의 마지막 상자",
+      "width": 7,
+      "height": 7,
+      "moves": 28,
+      "seed": 2693,
+      "colors": 4,
+      "targetColor": 3,
+      "targetAmount": 18,
+      "boxes": 2,
+      "ice": 3,
+      "layout": [
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO",
+        "OOOOOOO"
+      ],
+      "obstacles": [
+        {
+          "x": 2,
+          "y": 2,
+          "type": "box",
+          "durability": 1
+        },
+        {
+          "x": 4,
+          "y": 2,
+          "type": "box",
+          "durability": 1
+        },
+        {
+          "x": 1,
+          "y": 4,
+          "type": "ice",
+          "durability": 1
+        },
+        {
+          "x": 3,
+          "y": 4,
+          "type": "ice",
+          "durability": 1
+        },
+        {
+          "x": 5,
+          "y": 4,
+          "type": "ice",
+          "durability": 1
+        }
+      ]
+    }
+  ],
+  "riddles": [
+    {
+      "id": "route",
+      "title": "세 번의 이동",
+      "kind": "order",
+      "question": "열쇠는 수건에 걸려 함께 이동했다. 인계표에 따르면 수건을 받은 뒤 파란 바구니가 복도로 나갔고, 마지막에 빈 카트가 돌아왔다. 실제 순서대로 기록을 선택하자.",
+      "options": [
+        "빈 카트가 프런트로 돌아왔다",
+        "흰 수건을 인계했다",
+        "파란 바구니를 복도로 옮겼다"
+      ],
+      "answer": [
+        1,
+        2,
+        0
+      ],
+      "hints": [
+        "가장 먼저 일어난 일은 수건을 받은 것이다.",
+        "복도로 이동한 것은 카트가 아니라 파란 바구니다.",
+        "흰 수건 → 파란 바구니 → 빈 카트."
+      ],
+      "explanation": "열쇠가 수건에 걸려 있었다면 복도로 나간 파란 바구니를 찾아야 한다. 빈 카트만 살펴봐서는 찾을 수 없다."
+    },
+    {
+      "id": "phone",
+      "title": "빈 방에서 걸려 온 전화?",
+      "kind": "choice",
+      "question": "전화는 매일 정확히 18시에 울린다. 빈 객실에는 아무도 없고, 수화기를 들면 끊긴다. 관리실 기록에는 같은 시각 그 객실로 ‘시험 신호’를 보낸다고 적혀 있다. 가장 잘 맞는 설명은?",
+      "options": [
+        "빈 객실의 투숙객이 장난 전화를 건다",
+        "관리실의 자동 시험 신호가 객실 전화벨을 울린다",
+        "옆 객실의 시계가 전화 소리를 낸다"
+      ],
+      "answer": [
+        1
+      ],
+      "hints": [
+        "소리가 나는 장소와 신호를 보내는 장소는 다를 수 있다.",
+        "통화 기록의 방향은 관리실에서 객실로 향한다.",
+        "누군가의 통화가 아니라 자동으로 보내는 시험 신호다."
+      ],
+      "explanation": "전화벨은 사람이 발신했다는 증거가 아니다. 오래된 설비가 매일 같은 시간 연결 상태를 시험하고 있었다."
+    },
+    {
+      "id": "room",
+      "title": "번호 없는 방",
+      "kind": "choice",
+      "question": "달 태그에는 객실 번호가 없다. 옛 안내도에는 같은 표식 옆에 ‘누구나 편지와 책을 남길 수 있는 방’이라고 적혀 있다. 이 방의 원래 용도는?",
+      "options": [
+        "특정 손님만 쓰는 비밀 객실",
+        "직원의 개인 창고",
+        "투숙객과 직원이 함께 쓰는 서재"
+      ],
+      "answer": [
+        2
+      ],
+      "hints": [
+        "특정 사람에게 배정하는 방이었다면 객실 번호가 필요했을 것이다.",
+        "핵심은 ‘누구나’라는 표현이다.",
+        "책과 편지를 함께 나누던 공간을 고르자."
+      ],
+      "explanation": "객실 번호가 지워진 것이 아니었다. 처음부터 모두가 이용하는 공동 서재여서 달 표식만 붙어 있었다."
+    },
+    {
+      "id": "timeline",
+      "title": "닫힌 방의 진짜 이야기",
+      "kind": "order",
+      "question": "사진에는 서재가 문을 연 날이 남아 있다. 그 후 누수가 생겨 수리 때문에 문을 닫았다. 편지는 수리가 끝나면 친구들을 초대하려고 썼지만 부치지 못했다. 일어난 순서대로 놓자.",
+      "options": [
+        "부치지 못한 초대장이 남았다",
+        "서재에서 함께 사진을 찍었다",
+        "누수 수리로 서재 문을 닫았다"
+      ],
+      "answer": [
+        1,
+        2,
+        0
+      ],
+      "hints": [
+        "함께 사진을 찍은 때에는 서재를 사용할 수 있었다.",
+        "초대장은 다시 열 날을 기다리며 작성했다.",
+        "사진 → 수리로 폐쇄 → 부치지 못한 초대장."
+      ],
+      "explanation": "누군가 방의 존재를 지운 것이 아니었다. 수리가 길어지며 재개장 약속이 잊혔고, 문 선생은 혼자 그 약속을 기다렸다."
+    }
+  ]
+}

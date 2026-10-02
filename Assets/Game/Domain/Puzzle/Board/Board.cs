@@ -24,7 +24,8 @@ namespace PuzzleSpire.Domain.Puzzle
         public Board(
             int width,
             int height,
-            IReadOnlyCollection<GridPosition> voidPositions)
+            IReadOnlyCollection<GridPosition>
+                voidPositions)
         {
             if (width <= 0)
             {
@@ -51,12 +52,15 @@ namespace PuzzleSpire.Domain.Puzzle
             Width = width;
             Height = height;
 
-            _cells = new Cell[width, height];
+            _cells =
+                new Cell[width, height];
 
-            InitializeCells(voidPositions);
+            InitializeCells(
+                voidPositions);
         }
 
-        public bool IsInside(GridPosition position)
+        public bool IsInside(
+            GridPosition position)
         {
             return position.X >= 0
                 && position.X < Width
@@ -64,7 +68,8 @@ namespace PuzzleSpire.Domain.Puzzle
                 && position.Y < Height;
         }
 
-        public bool IsPlayable(GridPosition position)
+        public bool IsPlayable(
+            GridPosition position)
         {
             if (!IsInside(position))
             {
@@ -82,7 +87,8 @@ namespace PuzzleSpire.Domain.Puzzle
             return GetCell(position).Type;
         }
 
-        public Cell GetCell(GridPosition position)
+        public Cell GetCell(
+            GridPosition position)
         {
             ValidatePosition(position);
 
@@ -91,12 +97,14 @@ namespace PuzzleSpire.Domain.Puzzle
                 position.Y];
         }
 
-        public Block GetBlock(GridPosition position)
+        public Block GetBlock(
+            GridPosition position)
         {
             return GetCell(position).Block;
         }
 
-        public bool IsEmpty(GridPosition position)
+        public bool IsEmpty(
+            GridPosition position)
         {
             return GetCell(position).IsEmpty;
         }
@@ -105,22 +113,59 @@ namespace PuzzleSpire.Domain.Puzzle
             GridPosition position,
             Block block)
         {
-            GetCell(position).PlaceBlock(block);
+            GetCell(position)
+                .PlaceBlock(block);
         }
 
         public Block RemoveBlock(
             GridPosition position)
         {
-            return GetCell(position).RemoveBlock();
+            return GetCell(position)
+                .RemoveBlock();
+        }
+
+        public ICellObstacle GetObstacle(
+            GridPosition position,
+            ObstacleLayer layer)
+        {
+            return GetCell(position)
+                .GetObstacle(layer);
+        }
+
+        public bool HasObstacle(
+            GridPosition position,
+            ObstacleLayer layer)
+        {
+            return GetCell(position)
+                .HasObstacle(layer);
+        }
+
+        public void PlaceObstacle(
+            GridPosition position,
+            ICellObstacle obstacle)
+        {
+            GetCell(position)
+                .PlaceObstacle(obstacle);
+        }
+
+        public ICellObstacle RemoveObstacle(
+            GridPosition position,
+            ObstacleLayer layer)
+        {
+            return GetCell(position)
+                .RemoveObstacle(layer);
         }
 
         private void InitializeCells(
-            IReadOnlyCollection<GridPosition> voidPositions)
+            IReadOnlyCollection<GridPosition>
+                voidPositions)
         {
-            HashSet<GridPosition> voidPositionSet =
-                new HashSet<GridPosition>();
+            HashSet<GridPosition>
+                voidPositionSet =
+                    new HashSet<GridPosition>();
 
-            foreach (GridPosition position in voidPositions)
+            foreach (GridPosition position
+                     in voidPositions)
             {
                 if (!IsInside(position))
                 {
@@ -130,18 +175,26 @@ namespace PuzzleSpire.Domain.Puzzle
                         "Void ÁÂÇ¥°¡ º¸µå ¹üÀ§¸¦ ¹þ¾î³µ½À´Ï´Ù.");
                 }
 
-                voidPositionSet.Add(position);
+                voidPositionSet.Add(
+                    position);
             }
 
-            for (int x = 0; x < Width; x++)
+            for (int x = 0;
+                 x < Width;
+                 x++)
             {
-                for (int y = 0; y < Height; y++)
+                for (int y = 0;
+                     y < Height;
+                     y++)
                 {
                     GridPosition position =
-                        new GridPosition(x, y);
+                        new GridPosition(
+                            x,
+                            y);
 
                     CellType cellType =
-                        voidPositionSet.Contains(position)
+                        voidPositionSet.Contains(
+                            position)
                             ? CellType.Void
                             : CellType.Playable;
 

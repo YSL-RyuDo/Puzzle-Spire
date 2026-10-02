@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Game/Scenes/Hotel.unity
+    guid: 024e808be4157f24fab1b785cfe62adc
+  - enabled: 0
+    path: Assets/Game/Scenes/PuzzleTest.unity
+    guid: 7f0c5b50437286044b1d0557bb8740da
+  - enabled: 0
     path: Assets/Game/Scenes/SampleScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   m_configObjects:

@@ -36,15 +36,18 @@ namespace PuzzleSpire.Domain.Puzzle
                     nameof(turnResult));
             }
 
+            // 실제 블록 제거가 발생하지 않은 클릭은
+            // 이동 횟수를 소모하지 않습니다.
             if (!turnResult.WasResolved)
             {
                 return false;
             }
 
+            // 이동 횟수가 이미 0이면 예외를 발생시키지 않고
+            // 단순히 소모 실패로 처리합니다.
             if (!HasMovesRemaining)
             {
-                throw new InvalidOperationException(
-                    "남아 있는 이동 횟수가 없습니다.");
+                return false;
             }
 
             RemainingMoves--;

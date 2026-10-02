@@ -10,6 +10,11 @@ namespace PuzzleSpire.Domain.Puzzle
 
         public bool IsSpecial => Type != BlockType.Normal;
 
+        // Rockets and bombs are independent special blocks. Only normal
+        // blocks participate in color matching and color-bomb targeting.
+        public bool ParticipatesInColorMatch =>
+            Type == BlockType.Normal;
+
         public Block(
             BlockColor color,
             BlockType type = BlockType.Normal)
@@ -19,7 +24,7 @@ namespace PuzzleSpire.Domain.Puzzle
                 throw new ArgumentOutOfRangeException(
                     nameof(color),
                     color,
-                    "Á¤ÀÇµÇÁö ¾ÊÀº ºí·Ï »ö»óÀÔ´Ï´Ù.");
+                    "ì •ì˜ë˜ì§€ ì•Šì€ ë¸”ë¡ ìƒ‰ìƒì…ë‹ˆë‹¤.");
             }
 
             if (!Enum.IsDefined(typeof(BlockType), type))
@@ -27,7 +32,7 @@ namespace PuzzleSpire.Domain.Puzzle
                 throw new ArgumentOutOfRangeException(
                     nameof(type),
                     type,
-                    "Á¤ÀÇµÇÁö ¾ÊÀº ºí·Ï Á¾·ùÀÔ´Ï´Ù.");
+                    "ì •ì˜ë˜ì§€ ì•Šì€ ë¸”ë¡ ì¢…ë¥˜ì…ë‹ˆë‹¤.");
             }
 
             Color = color;

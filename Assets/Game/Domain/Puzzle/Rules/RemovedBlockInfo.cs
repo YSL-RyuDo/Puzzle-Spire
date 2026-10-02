@@ -11,6 +11,9 @@ namespace PuzzleSpire.Domain.Puzzle
 
         public BlockType Type { get; }
 
+        public bool ParticipatesInColorObjective =>
+            Type == BlockType.Normal;
+
         public RemovedBlockInfo(
             GridPosition position,
             BlockColor color,
@@ -21,7 +24,7 @@ namespace PuzzleSpire.Domain.Puzzle
                 throw new ArgumentOutOfRangeException(
                     nameof(color),
                     color,
-                    "Á¤ÀÇµÇÁö ¾ÊÀº ºí·Ï »ö»óÀÔ´Ï´Ù.");
+                    "ì •ì˜ë˜ì§€ ì•Šì€ ë¸”ë¡ ìƒ‰ìƒì…ë‹ˆë‹¤.");
             }
 
             if (!Enum.IsDefined(typeof(BlockType), type))
@@ -29,7 +32,7 @@ namespace PuzzleSpire.Domain.Puzzle
                 throw new ArgumentOutOfRangeException(
                     nameof(type),
                     type,
-                    "Á¤ÀÇµÇÁö ¾ÊÀº ºí·Ï Á¾·ùÀÔ´Ï´Ù.");
+                    "ì •ì˜ë˜ì§€ ì•Šì€ ë¸”ë¡ ì¢…ë¥˜ì…ë‹ˆë‹¤.");
             }
 
             Position = position;

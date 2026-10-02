@@ -16,8 +16,13 @@ MonoBehaviour:
   _width: 5
   _height: 1
   _randomSeed: 12345
+  _layoutRows:
+  - OOOOO
   _availableColors: 00000000
   _moveLimit: 99
+  _useColorObjective: 1
   _targetColor: 0
   _targetAmount: 999
-  _layoutRows: []
+  _boxTargetAmount: 0
+  _iceTargetAmount: 0
+  _obstaclePlacements: []

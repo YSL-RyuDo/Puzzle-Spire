@@ -1,0 +1,5 @@
+{
+  "name": "PuzzleSpire.Hotel.Editor",
+  "references": ["PuzzleSpire.Hotel", "Unity.ugui", "Unity.InputSystem"],
+  "includePlatforms": ["Editor"]
+}
