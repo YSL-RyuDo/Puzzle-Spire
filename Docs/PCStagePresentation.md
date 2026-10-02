@@ -1,5 +1,7 @@
 # PC 단일 화면 연출
 
+2026-10-03: 첫 조사에는 보관함 확대와 추가 인물 포즈를 적용했다. 퍼즐·수첩을 포함한 최신 변경은 [VisualInvestigation.md](VisualInvestigation.md)에 기록했다. 아래는 최초 PC 무대 구현의 기록이다.
+
 전체 플레이 영상과 최신 재검증 결과는 [FullPlayVerification.md](FullPlayVerification.md)에 기록했다.
 
 ## 참고 영상에서 가져온 것

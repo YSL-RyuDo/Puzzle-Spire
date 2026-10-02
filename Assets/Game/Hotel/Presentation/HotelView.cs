@@ -27,6 +27,7 @@ namespace PuzzleSpire.Hotel
         [Header("PC single-stage presentation · authored objects only")]
         public HotelStagePresentation stagePresentation;
         public CanvasGroup explorationHud;
+        public HotelInvestigationView investigation;
         [Header("Puzzle")]
         public Text puzzleTitle, puzzlePurpose, movesText, goalsText, puzzleHelp, comboText;
         public GridLayoutGroup boardLayout;
@@ -57,6 +58,7 @@ namespace PuzzleSpire.Hotel
 
         public void Show(GameObject target)
         {
+            if (investigation != null) { investigation.inspectionPanel.SetActive(false); investigation.helpPanel.SetActive(false); }
             if (stagePresentation != null) stagePresentation.CancelDialogue();
             if (explorationHud != null) { explorationHud.alpha = 1; explorationHud.blocksRaycasts = true; }
             foreach (var screen in new[] { titleScreen, exploreScreen, puzzleScreen, riddleScreen, notebookScreen, catalogScreen, settingsScreen, endingScreen }) screen.SetActive(screen == target);

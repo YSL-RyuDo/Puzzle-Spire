@@ -25,7 +25,7 @@ namespace PuzzleSpire.Hotel
         {
             var args=Environment.GetCommandLineArgs();int index=Array.IndexOf(args,"-hotel-encoder");
             if(index<0 || index+1>=args.Length)throw new ArgumentException("-hotel-encoder path is required");
-            recordingFolder=Path.Combine(Application.dataPath,"..","FullPlay");Directory.CreateDirectory(recordingFolder);
+            recordingFolder=Path.Combine(Application.dataPath,"..",Environment.GetCommandLineArgs().Contains("-hotel-first-slice") ? "FirstInvestigation" : "FullPlay");Directory.CreateDirectory(recordingFolder);
             Directory.CreateDirectory(Path.Combine(recordingFolder,"Checkpoints"));
             File.WriteAllText(Path.Combine(recordingFolder,"timeline.tsv"),"seconds\tevent\n");
             File.WriteAllText(Path.Combine(recordingFolder,"encoder.log"),"");
@@ -69,7 +69,8 @@ namespace PuzzleSpire.Hotel
             try { video.Dispose(); }
             catch(Exception e){recordingFailure=e.ToString();}
             Time.captureFramerate=0;HotelPresentationClock.Recording=false;
-            if(recordingFailure==null)
+            bool firstSlice = Environment.GetCommandLineArgs().Contains("-hotel-first-slice");
+            if(recordingFailure==null && !firstSlice)
             {
                 try { AuditModAndPractice(); }
                 catch(Exception e){recordingFailure=e.ToString();}
@@ -79,7 +80,7 @@ namespace PuzzleSpire.Hotel
                   "\nRiddles completed: "+recordedRiddles.Count+"\nDialogue lines shown: "+recordedLines.Count+
                   "\nLegal board moves: "+recordedMoves+"\nRetries: "+recordedRetries+"\nVerified UI clicks: "+recordedClicks+
                   "\nDuration seconds: "+(video.Frames/(double)HotelVideoWriter.Fps).ToString("F3",CultureInfo.InvariantCulture)+
-                  "\nSave/resume, all clues, wrong answers, hints, practice exit, MOD isolation: PASS\nVideo: 1280x720, 24 fps, silent, uninterrupted automated UI play; no forced wins.\n"
+                  (firstSlice ? "\nFirst investigation, discovery, illustrated notebook and save/resume: PASS\n" : "\nSave/resume, all clues, wrong answers, hints, practice exit, MOD isolation: PASS\n") + "Video: 24 fps, silent, uninterrupted automated UI play; no forced wins.\n"
                 : "FAIL\n"+recordingFailure;
             File.WriteAllText(Path.Combine(recordingFolder,"verification.txt"),report);
             Debug.Log(recordingFailure==null ? "HOTEL_FULL_PLAY_PASSED\n"+report : "HOTEL_FULL_PLAY_FAILED\n"+report);
@@ -87,6 +88,7 @@ namespace PuzzleSpire.Hotel
         }
         private IEnumerator PlayFullCampaign()
         {
+            bool firstSlice = Environment.GetCommandLineArgs().Contains("-hotel-first-slice");
             yield return new WaitForSeconds(2);
             Checkpoint("00-title","New game");RecordClick(view.newButton);
             float deadline=Time.time+1800;int actions=0;
@@ -94,7 +96,7 @@ namespace PuzzleSpire.Hotel
             {
                 yield return null;
                 // The final dialogue's exit coroutine may finish during this yield.
-                if(story.Progress.ending)break;
+                if(story.Progress.ending || (firstSlice && story.Progress.completed.Contains("keys")))break;
                 if(busy)continue;
                 if(view.dialoguePanel.activeSelf)
                 {
@@ -115,6 +117,12 @@ namespace PuzzleSpire.Hotel
                     Checkpoint("result-"+(activeNode?.id??"none")+"-"+attempt,"Result: "+view.resultTitle.text);
                     yield return new WaitForSeconds(Mathf.Clamp(view.resultBody.text.Length/22f,2,5));
                     RecordClick(view.resultPrimary);actions++;continue;
+                }
+                if(screen=="inspection")
+                {
+                    Checkpoint("inspection-"+activeNode.id+"-"+Presentation.discoveryCard.activeSelf,"Inspect: "+Presentation.inspectionTitle.text);
+                    yield return new WaitForSeconds(3);
+                    RecordClick(Presentation.inspectionContinue);actions++;continue;
                 }
                 if(screen=="explore")
                 {
@@ -164,6 +172,17 @@ namespace PuzzleSpire.Hotel
                     recordedRiddles.Add(riddle.id);actions++;continue;
                 }
                 throw new InvalidOperationException("Unexpected screen: "+screen);
+            }
+            if(firstSlice)
+            {
+                ContentValidation.Require(story.Progress.completed.Contains("keys"),"First investigation did not complete");
+                RecordClick(view.notebookButton); yield return new WaitForSeconds(2);
+                ContentValidation.Require(Presentation.notebookImage.gameObject.activeSelf,"Visual observation missing from notebook");
+                Checkpoint("first-slice-notebook","White thread recorded without changing saved clue set");
+                RecordClick(view.notebookBack); RecordClick(view.exploreTitleButton); RecordClick(view.continueButton);
+                ContentValidation.Require(NotebookEntries().Any(c=>c.id=="observation.keys"),"Visual observation lost on resume");
+                Checkpoint("first-slice-resumed","First investigation resumed"); yield return new WaitForSeconds(2);
+                recordingDone=true; yield break;
             }
             ContentValidation.Require(story.Progress.ending && story.Progress.completed.Count==storage.Pack.nodes.Length,"Campaign did not reach ending");
             ContentValidation.Require(recordedStages.Count==storage.Pack.nodes.Count(n=>n.kind=="stage"),"Not all story stages played");

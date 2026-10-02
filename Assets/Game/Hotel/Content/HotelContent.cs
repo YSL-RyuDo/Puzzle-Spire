@@ -26,11 +26,11 @@ namespace PuzzleSpire.Hotel
     }
     [Serializable] public sealed class ClueData
     {
-        public string id, title, description;
+        public string id, title, description, image;
     }
     [Serializable] public sealed class DialogueLine
     {
-        public string speaker, text;
+        public string speaker, text, pose;
     }
     [Serializable] public sealed class InvestigationNode
     {
@@ -40,6 +40,8 @@ namespace PuzzleSpire.Hotel
         public string[] rewards = Array.Empty<string>();
         public DialogueLine[] before = Array.Empty<DialogueLine>();
         public DialogueLine[] after = Array.Empty<DialogueLine>();
+        // Optional visual observations are derived from completed nodes, preserving existing saves.
+        public string inspection, discovery, discoveryTitle, discoveryText;
     }
     [Serializable] public sealed class HotelStage
     {
@@ -102,6 +104,7 @@ namespace PuzzleSpire.Hotel
             var riddles = Ids(pack.riddles, x => x.id, "수수께끼");
             Require(locations.Count > 0 && nodes.Count > 0, "장소와 조사가 필요합니다.");
             Require(locations.Count <= 3 && clues.Count <= 12, "이 UI 버전은 장소 3곳, 단서 12개까지 지원합니다.");
+            Require(clues.Count + pack.nodes.Count(n => !string.IsNullOrEmpty(n.discovery)) <= 12, "단서와 관찰 기록은 합쳐서 12개까지 지원합니다.");
             Require(nodes.Count <= 200 && stages.Count <= 200 && riddles.Count <= 100, "콘텐츠 개수 제한을 초과했습니다.");
             foreach (var l in pack.locations)
                 Require(string.IsNullOrEmpty(l.unlockAfter) || nodes.Contains(l.unlockAfter), "장소 해금 조건을 찾을 수 없습니다: " + l.id);
@@ -110,6 +113,7 @@ namespace PuzzleSpire.Hotel
                 Require(locations.Contains(n.location), "조사 장소를 찾을 수 없습니다: " + n.id);
                 Require(n.requires != null && n.rewards != null && n.before != null && n.after != null, "조사 목록 필드가 비었습니다: " + n.id);
                 Require(n.requires.All(nodes.Contains) && n.rewards.All(clues.Contains), "조사 조건/단서 ID 오류: " + n.id);
+                Require(string.IsNullOrEmpty(n.discovery) || (!string.IsNullOrWhiteSpace(n.discoveryTitle) && !string.IsNullOrWhiteSpace(n.discoveryText)), "발견 장면의 제목과 관찰 내용이 필요합니다: " + n.id);
                 Require(n.x >= 0 && n.x <= 1 && n.y >= 0 && n.y <= 1, "조사 좌표 범위 오류: " + n.id);
                 Require(n.kind == "dialogue" || n.kind == "ending" || (n.kind == "stage" && stages.Contains(n.contentId)) || (n.kind == "riddle" && riddles.Contains(n.contentId)), "조사 종류/콘텐츠 오류: " + n.id);
                 foreach (var line in n.before.Concat(n.after))

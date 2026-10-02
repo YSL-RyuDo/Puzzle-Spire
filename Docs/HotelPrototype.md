@@ -1,5 +1,7 @@
 # 잔월 호텔 플레이어블 프로토타입
 
+2026-10-03: 첫 보관함 확대 조사, 인물 포즈, 그림 수첩과 공통 퍼즐 UI·턴 연출을 추가했다. 현재 구현과 재현 방법은 [VisualInvestigation.md](VisualInvestigation.md)를 참고하세요. 아래 초기 프로토타입 설명 중 간단한 제거 전환·문자 장애물·그림 없는 수첩은 이 개편으로 대체했습니다.
+
 Windows / Unity 6000.3.1f1. 걷기 없는 2D 조사·대화 게임에 기존 PuzzleSpire 블록 규칙을 연결한 플레이어블 버전입니다. PC 단일 화면 배경과 큰 인물, 하단 대화창으로 연출을 개편했습니다. 최신 UI 구조와 편집 방법은 [PCStagePresentation.md](PCStagePresentation.md)를 참고하세요.
 
 ## 실행

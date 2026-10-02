@@ -41,9 +41,10 @@ namespace PuzzleSpire.Hotel
             smoke = Environment.GetCommandLineArgs().Contains("-hotel-smoke");
             bool preview = Environment.GetCommandLineArgs().Contains("-hotel-preview");
             bool fullPlay = Environment.GetCommandLineArgs().Contains("-hotel-full-play");
+            bool visualReview = Environment.GetCommandLineArgs().Contains("-hotel-effects-review");
             try
             {
-                string root = smoke || preview || fullPlay ? Path.Combine(Path.GetTempPath(), "PuzzleSpire-Smoke-" + Guid.NewGuid().ToString("N")) : Application.persistentDataPath;
+                string root = smoke || preview || fullPlay || visualReview ? Path.Combine(Path.GetTempPath(), "PuzzleSpire-Smoke-" + Guid.NewGuid().ToString("N")) : Application.persistentDataPath;
                 storage = new HotelStorage(Path.Combine(Application.streamingAssetsPath, "Hotel", "base.json"), root);
                 defaultBackgrounds = view.locationImages.Select(i => i.sprite).ToArray();
                 WireButtons();
@@ -53,6 +54,7 @@ namespace PuzzleSpire.Hotel
                 if (smoke) StartCoroutine(SmokeTest());
                 else if (preview) StartCoroutine(PresentationPreview());
                 else if (fullPlay) BeginFullPlayRecording();
+                else if (visualReview) StartCoroutine(ReviewPresentation());
             }
             catch (Exception e)
             {
@@ -92,12 +94,14 @@ namespace PuzzleSpire.Hotel
             Bind(view.retryButton, () => Confirm("다시 조사하기", "현재 보드를 새로 시작합니다. 모은 단서는 유지됩니다.", () => StartPuzzle(stage, practice, true), () => view.resultPanel.SetActive(false)));
             Bind(view.puzzleBackButton, LeavePuzzle);
             Bind(view.puzzleHintButton, PuzzleHint);
+            Bind(Presentation.helpButton, () => { Presentation.helpPanel.SetActive(!Presentation.helpPanel.activeSelf); ClearHighlights(); });
+            for (int i = 0; i < Presentation.props.Length; i++) { int index = i; Bind(Presentation.props[i], () => InspectProp(index)); }
             Bind(view.riddleBack, ShowExplore);
             Bind(view.resetAnswer, () => { selection.Clear(); RenderRiddle(); });
             Bind(view.riddleHint, RiddleHint);
             Bind(view.submitAnswer, SubmitRiddle);
             for (int i = 0; i < view.options.Length; i++) { int index = i; Bind(view.options[i], () => SelectOption(index)); }
-            for (int i = 0; i < view.cells.Length; i++) { int index = i; Bind(view.cells[i].button, () => ClickCell(index)); }
+            for (int i = 0; i < view.cells.Length; i++) { int index = i; Bind(view.cells[i].button, () => ClickCell(index)); view.cells[i].Hover = entered => HoverCell(index, entered); }
             Bind(view.catalogBack, ShowTitle);
             Bind(view.catalogPrevious, () => { catalogPage--; RenderCatalog(); });
             Bind(view.catalogNext, () => { catalogPage++; RenderCatalog(); });
@@ -175,11 +179,21 @@ namespace PuzzleSpire.Hotel
             view.hotspotDescription.text = local?.purpose ?? (next != null ? pack.locations.First(l => l.id == next.location).name + "에서 다음 단서를 찾아보세요." : "모은 단서를 수첩에서 다시 볼 수 있습니다.");
             view.nextLocation.gameObject.SetActive(next != null && next.location != room.id);
             if (next != null) HotelView.Label(view.nextLocation, pack.locations.First(l => l.id == next.location).name + "로 이동 →");
+            RefreshInvestigation();
         }
         private void BeginNode(InvestigationNode node)
         {
             if (!story.IsAvailable(node)) return;
             activeNode = node;
+            if (!string.IsNullOrEmpty(node.inspection))
+            {
+                ShowInspection(node, false, () => BeginNodeDialogue(node));
+                return;
+            }
+            BeginNodeDialogue(node);
+        }
+        private void BeginNodeDialogue(InvestigationNode node)
+        {
             ShowDialogue(node.before, () =>
             {
                 if (node.kind == "stage") { attempt = 0; StartPuzzle(storage.Pack.stages.First(s => s.id == node.contentId), false, false); }
@@ -188,6 +202,15 @@ namespace PuzzleSpire.Hotel
             });
         }
         private void FinishNode()
+        {
+            if (!string.IsNullOrEmpty(activeNode.discovery))
+            {
+                ShowInspection(activeNode, true, FinishNodeDialogue);
+                return;
+            }
+            FinishNodeDialogue();
+        }
+        private void FinishNodeDialogue()
         {
             ShowDialogue(activeNode.after, () =>
             {
@@ -215,12 +238,12 @@ namespace PuzzleSpire.Hotel
             view.stagePresentation.Open(Portrait("you"), partner == null ? null : Portrait(partner));
             RenderDialogue();
         }
-        private Sprite Portrait(string id)
+        private Sprite Portrait(string id, string pose = null)
         {
             var character = storage.Pack.characters.FirstOrDefault(c => c.id == id);
             if (character == null) return null;
             int index = Array.IndexOf(storage.Pack.characters, character);
-            return storage.Image(character.portrait ?? "character." + character.id) ??
+            return (!string.IsNullOrEmpty(pose) ? storage.Image("character." + id + "." + pose) : null) ?? storage.Image(character.portrait ?? "character." + character.id) ?? Presentation.Pose(id, pose) ??
                 (index < defaultPortraits.Length ? defaultPortraits[index] : null);
         }
         private void RenderDialogue()
@@ -229,7 +252,7 @@ namespace PuzzleSpire.Hotel
             var character = storage.Pack.characters.First(c => c.id == line.speaker);
             view.speakerName.text = character.name; view.speakerRole.text = character.role;
             view.dialogueCounter.text = "클릭 / Space  ·  글자 완성, 한 번 더 누르면 다음";
-            view.stagePresentation.Speak(line.speaker == "you", Portrait(line.speaker), line.text, smoke);
+            view.stagePresentation.Speak(line.speaker == "you", Portrait(line.speaker, line.pose), line.text, smoke);
         }
         private void NextDialogue()
         {
@@ -255,12 +278,11 @@ namespace PuzzleSpire.Hotel
             view.Show(view.puzzleScreen);
             view.puzzleTitle.text = stage.title;
             view.puzzlePurpose.text = practice ? "연습 · 이야기 진행에는 영향을 주지 않습니다" : activeNode.purpose;
-            view.puzzleHelp.text = "같은 색 2개 이상을 클릭\n5개 로켓 · 7개 폭탄 · 9개 색 제거\n특수 블록은 혼자서도 클릭 가능\n\n상자: 옆 블록 제거 / 특수 효과\n얼음: 같은 칸 제거 / 특수 효과";
-            toast = "먼저 왼쪽의 조사 목표를 확인하세요.";
+            SetupPuzzlePresentation();
             RenderBoard();
         }
         private static string ColorName(BlockColor color) => new[] { "산호", "파랑", "초록", "노랑", "보라" }[(int)color];
-        private void RenderBoard()
+        private void RenderBoard(bool updateHud = true)
         {
             var board = puzzle.Board;
             view.boardLayout.constraintCount = board.Width;
@@ -271,29 +293,9 @@ namespace PuzzleSpire.Hotel
             {
                 var cell = view.cells[i]; bool visible = i < board.Width * board.Height;
                 cell.gameObject.SetActive(visible); if (!visible) continue;
-                cell.transform.localScale = Vector3.one;
-                int x = i % board.Width, y = board.Height - 1 - i / board.Width;
-                var p = new GridPosition(x, y); bool playable = board.IsPlayable(p);
-                var block = playable ? board.GetBlock(p) : null;
-                cell.face.color = block != null ? blockColors[(int)block.Color] : new Color(.10f,.18f,.21f,playable ? 1 : .15f);
-                cell.symbol.text = ""; cell.customImage.gameObject.SetActive(false);
-                if (block != null)
-                {
-                    var sprite = storage.Image("block." + (int)block.Color) ?? ((int)block.Color < defaultBlockSprites.Length ? defaultBlockSprites[(int)block.Color] : null);
-                    cell.customImage.gameObject.SetActive(sprite != null); cell.customImage.sprite = sprite;
-                    cell.symbol.text = block.Type == BlockType.Normal ? new[] { "◆", "●", "▲", "■", "✦" }[(int)block.Color] : block.Type == BlockType.HorizontalRocket ? "↔" : block.Type == BlockType.VerticalRocket ? "↕" : block.Type == BlockType.Bomb ? "✹" : "◎";
-                }
-                var box = playable ? board.GetObstacle(p, ObstacleLayer.Blocking) as IDamageableObstacle : null;
-                var ice = playable ? board.GetObstacle(p, ObstacleLayer.Overlay) as IDamageableObstacle : null;
-                cell.obstacleText.text = box != null ? "상자\n" + box.CurrentDurability : ice != null ? "얼음 " + ice.CurrentDurability : "";
-                cell.obstacleBorder.gameObject.SetActive(box != null || ice != null);
-                cell.obstacleBorder.color = box != null ? new Color(.54f,.37f,.22f,.95f) : new Color(.62f,.85f,1f,.42f);
-                cell.button.interactable = !busy && !puzzle.Cleared && !puzzle.Failed && block != null;
+                DrawCell(i);
             }
-            view.movesText.text = puzzle.Session.RemainingMoves.ToString();
-            view.goalsText.text = string.Join("\n\n", puzzle.Objectives.Objectives.Select(g =>
-                (g is RemoveColorObjective color ? ColorName(color.TargetColor) + " 블록" : g is RemoveBoxObjective ? "상자" : "얼음") + "\n" + Math.Min(g.CurrentAmount, g.TargetAmount) + " / " + g.TargetAmount + (g.IsCompleted ? "  ✓" : "")));
-            view.comboText.text = toast;
+            if (updateHud) UpdatePuzzleHud();
         }
         private void ClickCell(int index)
         {
@@ -303,26 +305,19 @@ namespace PuzzleSpire.Hotel
             var result = puzzle.Play(p);
             if (!result.WasResolved) { toast = "같은 색이 두 개 이상 연결된 곳을 찾아보세요."; view.comboText.text = toast; return; }
             busy = true;
+            turnReshuffled = puzzle.Reshuffles > shuffles;
             toast = puzzle.Reshuffles > shuffles ? "움직일 곳이 없어 블록을 다시 배치했어요. 횟수는 추가로 쓰지 않습니다." : result.RemovedCount + "개 정리" + (result.HasCreatedSpecialBlock ? " · 특수 블록 생성!" : "");
             StartCoroutine(AnimateTurn(result));
         }
         private IEnumerator AnimateTurn(PuzzleTurnResult result)
         {
-            var affected = result.RemovedPositions.Select(p => (stage.height - 1 - p.Y) * stage.width + p.X).ToArray();
-            float duration = smoke ? .001f : turnAnimationSeconds;
-            float t = 0;
-            while (t < duration)
-            {
-                t += HotelPresentationClock.Delta;
-                foreach (int index in affected) view.cells[index].transform.localScale = Vector3.one * Mathf.Lerp(1, .08f, t / duration);
-                yield return null;
-            }
+            yield return PresentTurn(result);
             busy = false; RenderBoard();
             if (puzzle.Cleared)
             {
-                Result("조사 완료", stage.title, "목표를 모두 달성했습니다.\n" + (practice ? "연습 결과는 이야기 진행에 반영되지 않습니다." : "새로 알아낸 사실을 확인해 보세요."), practice ? "연습 목록" : "조사 계속", () => { if (practice) ShowCatalog("practice"); else FinishNode(); }, "다시 플레이", () => StartPuzzle(stage, practice, true));
+                Result("조사 완료", stage.title, practice ? "목표를 모두 달성했어요." : activeNode?.inspection == "cabinet" ? "빈 열쇠 고리에 작은 흔적이 남아 있어요." : "주변이 정리됐어요. 새 흔적을 확인해 보세요.", practice ? "연습 목록" : "흔적 확인", () => { if (practice) ShowCatalog("practice"); else FinishNode(); }, "다시 플레이", () => StartPuzzle(stage, practice, true));
             }
-            else if (puzzle.Failed) Result("다시 시도", "조금만 더 살펴볼까요?", "조사 횟수를 모두 사용했습니다.\n재도전하면 새로운 보드로 시작합니다. 단서는 유지됩니다.", "재도전", () => StartPuzzle(stage, practice, true), "돌아가기", ReturnFromPuzzle);
+            else if (puzzle.Failed) Result("다시 시도", "흔적이 조금 남았어요", string.Join("\n", puzzle.Objectives.Objectives.Select(g => (g is RemoveColorObjective c ? ColorName(c.TargetColor) : g is RemoveBoxObjective ? "상자" : "얼음") + (g.IsCompleted ? " · 완료" : " · " + (g.TargetAmount - g.CurrentAmount) + "개 남음"))), "재도전", () => StartPuzzle(stage, practice, true), "돌아가기", ReturnFromPuzzle);
         }
         private void LeavePuzzle() => Confirm("조사를 잠시 멈출까요?", "이 보드의 진행은 저장되지 않습니다. 완료한 조사와 단서는 이미 저장되어 있습니다.", ReturnFromPuzzle, () => view.resultPanel.SetActive(false));
         private void ReturnFromPuzzle() { if (practice) ShowCatalog("practice"); else ShowExplore(); }
@@ -331,8 +326,8 @@ namespace PuzzleSpire.Hotel
             var move = puzzle.FindMove();
             if (!move.HasValue) return;
             int index = (stage.height - 1 - move.Value.Y) * stage.width + move.Value.X;
-            RenderBoard(); view.cells[index].face.color = Color.white;
-            view.comboText.text = "밝게 표시한 칸을 눌러 보세요. 힌트는 횟수를 소모하지 않습니다.";
+            HoverCell(index, true);
+            view.comboText.text = "빛나는 묶음을 눌러 보세요 · 횟수 소모 없음";
         }
         private void StartRiddle(RiddleData data)
         {
@@ -371,15 +366,18 @@ namespace PuzzleSpire.Hotel
         private void ShowNotebook(bool fromEnding)
         {
             screen = "notebook"; notebookFromEnding = fromEnding; view.Show(view.notebookScreen);
-            view.clueCount.text = story.Progress.clues.Count + " / " + storage.Pack.clues.Length + "개의 단서";
+            var entries = NotebookEntries();
+            view.clueCount.text = entries.Count + "개의 조사 기록";
             view.clueTitle.text = "조사 수첩"; view.clueDescription.text = "획득한 단서를 선택하면 내용을 다시 확인할 수 있습니다.";
+            Presentation.notebookImage.gameObject.SetActive(false);
             for (int i = 0; i < view.clueButtons.Length; i++)
             {
-                var button = view.clueButtons[i]; bool exists = i < storage.Pack.clues.Length; button.gameObject.SetActive(exists); if (!exists) continue;
-                var clue = storage.Pack.clues[i]; bool found = story.Progress.clues.Contains(clue.id);
-                HotelView.Label(button, found ? clue.title : "아직 발견하지 못한 단서"); button.interactable = found;
-                Bind(button, () => { view.clueTitle.text = clue.title; view.clueDescription.text = clue.description; });
+                var button = view.clueButtons[i]; bool exists = i < entries.Count; button.gameObject.SetActive(exists); if (!exists) continue;
+                var clue = entries[i];
+                HotelView.Label(button, clue.title); button.interactable = true;
+                Bind(button, () => SelectNotebookEntry(clue));
             }
+            if (entries.Count > 0) SelectNotebookEntry(entries[0]);
         }
         private void ShowCatalog(string mode) { screen = "catalog"; catalogMode = mode; catalogPage = 0; view.Show(view.catalogScreen); RenderCatalog(); }
         private void RenderCatalog()
@@ -441,6 +439,12 @@ namespace PuzzleSpire.Hotel
         private void Update()
         {
             if (Keyboard.current == null || busy) return;
+            if (Keyboard.current.escapeKey.wasPressedThisFrame && Presentation.helpPanel.activeSelf) { Presentation.helpPanel.SetActive(false); return; }
+            if (screen == "inspection")
+            {
+                if (Keyboard.current.escapeKey.wasPressedThisFrame && Presentation.inspectionBack.gameObject.activeSelf) Guard(ShowExplore);
+                return;
+            }
             if (view.dialoguePanel.activeSelf && (Keyboard.current.enterKey.wasPressedThisFrame || Keyboard.current.spaceKey.wasPressedThisFrame)) Guard(NextDialogue);
             if (!view.resultPanel.activeSelf && !view.dialoguePanel.activeSelf && Keyboard.current.escapeKey.wasPressedThisFrame)
                 Guard(() => { if (screen == "puzzle") LeavePuzzle(); else if (screen == "riddle") ShowExplore(); else if (screen == "notebook") { if (notebookFromEnding) ShowEnding(); else ShowExplore(); } else ShowTitle(); });
@@ -493,6 +497,7 @@ namespace PuzzleSpire.Hotel
                     PressForSmoke(view.dialogueNext); continue;
                 }
                 if (view.resultPanel.activeSelf) { yield return new WaitForEndOfFrame(); HotelCapture.Save(view, Path.Combine(output, "09-result.png")); PressForSmoke(view.resultPrimary); continue; }
+                if (screen == "inspection") { yield return new WaitForEndOfFrame(); HotelCapture.Save(view, Path.Combine(output, Presentation.discoveryCard.activeSelf ? "11-discovery.png" : "10-inspection.png")); PressForSmoke(Presentation.inspectionContinue); continue; }
                 if (screen == "explore")
                 {
                     var next = story.Next;

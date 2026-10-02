@@ -3,6 +3,8 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1] / 'Assets/StreamingAssets/Hotel'
+from hotel_visual_content import apply_visual_story
+
 def line(who, text): return dict(speaker=who, text=text)
 characters = [
  dict(id='you',name='서윤',role='우연히 사건을 맡은 여행자',color='#D9B978'),
@@ -79,6 +81,7 @@ for item in nodes:
  if item["id"] in pc_positions: item["x"], item["y"] = pc_positions[item["id"]]
 
 pack=dict(schemaVersion=1,title='잔월 호텔',locations=locations,characters=characters,clues=clues,nodes=nodes,stages=stages,riddles=riddles)
+apply_visual_story(pack)
 ROOT.mkdir(parents=True,exist_ok=True)
 (ROOT/'base.json').write_text(json.dumps(pack,ensure_ascii=False,indent=2),encoding='utf-8')
 sample=ROOT/'ExampleMod'; sample.mkdir(exist_ok=True)

@@ -36,6 +36,35 @@ namespace PuzzleSpire.Hotel.Tests
             var pack = Pack(); pack.stages[0].boxes = 999;
             Assert.Throws<InvalidOperationException>(() => ContentValidation.Validate(pack));
         }
+        [Test] public void SaveBeforeVisualUpdate_StillLoadsWithoutNewSerializedClues()
+        {
+            Directory.CreateDirectory(root);
+            var oldPack = Pack();
+            foreach (var node in oldPack.nodes)
+                node.inspection = node.discovery = node.discoveryTitle = node.discoveryText = null;
+            string previousContent = Path.Combine(root, "before-visual-update.json");
+            File.WriteAllText(previousContent, JsonUtility.ToJson(oldPack));
+            using (var previous = new HotelStorage(previousContent, root))
+            {
+                var story = new InvestigationSession(previous.Pack, previous.NewProgress());
+                story.Complete("arrival"); story.Complete("keys"); previous.Save(story.Progress);
+            }
+            using (var current = new HotelStorage(ContentPath, root))
+            {
+                var loaded = current.Load(out var warning);
+                Assert.That(warning, Is.Null);
+                Assert.That(loaded.completed, Does.Contain("keys"));
+                Assert.That(loaded.clues, Is.Empty);
+                Assert.That(current.Pack.nodes.Single(n => n.id == "keys").discovery, Is.EqualTo("thread"));
+            }
+        }
+        [Test] public void Validator_RejectsNotebookOverflowIncludingVisualObservations()
+        {
+            var pack = Pack();
+            foreach (var node in pack.nodes.Take(5))
+            { node.discovery = "thread"; node.discoveryTitle = "흰 실"; node.discoveryText = "관찰 내용"; }
+            Assert.Throws<InvalidOperationException>(() => ContentValidation.Validate(pack));
+        }
         [Test] public void Riddles_CheckOrderAndRejectIncompleteAnswers()
         {
             foreach (var riddle in Pack().riddles)
