@@ -61,14 +61,53 @@ namespace PuzzleSpire.Hotel.Editor
             {
                 string asset = "Assets/Game/Hotel/Art/" + name + "-" + i.ToString("00") + ".asset";
                 sprites[i] = AssetDatabase.LoadAssetAtPath<Sprite>(asset);
-                if (sprites[i] != null) continue;
+                bool storybookCutout = (name.StartsWith("Storybook") && name != "StorybookBackgrounds") || name.StartsWith("Mystery");
+                if (sprites[i] != null && !storybookCutout) continue;
                 int x0 = i % columns * cw, y0 = (rows - 1 - i / columns) * ch;
-                int minX = x0 + cw, minY = y0 + ch, maxX = x0, maxY = y0;
-                for (int y = y0; y < y0 + ch; y++) for (int x = x0; x < x0 + cw; x++)
+                int cellWidth=cw,cellHeight=ch;
+                if (storybookCutout)
+                {
+                    // Find each row's actual transparent gutter; a sleeve can extend
+                    // past the mathematical grid line without touching its neighbour.
+                    int Edge(int column)
+                    {
+                        if (column == 0) return 0;
+                        if (column == columns) return texture.width;
+                        int ideal = column * cw, bestX = ideal, bestScore = int.MaxValue;
+                        for (int x = ideal - cw / 4; x <= ideal + cw / 4; x++)
+                        {
+                            int count = 0;
+                            for (int y = y0; y < y0 + ch; y++) if (pixels[y * texture.width + x].a > 64) count++;
+                            int score = count * texture.width + Math.Abs(x - ideal);
+                            if (score < bestScore) { bestScore = score; bestX = x; }
+                        }
+                        return bestX;
+                    }
+                    int col = i % columns; x0 = Edge(col); cellWidth = Edge(col + 1) - x0;
+                }
+                if(name=="CollectionEvidence")
+                {
+                    // The generated cutouts have uneven gutters. Slice along the transparent
+                    // gap in each column instead of cutting through the tag or envelope.
+                    float[] edges={0,.27f,.5f,.75f,1};int col=i%columns;
+                    x0=Mathf.RoundToInt(edges[col]*texture.width);cellWidth=Mathf.RoundToInt(edges[col+1]*texture.width)-x0;
+                    int split=ch,best=int.MaxValue;
+                    for(int y=Mathf.RoundToInt(texture.height*.40f);y<Mathf.RoundToInt(texture.height*.60f);y++)
+                    {
+                        int opaque=0;for(int x=x0;x<x0+cellWidth;x++)if(pixels[y*texture.width+x].a>64)opaque++;
+                        int score=opaque*texture.height+Mathf.Abs(y-ch);
+                        if(score<best){best=score;split=y;}
+                    }
+                    y0=i<columns?split:0;cellHeight=i<columns?texture.height-split:split;
+                }
+                int minX = x0 + cellWidth, minY = y0 + cellHeight, maxX = x0, maxY = y0;
+                for (int y = y0; y < y0 + cellHeight; y++) for (int x = x0; x < x0 + cellWidth; x++)
                     if (pixels[y * texture.width + x].a > 64) { minX = Math.Min(minX, x); maxX = Math.Max(maxX, x); minY = Math.Min(minY, y); maxY = Math.Max(maxY, y); }
                 if (maxX <= minX) throw new InvalidOperationException("Empty atlas cell: " + asset);
                 var sprite = Sprite.Create(texture, new Rect(minX, minY, maxX - minX + 1, maxY - minY + 1), new Vector2(.5f, .5f), 100, 0, SpriteMeshType.FullRect);
-                sprite.name = name + "-" + i.ToString("00"); AssetDatabase.CreateAsset(sprite, asset); sprites[i] = sprite;
+                sprite.name = name + "-" + i.ToString("00");
+                if (sprites[i] != null) { EditorUtility.CopySerialized(sprite, sprites[i]); EditorUtility.SetDirty(sprites[i]); UnityEngine.Object.DestroyImmediate(sprite); }
+                else { AssetDatabase.CreateAsset(sprite, asset); sprites[i] = sprite; }
             }
             importer.isReadable = false; importer.SaveAndReimport();
             return sprites;

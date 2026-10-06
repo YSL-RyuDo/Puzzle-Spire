@@ -67,11 +67,15 @@ namespace PuzzleSpire.Hotel
     {
         public int schemaVersion = 1;
         public string id, name, version, author, description, contentFile;
+        // Omitted/"content": separate campaign save. "theme": images only, base save.
+        public string kind;
         public ImageOverride[] images = Array.Empty<ImageOverride>();
     }
     [Serializable] public sealed class ImageOverride
     {
         public string key, file;
+        // Optional atlas rectangle in source PNG pixels, origin at bottom-left.
+        public int x, y, width, height;
     }
 
     public static class ContentValidation

@@ -25,7 +25,7 @@ namespace PuzzleSpire.Hotel
         {
             var args=Environment.GetCommandLineArgs();int index=Array.IndexOf(args,"-hotel-encoder");
             if(index<0 || index+1>=args.Length)throw new ArgumentException("-hotel-encoder path is required");
-            recordingFolder=Path.Combine(Application.dataPath,"..",Environment.GetCommandLineArgs().Contains("-hotel-first-slice") ? "FirstInvestigation" : "FullPlay");Directory.CreateDirectory(recordingFolder);
+            recordingFolder=Path.Combine(Application.dataPath,"..", Environment.GetCommandLineArgs().Contains("-hotel-theme-showcase") ? "ThemeSwitch" : (Environment.GetCommandLineArgs().Contains("-hotel-first-slice") || Environment.GetCommandLineArgs().Contains("-hotel-theme-showcase")) ? "FirstInvestigation" : "FullPlay");Directory.CreateDirectory(recordingFolder);
             Directory.CreateDirectory(Path.Combine(recordingFolder,"Checkpoints"));
             File.WriteAllText(Path.Combine(recordingFolder,"timeline.tsv"),"seconds\tevent\n");
             File.WriteAllText(Path.Combine(recordingFolder,"encoder.log"),"");
@@ -69,7 +69,7 @@ namespace PuzzleSpire.Hotel
             try { video.Dispose(); }
             catch(Exception e){recordingFailure=e.ToString();}
             Time.captureFramerate=0;HotelPresentationClock.Recording=false;
-            bool firstSlice = Environment.GetCommandLineArgs().Contains("-hotel-first-slice");
+            bool firstSlice = (Environment.GetCommandLineArgs().Contains("-hotel-first-slice") || Environment.GetCommandLineArgs().Contains("-hotel-theme-showcase"));
             if(recordingFailure==null && !firstSlice)
             {
                 try { AuditModAndPractice(); }
@@ -80,7 +80,7 @@ namespace PuzzleSpire.Hotel
                   "\nRiddles completed: "+recordedRiddles.Count+"\nDialogue lines shown: "+recordedLines.Count+
                   "\nLegal board moves: "+recordedMoves+"\nRetries: "+recordedRetries+"\nVerified UI clicks: "+recordedClicks+
                   "\nDuration seconds: "+(video.Frames/(double)HotelVideoWriter.Fps).ToString("F3",CultureInfo.InvariantCulture)+
-                  (firstSlice ? "\nFirst investigation, discovery, illustrated notebook and save/resume: PASS\n" : "\nSave/resume, all clues, wrong answers, hints, practice exit, MOD isolation: PASS\n") + "Video: 24 fps, silent, uninterrupted automated UI play; no forced wins.\n"
+                  (firstSlice ? "\nFirst investigation, discovery, illustrated notebook and save/resume: PASS\n" : "\nSave/resume, all clues, wrong answers, hints, practice exit, MOD isolation: PASS\n") + (Environment.GetCommandLineArgs().Contains("-hotel-theme-showcase") ? "Theme switches through actual menu: classic > base; resumed progress, portraits, collection, legal puzzle move, cancelled unfinished stage: PASS\n" : "") + "Video: 24 fps, silent, uninterrupted automated UI play; no forced wins.\n"
                 : "FAIL\n"+recordingFailure;
             File.WriteAllText(Path.Combine(recordingFolder,"verification.txt"),report);
             Debug.Log(recordingFailure==null ? "HOTEL_FULL_PLAY_PASSED\n"+report : "HOTEL_FULL_PLAY_FAILED\n"+report);
@@ -88,7 +88,7 @@ namespace PuzzleSpire.Hotel
         }
         private IEnumerator PlayFullCampaign()
         {
-            bool firstSlice = Environment.GetCommandLineArgs().Contains("-hotel-first-slice");
+            bool firstSlice = (Environment.GetCommandLineArgs().Contains("-hotel-first-slice") || Environment.GetCommandLineArgs().Contains("-hotel-theme-showcase"));
             yield return new WaitForSeconds(2);
             Checkpoint("00-title","New game");RecordClick(view.newButton);
             float deadline=Time.time+1800;int actions=0;
@@ -177,11 +177,13 @@ namespace PuzzleSpire.Hotel
             {
                 ContentValidation.Require(story.Progress.completed.Contains("keys"),"First investigation did not complete");
                 RecordClick(view.notebookButton); yield return new WaitForSeconds(2);
+                RecordClick(view.clueButtons[0]); yield return new WaitForSeconds(.4f);
                 ContentValidation.Require(Presentation.notebookImage.gameObject.activeSelf,"Visual observation missing from notebook");
                 Checkpoint("first-slice-notebook","White thread recorded without changing saved clue set");
-                RecordClick(view.notebookBack); RecordClick(view.exploreTitleButton); RecordClick(view.continueButton);
+                RecordClick(view.collection.closeDetail);RecordClick(view.notebookBack); RecordClick(view.exploreTitleButton); RecordClick(view.continueButton);
                 ContentValidation.Require(NotebookEntries().Any(c=>c.id=="observation.keys"),"Visual observation lost on resume");
                 Checkpoint("first-slice-resumed","First investigation resumed"); yield return new WaitForSeconds(2);
+                if (Environment.GetCommandLineArgs().Contains("-hotel-theme-showcase")) yield return RecordThemeSwitches();
                 recordingDone=true; yield break;
             }
             ContentValidation.Require(story.Progress.ending && story.Progress.completed.Count==storage.Pack.nodes.Length,"Campaign did not reach ending");
@@ -192,7 +194,7 @@ namespace PuzzleSpire.Hotel
             Checkpoint("90-ending","Ending reached");yield return new WaitForSeconds(7);
             RecordClick(view.endingNotebook);yield return new WaitForSeconds(2);
             foreach(var button in view.clueButtons.Where(b=>b.gameObject.activeInHierarchy))
-            {ContentValidation.Require(button.interactable,"Missing clue at ending");RecordClick(button);yield return new WaitForSeconds(2);}
+            {ContentValidation.Require(button.interactable,"Missing clue at ending");RecordClick(button);yield return new WaitForSeconds(2);RecordClick(view.collection.closeDetail);}
             Checkpoint("91-notebook","All clues readable");RecordClick(view.notebookBack);yield return new WaitForSeconds(1);
             RecordClick(view.endingTitle);yield return new WaitForSeconds(1.5f);RecordClick(view.continueButton);
             ContentValidation.Require(story.Progress.ending && view.endingScreen.activeSelf,"Resume did not restore ending");

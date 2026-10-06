@@ -17,12 +17,21 @@ namespace PuzzleSpire.Hotel
         private HotelCellView Cell(GridPosition p) => view.cells[CellIndex(p)];
         private float CellPitch => view.boardLayout.cellSize.y + view.boardLayout.spacing.y;
 
+        private Sprite ThemePiece(int index) => storage.Image(HotelThemeKeys.Pieces[index]) ?? Presentation.Piece(index);
+        private Sprite ThemeBackground(string id)
+        {
+            int index = Array.FindIndex(storage.Pack.locations, l => l.id == id);
+            if (index < 0) index = 0;
+            var location = storage.Pack.locations[index];
+            return storage.Image(location.image ?? "background." + location.id) ?? defaultBackgrounds[index];
+        }
+        private Sprite ThemeCabinet => storage.Image("inspection.cabinet") ?? Presentation.cabinet;
         private Sprite BlockSprite(Block block)
         {
             if (block.Type == BlockType.Normal)
                 return storage.Image("block." + (int)block.Color) ?? defaultBlockSprites[(int)block.Color];
             int index = block.Type == BlockType.HorizontalRocket ? 5 : block.Type == BlockType.VerticalRocket ? 6 : block.Type == BlockType.Bomb ? 7 : 8;
-            return Presentation.Piece(index);
+            return ThemePiece(index);
         }
         private void DrawBlock(HotelCellView cell, Block block)
         {
@@ -55,7 +64,7 @@ namespace PuzzleSpire.Hotel
             {
                 var authored = stage.obstacles.FirstOrDefault(o => o.x == p.X && o.y == p.Y && o.type == (box != null ? "box" : "ice"));
                 bool damaged = authored != null && obstacle.CurrentDurability < authored.durability;
-                cell.obstacleBorder.sprite = Presentation.Piece(box != null ? (damaged ? 10 : 9) : (damaged ? 12 : 11));
+                cell.obstacleBorder.sprite = ThemePiece(box != null ? (damaged ? 10 : 9) : (damaged ? 12 : 11));
                 cell.obstacleBorder.color = Color.white;
                 if (obstacle.CurrentDurability > 1) cell.obstacleText.text = obstacle.CurrentDurability.ToString();
             }
@@ -74,7 +83,7 @@ namespace PuzzleSpire.Hotel
                 var color = goal as RemoveColorObjective;
                 Presentation.goalIcons[i].sprite = color != null
                     ? storage.Image("block." + (int)color.TargetColor) ?? defaultBlockSprites[(int)color.TargetColor]
-                    : Presentation.Piece(goal is RemoveBoxObjective ? 9 : 11);
+                    : ThemePiece(goal is RemoveBoxObjective ? 9 : 11);
                 Presentation.goalNames[i].text = color != null ? ColorName(color.TargetColor) : goal is RemoveBoxObjective ? "상자" : "얼음";
                 Presentation.goalAmounts[i].text = goal.IsCompleted ? "완료" : Math.Max(0, goal.TargetAmount - goal.CurrentAmount).ToString();
                 Presentation.goalAmounts[i].fontSize = goal.IsCompleted ? 23 : 36;
@@ -86,7 +95,7 @@ namespace PuzzleSpire.Hotel
         private void SetupPuzzlePresentation()
         {
             Presentation.ClearEffects(); taughtSpecials.Clear();
-            Presentation.puzzleScene.sprite = !practice && activeNode?.inspection == "cabinet" ? Presentation.cabinet : defaultBackgrounds[Array.FindIndex(storage.Pack.locations, l => l.id == (activeNode?.location ?? "lobby"))];
+            Presentation.puzzleScene.sprite = !practice && activeNode?.inspection == "cabinet" ? ThemeCabinet : ThemeBackground(activeNode?.location ?? "lobby");
             Presentation.puzzlePortrait.sprite = Portrait("you", "curious");
             Presentation.contextTitle.text = practice ? "자유롭게 연습하기" : activeNode?.title ?? stage.title;
             Presentation.contextBody.text = !practice && activeNode?.inspection == "cabinet" ? "비어 있는 303호 자리.\n주변을 정리하면 작은 흔적이 보일지도." : "목표를 채우고\n다음 흔적을 확인해 보자.";

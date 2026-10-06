@@ -41,6 +41,7 @@ namespace PuzzleSpire.Hotel
         public Button[] clueButtons;
         public Text clueTitle, clueDescription, clueCount;
         public Button notebookBack;
+        public HotelCollectionView collection;
         [Header("Catalog · MOD / practice")]
         public Text catalogTitle, catalogPage, catalogDescription;
         public Button[] catalogRows;
@@ -58,6 +59,7 @@ namespace PuzzleSpire.Hotel
 
         public void Show(GameObject target)
         {
+            if (collection != null) collection.detailPanel.SetActive(false);
             if (investigation != null) { investigation.inspectionPanel.SetActive(false); investigation.helpPanel.SetActive(false); }
             if (stagePresentation != null) stagePresentation.CancelDialogue();
             if (explorationHud != null) { explorationHud.alpha = 1; explorationHud.blocksRaycasts = true; }

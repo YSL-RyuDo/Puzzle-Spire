@@ -1,0 +1,300 @@
+{
+    "schemaVersion": 1,
+    "id": "moonlight.classic",
+    "name": "클래식 일러스트 · 기존 그림",
+    "version": "1.0.0",
+    "author": "Puzzle Spire",
+    "description": "기존 인물·배경·블록·수집품으로 바꿉니다. 기본 진행 유지.",
+    "contentFile": "",
+    "kind": "theme",
+    "images": [
+        {
+            "key": "background.lobby",
+            "file": "Images/Lobby-PC.png",
+            "x": 0,
+            "y": 0,
+            "width": 1672,
+            "height": 941
+        },
+        {
+            "key": "background.corridor",
+            "file": "Images/Corridor-PC.png",
+            "x": 0,
+            "y": 0,
+            "width": 1672,
+            "height": 941
+        },
+        {
+            "key": "background.archive",
+            "file": "Images/Archive-PC.png",
+            "x": 0,
+            "y": 0,
+            "width": 1672,
+            "height": 941
+        },
+        {
+            "key": "character.you",
+            "file": "Images/Characters-PC.png",
+            "x": 0,
+            "y": 0,
+            "width": 543,
+            "height": 724
+        },
+        {
+            "key": "character.front",
+            "file": "Images/Characters-PC.png",
+            "x": 543,
+            "y": 0,
+            "width": 543,
+            "height": 724
+        },
+        {
+            "key": "character.keeper",
+            "file": "Images/Characters-PC.png",
+            "x": 1086,
+            "y": 0,
+            "width": 543,
+            "height": 724
+        },
+        {
+            "key": "character.guest",
+            "file": "Images/Characters-PC.png",
+            "x": 1629,
+            "y": 0,
+            "width": 543,
+            "height": 724
+        },
+        {
+            "key": "character.you.curious",
+            "file": "Images/InvestigationPoses.png",
+            "x": 144,
+            "y": 637,
+            "width": 410,
+            "height": 578
+        },
+        {
+            "key": "character.you.found",
+            "file": "Images/InvestigationPoses.png",
+            "x": 682,
+            "y": 637,
+            "width": 436,
+            "height": 574
+        },
+        {
+            "key": "character.front.worried",
+            "file": "Images/InvestigationPoses.png",
+            "x": 165,
+            "y": 10,
+            "width": 374,
+            "height": 595
+        },
+        {
+            "key": "character.front.remember",
+            "file": "Images/InvestigationPoses.png",
+            "x": 713,
+            "y": 10,
+            "width": 412,
+            "height": 596
+        },
+        {
+            "key": "block.0",
+            "file": "Images/InvestigationPieces.png",
+            "x": 45,
+            "y": 975,
+            "width": 241,
+            "height": 233
+        },
+        {
+            "key": "block.1",
+            "file": "Images/InvestigationPieces.png",
+            "x": 351,
+            "y": 975,
+            "width": 241,
+            "height": 233
+        },
+        {
+            "key": "block.2",
+            "file": "Images/InvestigationPieces.png",
+            "x": 659,
+            "y": 975,
+            "width": 244,
+            "height": 233
+        },
+        {
+            "key": "block.3",
+            "file": "Images/InvestigationPieces.png",
+            "x": 970,
+            "y": 975,
+            "width": 240,
+            "height": 233
+        },
+        {
+            "key": "block.4",
+            "file": "Images/InvestigationPieces.png",
+            "x": 48,
+            "y": 672,
+            "width": 240,
+            "height": 234
+        },
+        {
+            "key": "special.horizontal",
+            "file": "Images/InvestigationPieces.png",
+            "x": 349,
+            "y": 704,
+            "width": 270,
+            "height": 163
+        },
+        {
+            "key": "special.vertical",
+            "file": "Images/InvestigationPieces.png",
+            "x": 695,
+            "y": 663,
+            "width": 172,
+            "height": 268
+        },
+        {
+            "key": "special.bomb",
+            "file": "Images/InvestigationPieces.png",
+            "x": 985,
+            "y": 659,
+            "width": 208,
+            "height": 265
+        },
+        {
+            "key": "special.color",
+            "file": "Images/InvestigationPieces.png",
+            "x": 45,
+            "y": 313,
+            "width": 243,
+            "height": 294
+        },
+        {
+            "key": "obstacle.box",
+            "file": "Images/InvestigationPieces.png",
+            "x": 349,
+            "y": 369,
+            "width": 248,
+            "height": 248
+        },
+        {
+            "key": "obstacle.box.damaged",
+            "file": "Images/InvestigationPieces.png",
+            "x": 659,
+            "y": 313,
+            "width": 249,
+            "height": 304
+        },
+        {
+            "key": "obstacle.ice",
+            "file": "Images/InvestigationPieces.png",
+            "x": 966,
+            "y": 369,
+            "width": 251,
+            "height": 246
+        },
+        {
+            "key": "obstacle.ice.damaged",
+            "file": "Images/InvestigationPieces.png",
+            "x": 44,
+            "y": 67,
+            "width": 249,
+            "height": 246
+        },
+        {
+            "key": "clue.thread",
+            "file": "Images/InvestigationPieces.png",
+            "x": 345,
+            "y": 70,
+            "width": 259,
+            "height": 240
+        },
+        {
+            "key": "clue.key",
+            "file": "Images/InvestigationPieces.png",
+            "x": 649,
+            "y": 34,
+            "width": 267,
+            "height": 279
+        },
+        {
+            "key": "clue.towel",
+            "file": "Images/InvestigationPieces.png",
+            "x": 952,
+            "y": 53,
+            "width": 278,
+            "height": 248
+        },
+        {
+            "key": "inspection.cabinet",
+            "file": "Images/KeyCabinet-PC.png",
+            "x": 0,
+            "y": 0,
+            "width": 1672,
+            "height": 941
+        },
+        {
+            "key": "clue.handover",
+            "file": "Images/CollectionEvidence.png",
+            "x": 109,
+            "y": 442,
+            "width": 278,
+            "height": 437
+        },
+        {
+            "key": "clue.moon_tag",
+            "file": "Images/CollectionEvidence.png",
+            "x": 536,
+            "y": 408,
+            "width": 276,
+            "height": 460
+        },
+        {
+            "key": "clue.phone_log",
+            "file": "Images/CollectionEvidence.png",
+            "x": 957,
+            "y": 429,
+            "width": 333,
+            "height": 420
+        },
+        {
+            "key": "clue.voice_note",
+            "file": "Images/CollectionEvidence.png",
+            "x": 1386,
+            "y": 443,
+            "width": 345,
+            "height": 362
+        },
+        {
+            "key": "clue.old_plan",
+            "file": "Images/CollectionEvidence.png",
+            "x": 50,
+            "y": 58,
+            "width": 395,
+            "height": 332
+        },
+        {
+            "key": "clue.photo",
+            "file": "Images/CollectionEvidence.png",
+            "x": 532,
+            "y": 43,
+            "width": 313,
+            "height": 347
+        },
+        {
+            "key": "clue.letter",
+            "file": "Images/CollectionEvidence.png",
+            "x": 953,
+            "y": 41,
+            "width": 340,
+            "height": 376
+        },
+        {
+            "key": "clue.fallback",
+            "file": "Images/CollectionEvidence.png",
+            "x": 1414,
+            "y": 38,
+            "width": 310,
+            "height": 368
+        }
+    ]
+}

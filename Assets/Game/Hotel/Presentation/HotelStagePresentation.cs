@@ -10,6 +10,8 @@ namespace PuzzleSpire.Hotel
     {
         [Header("Authored stage · no split screen")]
         public Image leftActor, rightActor;
+        [Tooltip("Right-facing default portraits to mirror when used by the right speaker. External MOD art keeps its supplied orientation.")]
+        public Sprite[] mirrorOnRight = Array.Empty<Sprite>();
         public CanvasGroup leftGroup, rightGroup, dialogueGroup, curtain;
         public RectTransform dialogueCard, continueMark;
         public HotelTextReveal textReveal;
@@ -43,6 +45,7 @@ namespace PuzzleSpire.Hotel
         {
             Initialize(); active = true; IsClosing = false; enteredAt = HotelPresentationClock.Now;
             leftActor.sprite = protagonist; rightActor.sprite = other;
+            OrientRightActor();
             leftActor.enabled = protagonist != null; rightActor.enabled = other != null;
             leftGroup.alpha = rightGroup.alpha = dialogueGroup.alpha = 0;
         }
@@ -52,6 +55,7 @@ namespace PuzzleSpire.Hotel
             var actor = protagonist ? leftActor : rightActor;
             // Changing the conversation partner briefly introduces that sprite again.
             if (portrait != actor.sprite) { actor.sprite = portrait; actor.enabled = portrait != null; }
+            OrientRightActor();
             leftTint = protagonist ? Color.white : new Color(.68f,.70f,.74f);
             rightTint = protagonist ? new Color(.68f,.70f,.74f) : Color.white;
             dialogueText.text = text; revealCount = 0; IsRevealing = !immediate;
@@ -61,6 +65,12 @@ namespace PuzzleSpire.Hotel
         public void CompleteText()
         {
             IsRevealing = false; textReveal.Reveal(100000); continueMark.gameObject.SetActive(true);
+        }
+        private void OrientRightActor()
+        {
+            var scale = rightActor.rectTransform.localScale;
+            scale.x = Mathf.Abs(scale.x) * (Array.IndexOf(mirrorOnRight, rightActor.sprite) >= 0 ? -1 : 1);
+            rightActor.rectTransform.localScale = scale;
         }
         public void Close(Action done, bool immediate)
         {

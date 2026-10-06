@@ -1,0 +1,507 @@
+fileFormatVersion: 2
+guid: 576d7d1521ef3f34d8d21618f04ec23d
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 5267854257396502528
+    second: MysteryPoses_0
+  - first:
+      213: 1918950589534252522
+    second: MysteryPoses_1
+  - first:
+      213: -8946842984019341248
+    second: MysteryPoses_2
+  - first:
+      213: 7228190020054082108
+    second: MysteryPoses_3
+  - first:
+      213: 2005961041894905648
+    second: MysteryPoses_4
+  - first:
+      213: 3661883078599741105
+    second: MysteryPoses_5
+  - first:
+      213: -1345266660955832309
+    second: MysteryPoses_6
+  - first:
+      213: 4866518015542368412
+    second: MysteryPoses_7
+  - first:
+      213: 2209247954200337642
+    second: MysteryPoses_8
+  - first:
+      213: 1774620889697646233
+    second: MysteryPoses_9
+  - first:
+      213: -7811490057609935272
+    second: MysteryPoses_10
+  - first:
+      213: 3559792058544705620
+    second: MysteryPoses_11
+  - first:
+      213: 664743117639804523
+    second: MysteryPoses_12
+  - first:
+      213: -6552110303434044109
+    second: MysteryPoses_13
+  - first:
+      213: 8294676150659826230
+    second: MysteryPoses_14
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: MysteryPoses_0
+      rect:
+        serializedVersion: 2
+        x: 1107
+        y: 1257
+        width: 17
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 000d5ac698d2b1940800000000000000
+      internalID: 5267854257396502528
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPoses_1
+      rect:
+        serializedVersion: 2
+        x: 46
+        y: 596
+        width: 593
+        height: 655
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aed27b6e46b71aa10800000000000000
+      internalID: 1918950589534252522
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPoses_2
+      rect:
+        serializedVersion: 2
+        x: 660
+        y: 632
+        width: 546
+        height: 608
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 040d45c55bd66d380800000000000000
+      internalID: -8946842984019341248
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPoses_3
+      rect:
+        serializedVersion: 2
+        x: 766
+        y: 1231
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c32e852d680bf4460800000000000000
+      internalID: 7228190020054082108
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPoses_4
+      rect:
+        serializedVersion: 2
+        x: 619
+        y: 1132
+        width: 28
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0371b6780fa96db10800000000000000
+      internalID: 2005961041894905648
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPoses_5
+      rect:
+        serializedVersion: 2
+        x: 619
+        y: 1060
+        width: 54
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1be83fc224f91d230800000000000000
+      internalID: 3661883078599741105
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPoses_6
+      rect:
+        serializedVersion: 2
+        x: 593
+        y: 1004
+        width: 36
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b004d817917a45de0800000000000000
+      internalID: -1345266660955832309
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPoses_7
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 886
+        width: 30
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c981179e958598340800000000000000
+      internalID: 4866518015542368412
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPoses_8
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 771
+        width: 14
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aec9eda2f43d8ae10800000000000000
+      internalID: 2209247954200337642
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPoses_9
+      rect:
+        serializedVersion: 2
+        x: 561
+        y: 666
+        width: 13
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9967a6dfb48b0a810800000000000000
+      internalID: 1774620889697646233
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPoses_10
+      rect:
+        serializedVersion: 2
+        x: 46
+        y: 19
+        width: 577
+        height: 618
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8560aadfd23089390800000000000000
+      internalID: -7811490057609935272
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPoses_11
+      rect:
+        serializedVersion: 2
+        x: 611
+        y: 152
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 45050d3440ce66130800000000000000
+      internalID: 3559792058544705620
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPoses_12
+      rect:
+        serializedVersion: 2
+        x: 636
+        y: 0
+        width: 573
+        height: 635
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b666ec1f754a93900800000000000000
+      internalID: 664743117639804523
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPoses_13
+      rect:
+        serializedVersion: 2
+        x: 603
+        y: 119
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 33d03a2c46a3215a0800000000000000
+      internalID: -6552110303434044109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPoses_14
+      rect:
+        serializedVersion: 2
+        x: 119
+        y: 15
+        width: 11
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 632cbfe030c9c1370800000000000000
+      internalID: 8294676150659826230
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      MysteryPoses_0: 5267854257396502528
+      MysteryPoses_1: 1918950589534252522
+      MysteryPoses_10: -7811490057609935272
+      MysteryPoses_11: 3559792058544705620
+      MysteryPoses_12: 664743117639804523
+      MysteryPoses_13: -6552110303434044109
+      MysteryPoses_14: 8294676150659826230
+      MysteryPoses_2: -8946842984019341248
+      MysteryPoses_3: 7228190020054082108
+      MysteryPoses_4: 2005961041894905648
+      MysteryPoses_5: 3661883078599741105
+      MysteryPoses_6: -1345266660955832309
+      MysteryPoses_7: 4866518015542368412
+      MysteryPoses_8: 2209247954200337642
+      MysteryPoses_9: 1774620889697646233
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

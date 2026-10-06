@@ -1,0 +1,819 @@
+fileFormatVersion: 2
+guid: 96d68d0e4b516ce4085c95c85cc270be
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1481282086543471692
+    second: MysteryPieces_0
+  - first:
+      213: 1112672418812868979
+    second: MysteryPieces_1
+  - first:
+      213: -7723300410541991273
+    second: MysteryPieces_2
+  - first:
+      213: 497601951574825001
+    second: MysteryPieces_3
+  - first:
+      213: 2269006176271024703
+    second: MysteryPieces_4
+  - first:
+      213: 7706653236872167816
+    second: MysteryPieces_5
+  - first:
+      213: 1857620985296361968
+    second: MysteryPieces_6
+  - first:
+      213: -4330086035433888452
+    second: MysteryPieces_7
+  - first:
+      213: 3716821106245413984
+    second: MysteryPieces_8
+  - first:
+      213: 8151113616834865983
+    second: MysteryPieces_9
+  - first:
+      213: 7552076781583278610
+    second: MysteryPieces_10
+  - first:
+      213: -520758486205924128
+    second: MysteryPieces_11
+  - first:
+      213: 7379582366498394281
+    second: MysteryPieces_12
+  - first:
+      213: -8961128628462755580
+    second: MysteryPieces_13
+  - first:
+      213: 5170730128640821410
+    second: MysteryPieces_14
+  - first:
+      213: 172812179816121393
+    second: MysteryPieces_15
+  - first:
+      213: 4488452611598652392
+    second: MysteryPieces_16
+  - first:
+      213: 3359968010698994324
+    second: MysteryPieces_17
+  - first:
+      213: -8894788093955045072
+    second: MysteryPieces_18
+  - first:
+      213: -5668833166329431953
+    second: MysteryPieces_19
+  - first:
+      213: 6191230441872410418
+    second: MysteryPieces_20
+  - first:
+      213: 1075699029056277420
+    second: MysteryPieces_21
+  - first:
+      213: -6749907502391062853
+    second: MysteryPieces_22
+  - first:
+      213: 8201496857684770364
+    second: MysteryPieces_23
+  - first:
+      213: -8906777446231195406
+    second: MysteryPieces_24
+  - first:
+      213: 9222814975644820142
+    second: MysteryPieces_25
+  - first:
+      213: -1212740639734563987
+    second: MysteryPieces_26
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: MysteryPieces_0
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 947
+        width: 250
+        height: 254
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c44b294a5329e8410800000000000000
+      internalID: 1481282086543471692
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPieces_1
+      rect:
+        serializedVersion: 2
+        x: 665
+        y: 963
+        width: 267
+        height: 245
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 37937b27ba1017f00800000000000000
+      internalID: 1112672418812868979
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPieces_2
+      rect:
+        serializedVersion: 2
+        x: 691
+        y: 1197
+        width: 17
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 79a1408423351d490800000000000000
+      internalID: -7723300410541991273
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPieces_3
+      rect:
+        serializedVersion: 2
+        x: 950
+        y: 964
+        width: 244
+        height: 258
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 928982ba656d7e600800000000000000
+      internalID: 497601951574825001
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPieces_4
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 649
+        width: 261
+        height: 253
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f324dc978112d7f10800000000000000
+      internalID: 2269006176271024703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPieces_5
+      rect:
+        serializedVersion: 2
+        x: 356
+        y: 871
+        width: 268
+        height: 321
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88141ee894883fa60800000000000000
+      internalID: 7706653236872167816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPieces_6
+      rect:
+        serializedVersion: 2
+        x: 706
+        y: 634
+        width: 199
+        height: 283
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f996eba17897c910800000000000000
+      internalID: 1857620985296361968
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPieces_7
+      rect:
+        serializedVersion: 2
+        x: 946
+        y: 620
+        width: 264
+        height: 300
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c35651b41b178e3c0800000000000000
+      internalID: -4330086035433888452
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPieces_8
+      rect:
+        serializedVersion: 2
+        x: 353
+        y: 682
+        width: 291
+        height: 176
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 06cae638a1dc49330800000000000000
+      internalID: 3716821106245413984
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPieces_9
+      rect:
+        serializedVersion: 2
+        x: 866
+        y: 807
+        width: 33
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f3baa47e5a29e1170800000000000000
+      internalID: 8151113616834865983
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPieces_10
+      rect:
+        serializedVersion: 2
+        x: 928
+        y: 742
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2122fbaf1dd5ec860800000000000000
+      internalID: 7552076781583278610
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPieces_11
+      rect:
+        serializedVersion: 2
+        x: 948
+        y: 613
+        width: 10
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0ecfce77ae4e5c8f0800000000000000
+      internalID: -520758486205924128
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPieces_12
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 331
+        width: 295
+        height: 274
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a09fd9401b896660800000000000000
+      internalID: 7379582366498394281
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPieces_13
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 375
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 401e4e19dfca3a380800000000000000
+      internalID: -8961128628462755580
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPieces_14
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 310
+        width: 278
+        height: 295
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2a8cb0308af12c740800000000000000
+      internalID: 5170730128640821410
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPieces_15
+      rect:
+        serializedVersion: 2
+        x: 655
+        y: 352
+        width: 274
+        height: 250
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1340dce03c3f56200800000000000000
+      internalID: 172812179816121393
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPieces_16
+      rect:
+        serializedVersion: 2
+        x: 948
+        y: 312
+        width: 275
+        height: 290
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e313819edf2a4e30800000000000000
+      internalID: 4488452611598652392
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPieces_17
+      rect:
+        serializedVersion: 2
+        x: 305
+        y: 322
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 492b3669a1101ae20800000000000000
+      internalID: 3359968010698994324
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPieces_18
+      rect:
+        serializedVersion: 2
+        x: 967
+        y: 337
+        width: 13
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0398f6bea5d5f8480800000000000000
+      internalID: -8894788093955045072
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPieces_19
+      rect:
+        serializedVersion: 2
+        x: 1188
+        y: 320
+        width: 17
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f683bfd15424451b0800000000000000
+      internalID: -5668833166329431953
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPieces_20
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 61
+        width: 262
+        height: 263
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 237c36ac84babe550800000000000000
+      internalID: 6191230441872410418
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPieces_21
+      rect:
+        serializedVersion: 2
+        x: 979
+        y: 319
+        width: 11
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cabc1205196adee00800000000000000
+      internalID: 1075699029056277420
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPieces_22
+      rect:
+        serializedVersion: 2
+        x: 299
+        y: 19
+        width: 328
+        height: 265
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bbe8c3d93e28352a0800000000000000
+      internalID: -6749907502391062853
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPieces_23
+      rect:
+        serializedVersion: 2
+        x: 658
+        y: 0
+        width: 291
+        height: 309
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c3e78cc40f191d170800000000000000
+      internalID: 8201496857684770364
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPieces_24
+      rect:
+        serializedVersion: 2
+        x: 946
+        y: 37
+        width: 280
+        height: 246
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f0cdef4a15c46480800000000000000
+      internalID: -8906777446231195406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPieces_25
+      rect:
+        serializedVersion: 2
+        x: 947
+        y: 270
+        width: 25
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea266741b550eff70800000000000000
+      internalID: 9222814975644820142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MysteryPieces_26
+      rect:
+        serializedVersion: 2
+        x: 971
+        y: 267
+        width: 9
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d6bf0f340da7b2fe0800000000000000
+      internalID: -1212740639734563987
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      MysteryPieces_0: 1481282086543471692
+      MysteryPieces_1: 1112672418812868979
+      MysteryPieces_10: 7552076781583278610
+      MysteryPieces_11: -520758486205924128
+      MysteryPieces_12: 7379582366498394281
+      MysteryPieces_13: -8961128628462755580
+      MysteryPieces_14: 5170730128640821410
+      MysteryPieces_15: 172812179816121393
+      MysteryPieces_16: 4488452611598652392
+      MysteryPieces_17: 3359968010698994324
+      MysteryPieces_18: -8894788093955045072
+      MysteryPieces_19: -5668833166329431953
+      MysteryPieces_2: -7723300410541991273
+      MysteryPieces_20: 6191230441872410418
+      MysteryPieces_21: 1075699029056277420
+      MysteryPieces_22: -6749907502391062853
+      MysteryPieces_23: 8201496857684770364
+      MysteryPieces_24: -8906777446231195406
+      MysteryPieces_25: 9222814975644820142
+      MysteryPieces_26: -1212740639734563987
+      MysteryPieces_3: 497601951574825001
+      MysteryPieces_4: 2269006176271024703
+      MysteryPieces_5: 7706653236872167816
+      MysteryPieces_6: 1857620985296361968
+      MysteryPieces_7: -4330086035433888452
+      MysteryPieces_8: 3716821106245413984
+      MysteryPieces_9: 8151113616834865983
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
