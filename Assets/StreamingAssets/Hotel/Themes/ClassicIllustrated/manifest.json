@@ -2,7 +2,7 @@
     "schemaVersion": 1,
     "id": "moonlight.classic",
     "name": "클래식 일러스트 · 기존 그림",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "author": "Puzzle Spire",
     "description": "기존 인물·배경·블록·수집품으로 바꿉니다. 기본 진행 유지.",
     "contentFile": "",
@@ -14,7 +14,8 @@
             "x": 0,
             "y": 0,
             "width": 1672,
-            "height": 941
+            "height": 941,
+            "flipInDialogue": false
         },
         {
             "key": "background.corridor",
@@ -22,7 +23,8 @@
             "x": 0,
             "y": 0,
             "width": 1672,
-            "height": 941
+            "height": 941,
+            "flipInDialogue": false
         },
         {
             "key": "background.archive",
@@ -30,7 +32,8 @@
             "x": 0,
             "y": 0,
             "width": 1672,
-            "height": 941
+            "height": 941,
+            "flipInDialogue": false
         },
         {
             "key": "character.you",
@@ -38,7 +41,8 @@
             "x": 0,
             "y": 0,
             "width": 543,
-            "height": 724
+            "height": 724,
+            "flipInDialogue": false
         },
         {
             "key": "character.front",
@@ -46,7 +50,8 @@
             "x": 543,
             "y": 0,
             "width": 543,
-            "height": 724
+            "height": 724,
+            "flipInDialogue": false
         },
         {
             "key": "character.keeper",
@@ -54,7 +59,8 @@
             "x": 1086,
             "y": 0,
             "width": 543,
-            "height": 724
+            "height": 724,
+            "flipInDialogue": false
         },
         {
             "key": "character.guest",
@@ -62,7 +68,8 @@
             "x": 1629,
             "y": 0,
             "width": 543,
-            "height": 724
+            "height": 724,
+            "flipInDialogue": false
         },
         {
             "key": "character.you.curious",
@@ -70,7 +77,8 @@
             "x": 144,
             "y": 637,
             "width": 410,
-            "height": 578
+            "height": 578,
+            "flipInDialogue": false
         },
         {
             "key": "character.you.found",
@@ -78,7 +86,8 @@
             "x": 682,
             "y": 637,
             "width": 436,
-            "height": 574
+            "height": 574,
+            "flipInDialogue": true
         },
         {
             "key": "character.front.worried",
@@ -86,7 +95,8 @@
             "x": 165,
             "y": 10,
             "width": 374,
-            "height": 595
+            "height": 595,
+            "flipInDialogue": false
         },
         {
             "key": "character.front.remember",
@@ -94,7 +104,8 @@
             "x": 713,
             "y": 10,
             "width": 412,
-            "height": 596
+            "height": 596,
+            "flipInDialogue": false
         },
         {
             "key": "block.0",
@@ -102,7 +113,8 @@
             "x": 45,
             "y": 975,
             "width": 241,
-            "height": 233
+            "height": 233,
+            "flipInDialogue": false
         },
         {
             "key": "block.1",
@@ -110,7 +122,8 @@
             "x": 351,
             "y": 975,
             "width": 241,
-            "height": 233
+            "height": 233,
+            "flipInDialogue": false
         },
         {
             "key": "block.2",
@@ -118,7 +131,8 @@
             "x": 659,
             "y": 975,
             "width": 244,
-            "height": 233
+            "height": 233,
+            "flipInDialogue": false
         },
         {
             "key": "block.3",
@@ -126,7 +140,8 @@
             "x": 970,
             "y": 975,
             "width": 240,
-            "height": 233
+            "height": 233,
+            "flipInDialogue": false
         },
         {
             "key": "block.4",
@@ -134,7 +149,8 @@
             "x": 48,
             "y": 672,
             "width": 240,
-            "height": 234
+            "height": 234,
+            "flipInDialogue": false
         },
         {
             "key": "special.horizontal",
@@ -142,7 +158,8 @@
             "x": 349,
             "y": 704,
             "width": 270,
-            "height": 163
+            "height": 163,
+            "flipInDialogue": false
         },
         {
             "key": "special.vertical",
@@ -150,7 +167,8 @@
             "x": 695,
             "y": 663,
             "width": 172,
-            "height": 268
+            "height": 268,
+            "flipInDialogue": false
         },
         {
             "key": "special.bomb",
@@ -158,7 +176,8 @@
             "x": 985,
             "y": 659,
             "width": 208,
-            "height": 265
+            "height": 265,
+            "flipInDialogue": false
         },
         {
             "key": "special.color",
@@ -166,7 +185,8 @@
             "x": 45,
             "y": 313,
             "width": 243,
-            "height": 294
+            "height": 294,
+            "flipInDialogue": false
         },
         {
             "key": "obstacle.box",
@@ -174,7 +194,8 @@
             "x": 349,
             "y": 369,
             "width": 248,
-            "height": 248
+            "height": 248,
+            "flipInDialogue": false
         },
         {
             "key": "obstacle.box.damaged",
@@ -182,7 +203,8 @@
             "x": 659,
             "y": 313,
             "width": 249,
-            "height": 304
+            "height": 304,
+            "flipInDialogue": false
         },
         {
             "key": "obstacle.ice",
@@ -190,7 +212,8 @@
             "x": 966,
             "y": 369,
             "width": 251,
-            "height": 246
+            "height": 246,
+            "flipInDialogue": false
         },
         {
             "key": "obstacle.ice.damaged",
@@ -198,7 +221,8 @@
             "x": 44,
             "y": 67,
             "width": 249,
-            "height": 246
+            "height": 246,
+            "flipInDialogue": false
         },
         {
             "key": "clue.thread",
@@ -206,7 +230,8 @@
             "x": 345,
             "y": 70,
             "width": 259,
-            "height": 240
+            "height": 240,
+            "flipInDialogue": false
         },
         {
             "key": "clue.key",
@@ -214,7 +239,8 @@
             "x": 649,
             "y": 34,
             "width": 267,
-            "height": 279
+            "height": 279,
+            "flipInDialogue": false
         },
         {
             "key": "clue.towel",
@@ -222,7 +248,8 @@
             "x": 952,
             "y": 53,
             "width": 278,
-            "height": 248
+            "height": 248,
+            "flipInDialogue": false
         },
         {
             "key": "inspection.cabinet",
@@ -230,7 +257,8 @@
             "x": 0,
             "y": 0,
             "width": 1672,
-            "height": 941
+            "height": 941,
+            "flipInDialogue": false
         },
         {
             "key": "clue.handover",
@@ -238,7 +266,8 @@
             "x": 109,
             "y": 442,
             "width": 278,
-            "height": 437
+            "height": 437,
+            "flipInDialogue": false
         },
         {
             "key": "clue.moon_tag",
@@ -246,7 +275,8 @@
             "x": 536,
             "y": 408,
             "width": 276,
-            "height": 460
+            "height": 460,
+            "flipInDialogue": false
         },
         {
             "key": "clue.phone_log",
@@ -254,7 +284,8 @@
             "x": 957,
             "y": 429,
             "width": 333,
-            "height": 420
+            "height": 420,
+            "flipInDialogue": false
         },
         {
             "key": "clue.voice_note",
@@ -262,7 +293,8 @@
             "x": 1386,
             "y": 443,
             "width": 345,
-            "height": 362
+            "height": 362,
+            "flipInDialogue": false
         },
         {
             "key": "clue.old_plan",
@@ -270,7 +302,8 @@
             "x": 50,
             "y": 58,
             "width": 395,
-            "height": 332
+            "height": 332,
+            "flipInDialogue": false
         },
         {
             "key": "clue.photo",
@@ -278,7 +311,8 @@
             "x": 532,
             "y": 43,
             "width": 313,
-            "height": 347
+            "height": 347,
+            "flipInDialogue": false
         },
         {
             "key": "clue.letter",
@@ -286,7 +320,8 @@
             "x": 953,
             "y": 41,
             "width": 340,
-            "height": 376
+            "height": 376,
+            "flipInDialogue": false
         },
         {
             "key": "clue.fallback",
@@ -294,7 +329,44 @@
             "x": 1414,
             "y": 38,
             "width": 310,
-            "height": 368
+            "height": 368,
+            "flipInDialogue": false
+        },
+        {
+            "key": "character.keeper.think",
+            "file": "Images/ClassicMalePoses.png",
+            "x": 50,
+            "y": 825,
+            "width": 432,
+            "height": 657,
+            "flipInDialogue": false
+        },
+        {
+            "key": "character.keeper.explain",
+            "file": "Images/ClassicMalePoses.png",
+            "x": 544,
+            "y": 825,
+            "width": 468,
+            "height": 659,
+            "flipInDialogue": false
+        },
+        {
+            "key": "character.guest.remember",
+            "file": "Images/ClassicMalePoses.png",
+            "x": 37,
+            "y": 73,
+            "width": 465,
+            "height": 657,
+            "flipInDialogue": false
+        },
+        {
+            "key": "character.guest.warm",
+            "file": "Images/ClassicMalePoses.png",
+            "x": 555,
+            "y": 73,
+            "width": 459,
+            "height": 659,
+            "flipInDialogue": false
         }
     ]
 }

@@ -14,6 +14,34 @@ namespace PuzzleSpire.Hotel.Editor
     public static partial class HotelSceneBuilder
     {
         private const string ClassicFolder = "Assets/StreamingAssets/Hotel/Themes/ClassicIllustrated";
+        [MenuItem("Puzzle Spire/남성 대화 자세 에셋 연결")]
+        public static void UpgradeDialoguePoseAssetsAndBuild()
+        {
+            AssetDatabase.Refresh();
+            EditorSceneManager.OpenScene(ScenePath);
+            v = UnityEngine.Object.FindFirstObjectByType<HotelView>();
+            var men = ImportAtlas("MysteryMalePoses", 2, 2);
+            var classic = ImportAtlas("ClassicMalePoses", 2, 2);
+            v.investigation.poses = v.investigation.poses.Take(4).Concat(men).ToArray();
+            v.stagePresentation.mirrorOnRight = v.stagePresentation.mirrorOnRight.Where(s => s && !s.name.StartsWith("MysteryMalePoses")).Concat(men.Take(2)).ToArray();
+            var manifest = HotelStorage.ReadJson<ModManifest>(Path.Combine(ClassicFolder, "manifest.json"));
+            string[] keys = { "character.keeper.think", "character.keeper.explain", "character.guest.remember", "character.guest.warm" };
+            var images = manifest.images.Where(i => !keys.Contains(i.key)).ToList();
+            File.Copy("Assets/Game/Hotel/Art/ClassicMalePoses.png", Path.Combine(ClassicFolder, "Images/ClassicMalePoses.png"), true);
+            for (int i = 0; i < classic.Length; i++)
+            {
+                var rect = classic[i].rect;
+                images.Add(new ImageOverride { key = keys[i], file = "Images/ClassicMalePoses.png", x = (int)rect.x, y = (int)rect.y, width = (int)rect.width, height = (int)rect.height });
+            }
+            // This existing protagonist pose faces left in its source PNG.
+            images.Single(i => i.key == "character.you.found").flipInDialogue = true;
+            manifest.version = "1.1.0"; manifest.images = images.ToArray();
+            File.WriteAllText(Path.Combine(ClassicFolder, "manifest.json"), JsonUtility.ToJson(manifest, true));
+            EditorUtility.SetDirty(v.investigation); EditorUtility.SetDirty(v.stagePresentation);
+            EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+            EditorSceneManager.SaveScene(SceneManager.GetActiveScene()); AssetDatabase.SaveAssets(); AssetDatabase.Refresh();
+            CreateReleaseBuild();
+        }
         [MenuItem("Puzzle Spire/손그림 기본 테마 적용 · 기존 그림 MOD 보존 (최초 1회)")]
         public static void UpgradeMystery()
         {
@@ -65,7 +93,8 @@ namespace PuzzleSpire.Hotel.Editor
                 EditorUtility.SetDirty(image);
             }
             theme.backgrounds = bindings.ToArray();
-            v.stagePresentation.mirrorOnRight = characters.Concat(expressions).ToArray();
+            // The guest already faces left in the source illustration.
+            v.stagePresentation.mirrorOnRight = characters.Take(3).Concat(expressions).ToArray();
             EditorUtility.SetDirty(v.stagePresentation);
             v.investigation.pieces = pieces; v.investigation.poses = expressions; v.investigation.cabinet = backgrounds[3];
             v.collection.illustrations = evidence.Take(7).ToArray(); v.collection.fallback = evidence[7];

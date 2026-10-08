@@ -28,7 +28,7 @@ namespace PuzzleSpire.Hotel
             foreach (var o in stage.obstacles)
                 Board.PlaceObstacle(new GridPosition(o.x, o.y), o.type == "box" ? (ICellObstacle)new BoxObstacle("box", o.durability) : new IceObstacle("ice", o.durability));
             colors = stage.colors;
-            int seed = unchecked(stage.seed + attempt * 7919);
+            int seed = unchecked(stage.seed + (stage.fixedSeed ? 0 : attempt * 7919));
             random = new Random(seed);
             var palette = new List<BlockColor>();
             for (int i = 0; i < colors; i++) palette.Add((BlockColor)i);

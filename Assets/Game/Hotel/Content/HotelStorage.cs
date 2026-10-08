@@ -87,14 +87,19 @@ namespace PuzzleSpire.Hotel
                     entry.manifest = ReadJson<ModManifest>(ResolveFile(dir, "manifest.json"));
                     var m = entry.manifest;
                     ContentValidation.Require(m.schemaVersion == 1 && ContentValidation.IsId(m.id) && ids.Add(m.id) && !string.IsNullOrWhiteSpace(m.version), "MOD ID·버전 오류 또는 중복 ID입니다.");
-                    ContentValidation.Require(string.IsNullOrEmpty(m.kind) || m.kind == "content" || m.kind == "theme", "지원하지 않는 MOD 종류입니다.");
+                    ContentValidation.Require(string.IsNullOrEmpty(m.kind) || m.kind == "content" || m.kind == "theme" || m.kind == "adventure", "지원하지 않는 MOD 종류입니다.");
+                    ContentValidation.Require(m.kind != "adventure" || !string.IsNullOrWhiteSpace(m.contentFile), "독립 이야기의 콘텐츠 파일이 필요합니다.");
                     ContentValidation.Require(m.kind != "theme" || string.IsNullOrWhiteSpace(m.contentFile), "테마 MOD에는 이야기 변경 파일을 넣을 수 없습니다.");
+                    ContentValidation.Require(string.IsNullOrWhiteSpace(m.clearanceFile) || !string.IsNullOrWhiteSpace(m.contentFile), "클리어 기록에 대응하는 퍼즐 콘텐츠 파일이 필요합니다.");
                     entry.pack = JsonUtility.FromJson<HotelPack>(JsonUtility.ToJson(BasePack));
                     if (!string.IsNullOrWhiteSpace(m.contentFile))
                     {
                         var patch = ReadJson<HotelPack>(ResolveFile(dir, m.contentFile));
                         ContentValidation.Require(patch.schemaVersion == 1, "지원하지 않는 MOD 데이터 버전입니다.");
-                        Overlay(entry.pack, patch);
+                        if (!string.IsNullOrWhiteSpace(m.clearanceFile))
+                            HotelPuzzleClearance.VerifyPack(patch, ReadJson<PuzzleClearanceFile>(ResolveFile(dir, m.clearanceFile)));
+                        if (m.kind == "adventure") entry.pack = patch;
+                        else Overlay(entry.pack, patch);
                     }
                     ContentValidation.Validate(entry.pack);
                     ContentValidation.Require(m.images != null, "images 목록이 필요합니다.");
@@ -261,6 +266,13 @@ namespace PuzzleSpire.Hotel
                 sprites[key] = sprite; return sprite;
             }
             catch (Exception e) { Warning = "MOD 이미지 대신 기본 그림을 표시합니다: " + e.Message; sprites[key] = null; return null; }
+        }
+        public bool? DialogueMirror(Sprite sprite)
+        {
+            if (sprite == null) return null;
+            foreach (var pair in sprites)
+                if (pair.Value == sprite) return imageRegions[pair.Key].flipInDialogue;
+            return null;
         }
         private void ClearSprites()
         {

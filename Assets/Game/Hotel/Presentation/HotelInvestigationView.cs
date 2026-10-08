@@ -27,7 +27,9 @@ namespace PuzzleSpire.Hotel
         public Sprite Pose(string speaker, string pose)
         {
             int index = speaker == "you" ? (pose == "curious" ? 0 : pose == "found" ? 1 : -1)
-                : speaker == "front" ? (pose == "worried" ? 2 : pose == "remember" ? 3 : -1) : -1;
+                : speaker == "front" ? (pose == "worried" ? 2 : pose == "remember" ? 3 : -1)
+                : speaker == "keeper" ? (pose == "think" ? 4 : pose == "explain" ? 5 : -1)
+                : speaker == "guest" ? (pose == "remember" ? 6 : pose == "warm" ? 7 : -1) : -1;
             return poses != null && index >= 0 && index < poses.Length ? poses[index] : null;
         }
         public Sprite Evidence(string id) => id == "thread" ? Piece(13) : id == "key" ? Piece(14) : id == "towel" ? Piece(15) : null;

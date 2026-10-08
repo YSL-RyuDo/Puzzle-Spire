@@ -41,7 +41,30 @@ MOD의 `block.*`와 `character.*` 이미지가 우선한다. 선택적으로 `ch
 
 기본 콘텐츠 원본을 다시 저작할 때도 `Tools/hotel_visual_content.py`를 통해 같은 첫 조사 데이터를 적용한다. 이 스크립트만 실행하면 기존 `base.json`에서 해당 내용만 갱신한다.
 
-## 검증 및 재현
+## 2026-10-06 대화 인물 수정
+
+MOD 활성화 시 콘텐츠 JSON을 복제하면서 생긴 빈 `portrait` 문자열도 기본 키(`character.<id>`)로 해석하도록 수정했다. 이전에는 표정이 없는 대사에서 MOD 그림 대신 기본 인물이 표시됐다. 일반 인물 4명과 표정 4종, MOD 해제 복원을 검사한다. 기본 그림에서 이미 왼쪽을 바라보는 문 선생은 오른쪽 반전 목록에서 제외했다.
+
+대화 인물은 기존 Hierarchy의 Image를 그대로 사용한다. 두 인물의 pivot은 하단 중앙이며, 높이 690과 하단 위치를 공유하고 그림 비율에 따라 너비를 조정한다. 도식처럼 넓은 그림이 고정 폭 안에서 축소되어 위에 떠 있던 문제를 수정했다. 최대 너비 900으로 화면 밖으로 지나치게 커지는 것을 제한한다.
+
+`Hotel Systems · references / HotelStagePresentation` Inspector에서 `Portrait Height`, `Maximum Portrait Width`를 편집한다. 위치와 하단 기준은 기존 `Seoyun · editable portrait slot`, `Conversation partner · editable portrait slot`의 RectTransform에서 편집한다. 런타임 UI 오브젝트 생성은 없다. 명시적 최초 배치 도구는 `UpgradeDialogueFraming`이며 일반 빌드는 사용자 배치를 다시 만들지 않는다.
+
+요청을 재확인한 뒤, 임시로 추가했던 흔들기·기울이기 효과와 `motion` 데이터를 제거했다. 실제 자세 그림을 추가하고 `pose`로 교체한다. 인물별로 기본 그림 1종 + 대화 자세 2종을 사용하며, 51줄 모든 대사에 문맥에 맞는 자세를 지정했다. 기본 게임과 클래식 MOD 모두 같은 구성을 지원한다.
+
+| 인물 | pose | 그림 |
+| --- | --- | --- |
+| 서윤 | `curious`, `found` | 생각하기, 발견하기 |
+| 하린 | `worried`, `remember` | 걱정하기, 떠올리기 |
+| 도식 | `think`, `explain` | 턱 짚기, 손가락 들어 설명하기 |
+| 문 선생 | `remember`, `warm` | 책 펼쳐 회상하기, 가슴에 손을 얹고 웃기 |
+
+새 기본 아틀라스: `Assets/Game/Hotel/Art/MysteryMalePoses.png`. 클래식 아틀라스: `Assets/Game/Hotel/Art/ClassicMalePoses.png` 및 외부 MOD의 `Images/ClassicMalePoses.png`. 내장 image_gen으로 기존 인물의 외형과 그림체를 참고해 제작했다. [프롬프트](DialoguePoseArtPrompts.md).
+
+Inspector의 `HotelInvestigationView / Poses` 배열은 기존 여성 4장 다음에 도식 2장, 문 선생 2장 순서다. 기본 도식은 원본이 오른쪽을 보므로 `mirrorOnRight`에 새 2장을 등록했다. MOD는 이미지별 `flipInDialogue`로 반전을 명시할 수 있다. 기존 클래식 서윤의 발견 자세는 왼쪽을 보는 그림이므로 이 값을 true로 설정했다. 글자와 UI는 반전하지 않는다.
+
+EditMode **124/124 통과**. 추가 회귀 검사에서 각 인물이 이야기에서 실제로 2가지 이상의 서로 다른 자세 그림을 사용하는지, MOD 자세를 불러오는지, 방향이 맞는지 확인했다. `-hotel-theme-review`는 모든 인물의 모든 대화 자세를 기본/클래식/기본 순서로 화면에 출력한다. 결과는 `ThemeReview/*-pose-*.png`다.
+
+## 이전 검증 및 재현
 
 - Unity 6000.3.1f1 EditMode: 115개 통과. 기존 저장 호환성과 관찰 기록을 포함한 수첩 수용량 검증을 추가했다.
 - `-hotel-smoke`: 별도 임시 저장에서 전체 이야기, 퍼즐, 수수께끼, 저장과 MOD를 실제 UI 클릭으로 검증한다. `Builds/Hotel/Smoke`에 화면과 결과를 기록한다.

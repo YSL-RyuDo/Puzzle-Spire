@@ -9,6 +9,7 @@ namespace PuzzleSpire.Hotel
     {
         public int schemaVersion = 1;
         public string title;
+        public string endingTitle, endingText;
         public LocationData[] locations = Array.Empty<LocationData>();
         public CharacterData[] characters = Array.Empty<CharacterData>();
         public ClueData[] clues = Array.Empty<ClueData>();
@@ -46,6 +47,7 @@ namespace PuzzleSpire.Hotel
     [Serializable] public sealed class HotelStage
     {
         public string id, title;
+        public bool fixedSeed;
         public int width = 7, height = 7, moves = 22, seed = 1001, colors = 4;
         public int targetColor, targetAmount = 12, boxes, ice;
         public string[] layout = Array.Empty<string>();
@@ -69,6 +71,7 @@ namespace PuzzleSpire.Hotel
         public string id, name, version, author, description, contentFile;
         // Omitted/"content": separate campaign save. "theme": images only, base save.
         public string kind;
+        public string clearanceFile;
         public ImageOverride[] images = Array.Empty<ImageOverride>();
     }
     [Serializable] public sealed class ImageOverride
@@ -76,6 +79,8 @@ namespace PuzzleSpire.Hotel
         public string key, file;
         // Optional atlas rectangle in source PNG pixels, origin at bottom-left.
         public int x, y, width, height;
+        // Optional: mirror this external portrait when displayed in dialogue.
+        public bool flipInDialogue;
     }
 
     public static class ContentValidation
@@ -107,8 +112,8 @@ namespace PuzzleSpire.Hotel
             var stages = Ids(pack.stages, x => x.id, "스테이지");
             var riddles = Ids(pack.riddles, x => x.id, "수수께끼");
             Require(locations.Count > 0 && nodes.Count > 0, "장소와 조사가 필요합니다.");
-            Require(locations.Count <= 3 && clues.Count <= 12, "이 UI 버전은 장소 3곳, 단서 12개까지 지원합니다.");
-            Require(clues.Count + pack.nodes.Count(n => !string.IsNullOrEmpty(n.discovery)) <= 12, "단서와 관찰 기록은 합쳐서 12개까지 지원합니다.");
+            Require(locations.Count <= 30 && clues.Count <= 200, "장소 30곳, 단서 200개까지 지원합니다.");
+            Require(clues.Count + pack.nodes.Count(n => !string.IsNullOrEmpty(n.discovery)) <= 200, "단서와 관찰 기록은 합쳐서 200개까지 지원합니다.");
             Require(nodes.Count <= 200 && stages.Count <= 200 && riddles.Count <= 100, "콘텐츠 개수 제한을 초과했습니다.");
             foreach (var l in pack.locations)
                 Require(string.IsNullOrEmpty(l.unlockAfter) || nodes.Contains(l.unlockAfter), "장소 해금 조건을 찾을 수 없습니다: " + l.id);

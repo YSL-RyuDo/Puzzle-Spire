@@ -25,7 +25,7 @@ namespace PuzzleSpire.Hotel
         {
             var args=Environment.GetCommandLineArgs();int index=Array.IndexOf(args,"-hotel-encoder");
             if(index<0 || index+1>=args.Length)throw new ArgumentException("-hotel-encoder path is required");
-            recordingFolder=Path.Combine(Application.dataPath,"..", Environment.GetCommandLineArgs().Contains("-hotel-theme-showcase") ? "ThemeSwitch" : (Environment.GetCommandLineArgs().Contains("-hotel-first-slice") || Environment.GetCommandLineArgs().Contains("-hotel-theme-showcase")) ? "FirstInvestigation" : "FullPlay");Directory.CreateDirectory(recordingFolder);
+            recordingFolder=Path.Combine(Application.dataPath,"..", args.Contains("-hotel-midpoint-mod") ? "MidpointModFullPlay" : args.Contains("-hotel-mod-full-play") ? "ModFullPlay" : args.Contains("-hotel-theme-showcase") ? "ThemeSwitch" : args.Contains("-hotel-first-slice") ? "FirstInvestigation" : "FullPlay");Directory.CreateDirectory(recordingFolder);
             Directory.CreateDirectory(Path.Combine(recordingFolder,"Checkpoints"));
             File.WriteAllText(Path.Combine(recordingFolder,"timeline.tsv"),"seconds\tevent\n");
             File.WriteAllText(Path.Combine(recordingFolder,"encoder.log"),"");
@@ -70,7 +70,8 @@ namespace PuzzleSpire.Hotel
             catch(Exception e){recordingFailure=e.ToString();}
             Time.captureFramerate=0;HotelPresentationClock.Recording=false;
             bool firstSlice = (Environment.GetCommandLineArgs().Contains("-hotel-first-slice") || Environment.GetCommandLineArgs().Contains("-hotel-theme-showcase"));
-            if(recordingFailure==null && !firstSlice)
+            bool modFullPlay = Environment.GetCommandLineArgs().Contains("-hotel-mod-full-play");
+            if(recordingFailure==null && !firstSlice && !modFullPlay)
             {
                 try { AuditModAndPractice(); }
                 catch(Exception e){recordingFailure=e.ToString();}
@@ -80,15 +81,23 @@ namespace PuzzleSpire.Hotel
                   "\nRiddles completed: "+recordedRiddles.Count+"\nDialogue lines shown: "+recordedLines.Count+
                   "\nLegal board moves: "+recordedMoves+"\nRetries: "+recordedRetries+"\nVerified UI clicks: "+recordedClicks+
                   "\nDuration seconds: "+(video.Frames/(double)HotelVideoWriter.Fps).ToString("F3",CultureInfo.InvariantCulture)+
-                  (firstSlice ? "\nFirst investigation, discovery, illustrated notebook and save/resume: PASS\n" : "\nSave/resume, all clues, wrong answers, hints, practice exit, MOD isolation: PASS\n") + (Environment.GetCommandLineArgs().Contains("-hotel-theme-showcase") ? "Theme switches through actual menu: classic > base; resumed progress, portraits, collection, legal puzzle move, cancelled unfinished stage: PASS\n" : "") + "Video: 24 fps, silent, uninterrupted automated UI play; no forced wins.\n"
+                  (firstSlice ? "\nFirst investigation, discovery, illustrated notebook and save/resume: PASS\n" : modFullPlay ? "\nBase first investigation > actual MOD menu > classic theme > same save continued to ending: PASS\nClassic theme retained through ending and save/resume: PASS\nAll clues, wrong answers and hints: PASS\n" : "\nSave/resume, all clues, wrong answers, hints, practice exit, MOD isolation: PASS\n") + (Environment.GetCommandLineArgs().Contains("-hotel-theme-showcase") ? "Theme switches through actual menu: classic > base; resumed progress, portraits, collection, legal puzzle move, cancelled unfinished stage: PASS\n" : "") + "Video: 24 fps, silent, uninterrupted automated UI play; no forced wins.\n"
                 : "FAIL\n"+recordingFailure;
+            if (Environment.GetCommandLineArgs().Contains("-hotel-midpoint-mod"))
+                report = report.Replace("Base first investigation > actual MOD menu", "Base first half (10/20) > actual MOD menu");
             File.WriteAllText(Path.Combine(recordingFolder,"verification.txt"),report);
+            if (recordingFailure == null && Environment.GetCommandLineArgs().Contains("-hotel-midpoint-mod"))
+                File.AppendAllText(Path.Combine(recordingFolder,"verification.txt"), "Midpoint MOD switch after 10/20 investigations; identical next-board layout and saved progress: PASS\n");
             Debug.Log(recordingFailure==null ? "HOTEL_FULL_PLAY_PASSED\n"+report : "HOTEL_FULL_PLAY_FAILED\n"+report);
             Application.Quit(recordingFailure==null?0:2);
         }
         private IEnumerator PlayFullCampaign()
         {
             bool firstSlice = (Environment.GetCommandLineArgs().Contains("-hotel-first-slice") || Environment.GetCommandLineArgs().Contains("-hotel-theme-showcase"));
+            bool modFullPlay = Environment.GetCommandLineArgs().Contains("-hotel-mod-full-play");
+            bool modApplied = false;
+            bool midpointMod = Environment.GetCommandLineArgs().Contains("-hotel-midpoint-mod");
+            ContentValidation.Require(storage.PackId == "base", "Recording must start without a MOD");
             yield return new WaitForSeconds(2);
             Checkpoint("00-title","New game");RecordClick(view.newButton);
             float deadline=Time.time+1800;int actions=0;
@@ -98,6 +107,14 @@ namespace PuzzleSpire.Hotel
                 // The final dialogue's exit coroutine may finish during this yield.
                 if(story.Progress.ending || (firstSlice && story.Progress.completed.Contains("keys")))break;
                 if(busy)continue;
+                if(modApplied)ContentValidation.Require(storage.PackId == "moonlight.classic", "MOD was removed during the campaign");
+                if(modFullPlay && !modApplied && screen=="explore" && !view.dialoguePanel.activeSelf && !view.resultPanel.activeSelf && story.Progress.completed.Contains(midpointMod ? "hall_trace" : "keys"))
+                {
+                    if (midpointMod) yield return RecordMidpointModActivation();
+                    else yield return RecordCampaignModActivation();
+                    modApplied = true;
+                    continue;
+                }
                 if(view.dialoguePanel.activeSelf)
                 {
                     while(view.stagePresentation.IsRevealing)yield return null;
@@ -187,6 +204,7 @@ namespace PuzzleSpire.Hotel
                 recordingDone=true; yield break;
             }
             ContentValidation.Require(story.Progress.ending && story.Progress.completed.Count==storage.Pack.nodes.Length,"Campaign did not reach ending");
+            if(modFullPlay)ContentValidation.Require(modApplied && storage.PackId=="moonlight.classic", "Ending reached without the selected MOD");
             ContentValidation.Require(recordedStages.Count==storage.Pack.nodes.Count(n=>n.kind=="stage"),"Not all story stages played");
             ContentValidation.Require(recordedRiddles.Count==storage.Pack.riddles.Length,"Not all riddles played");
             int expectedLines=storage.Pack.nodes.Sum(n=>n.before.Length+n.after.Length);
@@ -198,6 +216,7 @@ namespace PuzzleSpire.Hotel
             Checkpoint("91-notebook","All clues readable");RecordClick(view.notebookBack);yield return new WaitForSeconds(1);
             RecordClick(view.endingTitle);yield return new WaitForSeconds(1.5f);RecordClick(view.continueButton);
             ContentValidation.Require(story.Progress.ending && view.endingScreen.activeSelf,"Resume did not restore ending");
+            if(modFullPlay)ContentValidation.Require(storage.PackId=="moonlight.classic", "Saved ending lost selected MOD");
             Checkpoint("92-resumed","Saved ending restored");yield return new WaitForSeconds(4);
             recordingDone=true;
         }

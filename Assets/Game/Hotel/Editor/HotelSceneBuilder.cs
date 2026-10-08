@@ -31,6 +31,14 @@ namespace PuzzleSpire.Hotel.Editor
         // Batch entry point. Existing authored scenes are ALWAYS preserved.
         public static void CreateAndBuild()
         {
+            BuildHotel(BuildOptions.Development);
+        }
+        public static void CreateReleaseBuild()
+        {
+            BuildHotel(BuildOptions.None);
+        }
+        private static void BuildHotel(BuildOptions options)
+        {
             if (!File.Exists(ScenePath)) CreateScene();
             else EditorSceneManager.OpenScene(ScenePath);
             ApplyBundledFont();
@@ -41,7 +49,7 @@ namespace PuzzleSpire.Hotel.Editor
             var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
             {
                 scenes = new[] { ScenePath }, locationPathName = "Builds/Hotel/MoonlitHotel.exe",
-                target = BuildTarget.StandaloneWindows64, options = BuildOptions.Development
+                target = BuildTarget.StandaloneWindows64, options = options
             });
             if (report.summary.result != BuildResult.Succeeded) throw new Exception("Hotel build failed: " + report.summary.result);
             Directory.CreateDirectory("Builds/Hotel/ThirdPartyNotices");

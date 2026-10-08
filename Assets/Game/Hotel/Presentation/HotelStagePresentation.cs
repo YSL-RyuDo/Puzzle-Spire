@@ -16,6 +16,11 @@ namespace PuzzleSpire.Hotel
         public RectTransform dialogueCard, continueMark;
         public HotelTextReveal textReveal;
         public Text dialogueText;
+        [Header("Portrait framing · shared bottom baseline")]
+        [Range(400, 760)] public float portraitHeight = 690;
+        [Range(600, 1000)] public float maximumPortraitWidth = 900;
+        // MOD-specific facing; default art remains editable through mirrorOnRight.
+        public Func<Sprite, bool?> modPortraitMirror;
         [Header("Timing · editable in Inspector")]
         [Range(10,90)] public float lettersPerSecond = 32;
         [Range(.1f,1)] public float entranceSeconds = .3f;
@@ -30,11 +35,28 @@ namespace PuzzleSpire.Hotel
         private float enteredAt, revealCount;
         private bool initialized, active, leftSpeaking;
         private Coroutine transition;
+        // Keep the authored centre and bottom while changing sprite aspect ratio.
+        private static void AnchorPortrait(Image actor)
+        {
+            var rect = actor.rectTransform;
+            var position = rect.anchoredPosition;
+            position += new Vector2((.5f - rect.pivot.x) * rect.rect.width, -rect.pivot.y * rect.rect.height);
+            rect.pivot = new Vector2(.5f, 0); rect.anchoredPosition = position;
+        }
+        private void FitPortrait(Image actor)
+        {
+            if (actor.sprite == null) return;
+            float aspect = actor.sprite.rect.width / actor.sprite.rect.height;
+            float width = Mathf.Min(maximumPortraitWidth, portraitHeight * aspect);
+            actor.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
+            actor.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, width / aspect);
+        }
 
         private void Initialize()
         {
             if (initialized) return;
             initialized = true;
+            AnchorPortrait(leftActor); AnchorPortrait(rightActor);
             leftHome = leftActor.rectTransform.anchoredPosition;
             rightHome = rightActor.rectTransform.anchoredPosition;
             cardHome = dialogueCard.anchoredPosition;
@@ -45,6 +67,8 @@ namespace PuzzleSpire.Hotel
         {
             Initialize(); active = true; IsClosing = false; enteredAt = HotelPresentationClock.Now;
             leftActor.sprite = protagonist; rightActor.sprite = other;
+            FitPortrait(leftActor); FitPortrait(rightActor);
+            leftActor.rectTransform.localRotation = rightActor.rectTransform.localRotation = Quaternion.identity;
             OrientRightActor();
             leftActor.enabled = protagonist != null; rightActor.enabled = other != null;
             leftGroup.alpha = rightGroup.alpha = dialogueGroup.alpha = 0;
@@ -54,7 +78,7 @@ namespace PuzzleSpire.Hotel
             leftSpeaking = protagonist;
             var actor = protagonist ? leftActor : rightActor;
             // Changing the conversation partner briefly introduces that sprite again.
-            if (portrait != actor.sprite) { actor.sprite = portrait; actor.enabled = portrait != null; }
+            if (portrait != actor.sprite) { actor.sprite = portrait; actor.enabled = portrait != null; FitPortrait(actor); }
             OrientRightActor();
             leftTint = protagonist ? Color.white : new Color(.68f,.70f,.74f);
             rightTint = protagonist ? new Color(.68f,.70f,.74f) : Color.white;
@@ -69,8 +93,12 @@ namespace PuzzleSpire.Hotel
         private void OrientRightActor()
         {
             var scale = rightActor.rectTransform.localScale;
-            scale.x = Mathf.Abs(scale.x) * (Array.IndexOf(mirrorOnRight, rightActor.sprite) >= 0 ? -1 : 1);
+            bool flipRight = modPortraitMirror?.Invoke(rightActor.sprite) ?? (Array.IndexOf(mirrorOnRight, rightActor.sprite) >= 0);
+            scale.x = Mathf.Abs(scale.x) * (flipRight ? -1 : 1);
             rightActor.rectTransform.localScale = scale;
+            var leftScale = leftActor.rectTransform.localScale;
+            leftScale.x = Mathf.Abs(leftScale.x) * ((modPortraitMirror?.Invoke(leftActor.sprite) ?? false) ? -1 : 1);
+            leftActor.rectTransform.localScale = leftScale;
         }
         public void Close(Action done, bool immediate)
         {
@@ -97,6 +125,7 @@ namespace PuzzleSpire.Hotel
             if (!initialized) return;
             leftActor.rectTransform.anchoredPosition = leftHome;
             rightActor.rectTransform.anchoredPosition = rightHome;
+            leftActor.rectTransform.localRotation = rightActor.rectTransform.localRotation = Quaternion.identity;
             dialogueCard.anchoredPosition = cardHome;
         }
         public void ChangeRoom(Action change, Action finished, bool immediate)

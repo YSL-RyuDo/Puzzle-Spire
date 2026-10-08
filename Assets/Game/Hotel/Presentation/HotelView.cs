@@ -12,6 +12,12 @@ namespace PuzzleSpire.Hotel
         [Header("Title")]
         public Button continueButton, newButton, practiceButton, modsButton, settingsButton, quitButton;
         public Text titleStatus;
+        [Header("Puzzle workshop · editable prefab")]
+        public Button workshopButton;
+        public HotelPuzzleWorkshop workshop;
+        public Button storyStudioButton, studioReturnButton, roomPrevious, roomNext;
+        public Text gameTitle, endingHeading;
+        public HotelStoryStudio storyStudio;
         [Header("Investigation")]
         public Text chapter, objective, locationTitle, locationDescription, progressText;
         public Button[] locationButtons;
@@ -64,6 +70,8 @@ namespace PuzzleSpire.Hotel
             if (stagePresentation != null) stagePresentation.CancelDialogue();
             if (explorationHud != null) { explorationHud.alpha = 1; explorationHud.blocksRaycasts = true; }
             foreach (var screen in new[] { titleScreen, exploreScreen, puzzleScreen, riddleScreen, notebookScreen, catalogScreen, settingsScreen, endingScreen }) screen.SetActive(screen == target);
+            if (workshop != null) workshop.View.screen.SetActive(workshop.View.screen == target);
+            if (storyStudio != null) storyStudio.View.screen.SetActive(storyStudio.View.screen == target);
             dialoguePanel.SetActive(false); resultPanel.SetActive(false);
         }
         public static void Label(Button button, string text) => button.GetComponentInChildren<Text>(true).text = text;

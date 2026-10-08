@@ -30,6 +30,7 @@ namespace PuzzleSpire.Hotel
         private readonly List<int> selection = new List<int>();
         private DialogueLine[] lines;
         private int dialogueIndex, hints, attempt, catalogPage;
+        private int roomPage;
         private Action afterDialogue;
         private bool practice, busy, notebookFromEnding, smoke;
         private string catalogMode = "mods", screen = "title", toast = "";
@@ -44,10 +45,16 @@ namespace PuzzleSpire.Hotel
             bool visualReview = Environment.GetCommandLineArgs().Contains("-hotel-effects-review");
             bool collectionReview = Environment.GetCommandLineArgs().Contains("-hotel-collection-review");
             bool themeReview = Environment.GetCommandLineArgs().Contains("-hotel-theme-review");
+            bool workshopReview = Environment.GetCommandLineArgs().Contains("-hotel-workshop-review");
+            bool studioReview = Environment.GetCommandLineArgs().Contains("-hotel-studio-review");
             try
             {
-                string root = smoke || preview || fullPlay || visualReview || collectionReview || themeReview ? Path.Combine(Path.GetTempPath(), "PuzzleSpire-Smoke-" + Guid.NewGuid().ToString("N")) : Application.persistentDataPath;
+                string root = smoke || preview || fullPlay || visualReview || collectionReview || themeReview || workshopReview || studioReview ? Path.Combine(Path.GetTempPath(), "PuzzleSpire-Smoke-" + Guid.NewGuid().ToString("N")) : Application.persistentDataPath;
+                var args = Environment.GetCommandLineArgs();
+                int qaRoot = Array.IndexOf(args, "-hotel-qa-root");
+                if ((fullPlay || themeReview) && qaRoot >= 0 && qaRoot + 1 < args.Length) root = Path.GetFullPath(args[qaRoot + 1]);
                 storage = new HotelStorage(Path.Combine(Application.streamingAssetsPath, "Hotel", "base.json"), root, Path.Combine(Application.streamingAssetsPath, "Hotel", "Themes"));
+                view.stagePresentation.modPortraitMirror = storage.DialogueMirror;
                 defaultBackgrounds = view.locationImages.Select(i => i.sprite).ToArray();
                 GetComponent<HotelThemeView>()?.Apply(storage);
                 WireButtons();
@@ -60,6 +67,8 @@ namespace PuzzleSpire.Hotel
                 else if (visualReview) StartCoroutine(ReviewPresentation());
                 else if (collectionReview) StartCoroutine(ReviewCollection());
                 else if (themeReview) StartCoroutine(ReviewThemes());
+                else if (workshopReview) StartCoroutine(ReviewWorkshop());
+                else if (studioReview) StartCoroutine(ReviewStudio());
             }
             catch (Exception e)
             {
@@ -84,6 +93,15 @@ namespace PuzzleSpire.Hotel
             Bind(view.continueButton, ContinueGame);
             Bind(view.practiceButton, () => ShowCatalog("practice"));
             Bind(view.modsButton, () => ShowCatalog("mods"));
+            if (view.storyStudio != null)
+            {
+                Bind(view.storyStudioButton, OpenStoryStudio);
+                Bind(view.studioReturnButton, EndStudioPreview);
+            }
+            if (view.workshop != null) Bind(view.workshopButton, () => {
+                screen = "workshop"; view.Show(view.workshop.View.screen);
+                view.workshop.Open(storage, i => i < 5 ? defaultBlockSprites[i] : Presentation.Piece(i), ShowTitle);
+            });
             Bind(view.settingsButton, ShowSettings);
             Bind(view.quitButton, () => Application.Quit());
             Bind(view.exploreTitleButton, ShowTitle);
@@ -121,12 +139,15 @@ namespace PuzzleSpire.Hotel
         }
         public void ShowTitle()
         {
+            if (studioOriginalStorage != null) { EndStudioPreview(); return; }
             screen = "title"; view.Show(view.titleScreen);
+            if (view.gameTitle != null) view.gameTitle.text = storage.PackId == "base" || storage.IsTheme ? "잔월 호텔" : storage.Pack.title;
             view.continueButton.interactable = storage.HasSave;
             view.titleStatus.text = storage.PackName + "  ·  v" + storage.PackVersion + "\n조사 완료 시 자동 저장 · 퍼즐 중 종료하면 해당 조사부터 다시 시작";
         }
         private void NewGame()
         {
+            roomPage = 0;
             story = new InvestigationSession(storage.Pack, storage.NewProgress());
             storage.Save(story.Progress); ShowExplore();
         }
@@ -134,6 +155,7 @@ namespace PuzzleSpire.Hotel
         {
             var progress = storage.Load(out string warning);
             story = new InvestigationSession(storage.Pack, progress);
+            roomPage = Math.Max(0, Array.FindIndex(storage.Pack.locations, l => l.id == progress.location)) / view.locationButtons.Length;
             if (progress.ending) ShowEnding(); else ShowExplore();
             if (warning != null) Notice("저장 복구", warning, () => { if (progress.ending) ShowEnding(); else ShowExplore(); });
         }
@@ -143,7 +165,7 @@ namespace PuzzleSpire.Hotel
             if (!story.IsUnlocked(room) || busy || story.Progress.location == id) return;
             busy = true;
             view.stagePresentation.ChangeRoom(() => Guard(() =>
-            { story.Progress.location = id; storage.Save(story.Progress); ShowExplore(); }), () => busy = false, false);
+            { story.Progress.location = id; roomPage = Array.IndexOf(storage.Pack.locations, room) / view.locationButtons.Length; storage.Save(story.Progress); ShowExplore(); }), () => busy = false, false);
         }
         private void ShowExplore()
         {
@@ -158,16 +180,27 @@ namespace PuzzleSpire.Hotel
             view.progressText.text = "조사 " + story.Progress.completed.Count + " / " + pack.nodes.Length + "     단서 " + story.Progress.clues.Count + " / " + pack.clues.Length;
             for (int i = 0; i < view.locationButtons.Length; i++)
             {
-                bool exists = i < pack.locations.Length;
+                int index = roomPage * view.locationButtons.Length + i;
+                bool exists = index < pack.locations.Length;
                 view.locationButtons[i].gameObject.SetActive(exists);
-                view.locationArt[i].SetActive(exists && i == roomIndex);
+                bool currentArt = i == roomIndex % view.locationArt.Length;
+                view.locationArt[i].SetActive(currentArt);
+                var roomImage = storage.Image(room.image ?? "background." + room.id) ?? defaultBackgrounds[roomIndex % defaultBackgrounds.Length];
+                view.locationImages[i].gameObject.SetActive(currentArt && roomImage != null);
+                view.locationImages[i].sprite = roomImage;
                 if (!exists) continue;
-                var l = pack.locations[i];
-                HotelView.Label(view.locationButtons[i], (i == roomIndex ? "● " : "") + l.name + (story.IsUnlocked(l) ? "" : " · 잠김"));
+                var l = pack.locations[index];
+                HotelView.Label(view.locationButtons[i], (index == roomIndex ? "● " : "") + l.name + (story.IsUnlocked(l) ? "" : " · 잠김"));
                 view.locationButtons[i].interactable = story.IsUnlocked(l);
-                var image = storage.Image(l.image ?? "background." + l.id) ?? defaultBackgrounds[i];
-                view.locationImages[i].gameObject.SetActive(image != null && i == roomIndex);
-                view.locationImages[i].sprite = image;
+                Bind(view.locationButtons[i], () => MoveLocation(l.id));
+            }
+            if (view.roomPrevious != null)
+            {
+                bool paged = pack.locations.Length > view.locationButtons.Length;
+                view.roomPrevious.gameObject.SetActive(paged); view.roomNext.gameObject.SetActive(paged);
+                view.roomPrevious.interactable = roomPage > 0;
+                view.roomNext.interactable = (roomPage + 1) * view.locationButtons.Length < pack.locations.Length;
+                Bind(view.roomPrevious, () => { roomPage--; ShowExplore(); }); Bind(view.roomNext, () => { roomPage++; ShowExplore(); });
             }
             var local = pack.nodes.FirstOrDefault(n => n.location == room.id && story.IsAvailable(n));
             view.hotspot.gameObject.SetActive(local != null);
@@ -248,8 +281,9 @@ namespace PuzzleSpire.Hotel
             var character = storage.Pack.characters.FirstOrDefault(c => c.id == id);
             if (character == null) return null;
             int index = Array.IndexOf(storage.Pack.characters, character);
-            return (!string.IsNullOrEmpty(pose) ? storage.Image("character." + id + "." + pose) : null) ?? storage.Image(character.portrait ?? "character." + character.id) ?? Presentation.Pose(id, pose) ??
-                (index < defaultPortraits.Length ? defaultPortraits[index] : null);
+            string portraitKey = string.IsNullOrWhiteSpace(character.portrait) ? "character." + character.id : character.portrait;
+            return (!string.IsNullOrEmpty(pose) ? storage.Image("character." + id + "." + pose) : null) ?? storage.Image(portraitKey) ?? Presentation.Pose(id, pose) ??
+                defaultPortraits[index % defaultPortraits.Length];
         }
         private void RenderDialogue()
         {
@@ -385,7 +419,8 @@ namespace PuzzleSpire.Hotel
             view.catalogDescription.text = mods ? "테마 MOD는 기본 진행을 공유합니다. 콘텐츠 MOD는 별도 저장합니다.\n현재: " + storage.PackName + "\n" + storage.ModsPath : "기본 스테이지와 MOD 스테이지를 자유롭게 연습하세요.\n이야기의 단서와 진행에는 영향을 주지 않습니다.";
             view.catalogPage.text = (catalogPage + 1) + " / " + pageCount;
             view.catalogPrevious.interactable = catalogPage > 0; view.catalogNext.interactable = catalogPage + 1 < pageCount;
-            view.catalogFolder.gameObject.SetActive(mods); view.catalogRefresh.gameObject.SetActive(mods); view.catalogSample.gameObject.SetActive(mods);
+            view.catalogFolder.gameObject.SetActive(mods); view.catalogRefresh.gameObject.SetActive(mods);
+            view.catalogSample.gameObject.SetActive(mods && Directory.Exists(Path.Combine(Application.streamingAssetsPath, "Hotel", "ExampleMod")));
             for (int i = 0; i < view.catalogRows.Length; i++)
             {
                 int index = catalogPage * view.catalogRows.Length + i;
@@ -419,6 +454,8 @@ namespace PuzzleSpire.Hotel
         private void ShowEnding()
         {
             screen = "ending"; view.Show(view.endingScreen);
+            if (view.endingHeading != null) view.endingHeading.text = string.IsNullOrWhiteSpace(storage.Pack.endingTitle) ? "사람을 기다리는 방" : storage.Pack.endingTitle;
+            if (!string.IsNullOrWhiteSpace(storage.Pack.endingText)) { view.endingSummary.text = storage.Pack.endingText + "\n\n조사 " + story.Progress.completed.Count + "개 완료 · 단서 " + story.Progress.clues.Count + "개"; return; }
             view.endingSummary.text = "열쇠는 수건을 따라 이동했고, 전화벨은 오래된 설비의 신호였습니다.\n두 사건이 가리킨 곳에는 잊힌 서재와 아직 유효한 약속이 있었습니다.\n\n서윤의 첫 번째 조사 기록 — 완료\n" + story.Progress.clues.Count + "개의 단서 · " + storage.Pack.stages.Length + "개의 기본/추가 스테이지\n\n다음 손님이 남길 이야기를 기다립니다.";
         }
         private void Result(string eyebrow, string title, string body, string primary, Action action, string secondary, Action other)
@@ -434,6 +471,7 @@ namespace PuzzleSpire.Hotel
         private void Update()
         {
             if (Keyboard.current == null || busy) return;
+            if (screen == "studio" || screen == "workshop") return;
             if (Keyboard.current.escapeKey.wasPressedThisFrame && Presentation.helpPanel.activeSelf) { Presentation.helpPanel.SetActive(false); return; }
             if (screen == "inspection")
             {
@@ -452,7 +490,7 @@ namespace PuzzleSpire.Hotel
             clickClip.SetData(samples, 0);
         }
         private void Sound() { if (storage != null && storage.Preferences.sound && clickClip != null && !smoke) audioSource.PlayOneShot(clickClip); }
-        private void OnDestroy() { storage?.Dispose(); if (clickClip != null) Destroy(clickClip); }
+        private void OnDestroy() { storage?.Dispose(); studioOriginalStorage?.Dispose(); if (clickClip != null) Destroy(clickClip); }
 
         private void PressForSmoke(Button button)
         {

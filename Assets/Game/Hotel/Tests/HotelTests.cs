@@ -61,6 +61,7 @@ namespace PuzzleSpire.Hotel.Tests
         [Test] public void Validator_RejectsNotebookOverflowIncludingVisualObservations()
         {
             var pack = Pack();
+            pack.clues = pack.clues.Concat(Enumerable.Range(pack.clues.Length, 200 - pack.clues.Length).Select(i => new ClueData { id = "extra_" + i, title = "단서", description = "설명" })).ToArray();
             foreach (var node in pack.nodes.Take(5))
             { node.discovery = "thread"; node.discoveryTitle = "흰 실"; node.discoveryText = "관찰 내용"; }
             Assert.Throws<InvalidOperationException>(() => ContentValidation.Validate(pack));

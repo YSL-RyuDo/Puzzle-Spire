@@ -23,7 +23,7 @@ namespace PuzzleSpire.Hotel
             int index = Array.FindIndex(storage.Pack.locations, l => l.id == id);
             if (index < 0) index = 0;
             var location = storage.Pack.locations[index];
-            return storage.Image(location.image ?? "background." + location.id) ?? defaultBackgrounds[index];
+            return storage.Image(location.image ?? "background." + location.id) ?? defaultBackgrounds[index % defaultBackgrounds.Length];
         }
         private Sprite ThemeCabinet => storage.Image("inspection.cabinet") ?? Presentation.cabinet;
         private Sprite BlockSprite(Block block)

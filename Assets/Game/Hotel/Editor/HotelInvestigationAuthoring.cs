@@ -61,10 +61,22 @@ namespace PuzzleSpire.Hotel.Editor
             {
                 string asset = "Assets/Game/Hotel/Art/" + name + "-" + i.ToString("00") + ".asset";
                 sprites[i] = AssetDatabase.LoadAssetAtPath<Sprite>(asset);
-                bool storybookCutout = (name.StartsWith("Storybook") && name != "StorybookBackgrounds") || name.StartsWith("Mystery");
+                bool storybookCutout = (name.StartsWith("Storybook") && name != "StorybookBackgrounds") || name.StartsWith("Mystery") || name.EndsWith("MalePoses");
                 if (sprites[i] != null && !storybookCutout) continue;
                 int x0 = i % columns * cw, y0 = (rows - 1 - i / columns) * ch;
                 int cellWidth=cw,cellHeight=ch;
+                if (name.EndsWith("MalePoses") && rows == 2)
+                {
+                    int split = ch, best = int.MaxValue;
+                    for (int y = ch - ch / 5; y <= ch + ch / 5; y++)
+                    {
+                        int opaque = 0;
+                        for (int x = 0; x < texture.width; x++) if (pixels[y * texture.width + x].a > 64) opaque++;
+                        int score = opaque * texture.height + Math.Abs(y - ch);
+                        if (score < best) { best = score; split = y; }
+                    }
+                    y0 = i < columns ? split : 0; cellHeight = i < columns ? texture.height - split : split;
+                }
                 if (storybookCutout)
                 {
                     // Find each row's actual transparent gutter; a sleeve can extend
@@ -77,7 +89,7 @@ namespace PuzzleSpire.Hotel.Editor
                         for (int x = ideal - cw / 4; x <= ideal + cw / 4; x++)
                         {
                             int count = 0;
-                            for (int y = y0; y < y0 + ch; y++) if (pixels[y * texture.width + x].a > 64) count++;
+                            for (int y = y0; y < y0 + cellHeight; y++) if (pixels[y * texture.width + x].a > 64) count++;
                             int score = count * texture.width + Math.Abs(x - ideal);
                             if (score < bestScore) { bestScore = score; bestX = x; }
                         }

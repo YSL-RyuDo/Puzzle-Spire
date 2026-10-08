@@ -55,6 +55,29 @@ namespace PuzzleSpire.Hotel.Editor
             Debug.Log("HOTEL_PC_STAGE_AUTHORED");
         }
         public static void UpgradePcStageAndBuild() { UpgradePcStage(); CreateAndBuild(); }
+        [MenuItem("Puzzle Spire/대화 인물 높이·하단 기준 적용")]
+        public static void UpgradeDialogueFraming()
+        {
+            EditorSceneManager.OpenScene(ScenePath);
+            v = UnityEngine.Object.FindFirstObjectByType<HotelView>();
+            var presentation = v.stagePresentation;
+            foreach (var actor in new[] { presentation.leftActor, presentation.rightActor })
+            {
+                var rect = actor.rectTransform;
+                var position = rect.anchoredPosition;
+                position += new Vector2((.5f - rect.pivot.x) * rect.rect.width, -rect.pivot.y * rect.rect.height);
+                rect.pivot = new Vector2(.5f, 0); rect.anchoredPosition = position;
+                float aspect = actor.sprite.rect.width / actor.sprite.rect.height;
+                float width = Mathf.Min(presentation.maximumPortraitWidth, presentation.portraitHeight * aspect);
+                rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
+                rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, width / aspect);
+                EditorUtility.SetDirty(rect);
+            }
+            EditorUtility.SetDirty(presentation);
+            EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+            EditorSceneManager.SaveScene(SceneManager.GetActiveScene()); AssetDatabase.SaveAssets();
+        }
+        public static void UpgradeDialogueFramingAndBuild() { UpgradeDialogueFraming(); CreateAndBuild(); }
         private static Sprite ImportBackground(string name)
         {
             string path="Assets/Game/Hotel/Art/"+name+"-PC.png";
