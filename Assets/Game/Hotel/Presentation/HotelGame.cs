@@ -47,9 +47,10 @@ namespace PuzzleSpire.Hotel
             bool themeReview = Environment.GetCommandLineArgs().Contains("-hotel-theme-review");
             bool workshopReview = Environment.GetCommandLineArgs().Contains("-hotel-workshop-review");
             bool studioReview = Environment.GetCommandLineArgs().Contains("-hotel-studio-review");
+            bool studioDemo = Environment.GetCommandLineArgs().Contains("-hotel-studio-demo");
             try
             {
-                string root = smoke || preview || fullPlay || visualReview || collectionReview || themeReview || workshopReview || studioReview ? Path.Combine(Path.GetTempPath(), "PuzzleSpire-Smoke-" + Guid.NewGuid().ToString("N")) : Application.persistentDataPath;
+                string root = smoke || preview || fullPlay || visualReview || collectionReview || themeReview || workshopReview || studioReview || studioDemo ? Path.Combine(Path.GetTempPath(), "PuzzleSpire-Smoke-" + Guid.NewGuid().ToString("N")) : Application.persistentDataPath;
                 var args = Environment.GetCommandLineArgs();
                 int qaRoot = Array.IndexOf(args, "-hotel-qa-root");
                 if ((fullPlay || themeReview) && qaRoot >= 0 && qaRoot + 1 < args.Length) root = Path.GetFullPath(args[qaRoot + 1]);
@@ -69,6 +70,7 @@ namespace PuzzleSpire.Hotel
                 else if (themeReview) StartCoroutine(ReviewThemes());
                 else if (workshopReview) StartCoroutine(ReviewWorkshop());
                 else if (studioReview) StartCoroutine(ReviewStudio());
+                else if (studioDemo) BeginStudioDemo();
             }
             catch (Exception e)
             {
