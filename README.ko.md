@@ -129,4 +129,4 @@ Unity scene: [Assets/Game/Scenes/Hotel.unity](Assets/Game/Scenes/Hotel.unity)
 
 ## 관련 저장소
 
-[Puzzle-Spire](https://github.com/YSL-RyuDo/Puzzle-Spire), 비공개, 접근 권한 필요
+[Puzzle-Spire](https://github.com/YSL-RyuDo/Puzzle-Spire), 공개 저장소

@@ -129,4 +129,4 @@ Playable prototype. The README's 2026 ~ 10 ~ 08 record reports 141 EditMode test
 
 ## Related repositories
 
-[Puzzle-Spire](https://github.com/YSL-RyuDo/Puzzle-Spire), Private, access required
+[Puzzle-Spire](https://github.com/YSL-RyuDo/Puzzle-Spire), Public repository

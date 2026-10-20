@@ -131,4 +131,4 @@ Unity scene: [Assets/Game/Scenes/Hotel.unity](Assets/Game/Scenes/Hotel.unity)
 
 ## 関連リポジトリ
 
-[Puzzle-Spire](https://github.com/YSL-RyuDo/Puzzle-Spire), 非公開・アクセス権が必要
+[Puzzle-Spire](https://github.com/YSL-RyuDo/Puzzle-Spire), 公開リポジトリ
