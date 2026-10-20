@@ -11,6 +11,40 @@ A mystery adventure combining investigation, dialogue and puzzles with local sto
 
 [Explore the case](https://ysl-ryudo.github.io/en/work/moonlit/), [Portfolio](https://ysl-ryudo.github.io/en/)
 
+## What I built across the game
+
+Moonlit Hotel includes an investigation/story game, a match-puzzle domain and player-facing authoring tools. I implemented campaign flow, clue collection, puzzle presentation, story editing and puzzle testing, in addition to the rule resolver and MOD formats.
+
+**Player flow**
+
+Explore the hotel → inspect and record clues → dialogue and riddles → puzzle resolution → story progression → author and test new content
+
+Source links pin the inspected revision; contribution links identify my non-merge changes. Shared-file links do not imply sole authorship. Private source requires repository access.
+
+### Investigation and story progression
+
+Implemented new/continued games, location and node progression, dialogue, riddles and conclusions. Investigation records inspected objects and notebook/collection entries, connecting world interaction to the player's accumulated evidence.
+
+[HotelGame.cs (main)](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/530565b67d90b3673159611170ddbaba4bb79af1/Assets/Game/Hotel/Presentation/HotelGame.cs), [My change 65c3791](https://github.com/YSL-RyuDo/Puzzle-Spire/commit/65c379100887602f8a06cbcfb8edf00d0d512ea6), [HotelInvestigation.cs (main)](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/530565b67d90b3673159611170ddbaba4bb79af1/Assets/Game/Hotel/Presentation/HotelInvestigation.cs), [My change 26d8094](https://github.com/YSL-RyuDo/Puzzle-Spire/commit/26d8094e20e400818c2576b1406bdb24f4adf7cf)
+
+### Puzzle rules and turn presentation
+
+Implemented a rule layer for matches, special blocks, obstacles and goals, and a presentation layer for movement, removal and effects. The displayed turn follows the resolved rule outcome instead of making visual callbacks the sole source of puzzle rules.
+
+[HotelPuzzle.cs (main)](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/530565b67d90b3673159611170ddbaba4bb79af1/Assets/Game/Hotel/Gameplay/HotelPuzzle.cs), [My change 8505173](https://github.com/YSL-RyuDo/Puzzle-Spire/commit/8505173364c11e98730b2a61ad8503cb52bc9ccd), [HotelPuzzlePresentation.cs (main)](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/530565b67d90b3673159611170ddbaba4bb79af1/Assets/Game/Hotel/Presentation/HotelPuzzlePresentation.cs), [My change 8505173](https://github.com/YSL-RyuDo/Puzzle-Spire/commit/8505173364c11e98730b2a61ad8503cb52bc9ccd)
+
+### Story Studio authoring
+
+Built story-node and choice editing, investigation/riddle forms and preview flows. Story projects can be validated and exported as content packs. This makes editing and trying authored content part of the product rather than requiring a developer to rewrite each story in code.
+
+[HotelStoryStudioEditing.cs (main)](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/530565b67d90b3673159611170ddbaba4bb79af1/Assets/Game/Hotel/Presentation/HotelStoryStudioEditing.cs), [My change 8505173](https://github.com/YSL-RyuDo/Puzzle-Spire/commit/8505173364c11e98730b2a61ad8503cb52bc9ccd), [HotelStoryProject.cs (main)](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/530565b67d90b3673159611170ddbaba4bb79af1/Assets/Game/Hotel/Content/HotelStoryProject.cs), [My change 8505173](https://github.com/YSL-RyuDo/Puzzle-Spire/commit/8505173364c11e98730b2a61ad8503cb52bc9ccd)
+
+### Puzzle Workshop and content saves
+
+Implemented board editing, project load/save, playtesting and export validation in Puzzle Workshop. Theme-only changes and content changes use different save boundaries, so presentation changes need not create unrelated campaign progress.
+
+[HotelPuzzleWorkshop.cs (main)](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/530565b67d90b3673159611170ddbaba4bb79af1/Assets/Game/Hotel/Presentation/HotelPuzzleWorkshop.cs), [My change 8505173](https://github.com/YSL-RyuDo/Puzzle-Spire/commit/8505173364c11e98730b2a61ad8503cb52bc9ccd), [HotelStoryProject.cs (main)](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/530565b67d90b3673159611170ddbaba4bb79af1/Assets/Game/Hotel/Content/HotelStoryProject.cs), [My change 8505173](https://github.com/YSL-RyuDo/Puzzle-Spire/commit/8505173364c11e98730b2a61ad8503cb52bc9ccd)
+
 ## My contribution
 
 Implemented investigation/dialogue/puzzle progression and separated puzzle domain rules from presentation.
@@ -30,12 +64,6 @@ Commits are evidence of the stated changes, not a percentage-of-authorship score
 A mystery adventure combines investigation, dialogue and puzzles. Authoring and loading new stories should not mix their save state with the base game.
 
 I separated puzzle domain rules from presentation, implemented clear-validation and story editing/export, and gave local MOD stories independent save state.
-
-| Area | Implementation |
-|---|---|
-| Rules | Puzzle domain rules and clear validation |
-| Presentation | Investigation, dialogue and puzzle UI |
-| Story content | JSON/PNG loading, editor/export and independent local-story saves |
 
 ## How the code works and why it is structured this way
 

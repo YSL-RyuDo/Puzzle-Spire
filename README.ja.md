@@ -11,6 +11,40 @@
 
 [開発事例を見る](https://ysl-ryudo.github.io/ja/work/moonlit/), [Portfolio](https://ysl-ryudo.github.io/ja/)
 
+## ゲーム全体で担当した実装
+
+Moonlit Hotelは調査・物語進行、マッチパズル規則、利用者向け制作ツールを含みます。ResolverとMOD形式に加え、キャンペーン・手掛かり収集・パズル表示・物語編集・試験を実装しました。
+
+**プレイの流れ**
+
+ホテル探索 → 調査と手掛かり記録 → 会話となぞ → パズル解決 → 物語進行 → 新規コンテンツ制作・試験
+
+ソースリンクは確認した版に固定し、担当リンクは自分のマージ以外の変更を示します。共同ファイルは単独著作を意味しません。非公開ソースには閲覧権限が必要です。
+
+### 調査と物語進行
+
+新規・継続プレイ、場所・ノード進行、会話・なぞ・結末を実装しました。調査対象と手帳・収集項目を記録し、ワールド操作を蓄積した手掛かりにつなぎます。
+
+[HotelGame.cs (main)](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/530565b67d90b3673159611170ddbaba4bb79af1/Assets/Game/Hotel/Presentation/HotelGame.cs), [担当変更 65c3791](https://github.com/YSL-RyuDo/Puzzle-Spire/commit/65c379100887602f8a06cbcfb8edf00d0d512ea6), [HotelInvestigation.cs (main)](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/530565b67d90b3673159611170ddbaba4bb79af1/Assets/Game/Hotel/Presentation/HotelInvestigation.cs), [担当変更 26d8094](https://github.com/YSL-RyuDo/Puzzle-Spire/commit/26d8094e20e400818c2576b1406bdb24f4adf7cf)
+
+### パズル規則とターン演出
+
+マッチ・特殊ブロック・障害物・目標の規則層と、移動・除去・効果の表示層を実装しました。表示コールバックだけで規則を決めず、解決結果に従ってターンを表示します。
+
+[HotelPuzzle.cs (main)](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/530565b67d90b3673159611170ddbaba4bb79af1/Assets/Game/Hotel/Gameplay/HotelPuzzle.cs), [担当変更 8505173](https://github.com/YSL-RyuDo/Puzzle-Spire/commit/8505173364c11e98730b2a61ad8503cb52bc9ccd), [HotelPuzzlePresentation.cs (main)](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/530565b67d90b3673159611170ddbaba4bb79af1/Assets/Game/Hotel/Presentation/HotelPuzzlePresentation.cs), [担当変更 8505173](https://github.com/YSL-RyuDo/Puzzle-Spire/commit/8505173364c11e98730b2a61ad8503cb52bc9ccd)
+
+### Story Studioの物語制作
+
+物語ノード・選択肢編集、調査・なぞのフォーム、プレビューを実装しました。プロジェクトを検証しコンテンツパックとして出力できます。毎回コードを書き換えず、制作と試行を製品内でつなぎます。
+
+[HotelStoryStudioEditing.cs (main)](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/530565b67d90b3673159611170ddbaba4bb79af1/Assets/Game/Hotel/Presentation/HotelStoryStudioEditing.cs), [担当変更 8505173](https://github.com/YSL-RyuDo/Puzzle-Spire/commit/8505173364c11e98730b2a61ad8503cb52bc9ccd), [HotelStoryProject.cs (main)](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/530565b67d90b3673159611170ddbaba4bb79af1/Assets/Game/Hotel/Content/HotelStoryProject.cs), [担当変更 8505173](https://github.com/YSL-RyuDo/Puzzle-Spire/commit/8505173364c11e98730b2a61ad8503cb52bc9ccd)
+
+### Puzzle Workshopとコンテンツ保存
+
+Puzzle Workshopで盤面編集、プロジェクト保存・読込、試遊、出力検証を実装しました。外観テーマと内容変更の保存境界を分け、外観変更だけで進行が不必要に分離しないようにしました。
+
+[HotelPuzzleWorkshop.cs (main)](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/530565b67d90b3673159611170ddbaba4bb79af1/Assets/Game/Hotel/Presentation/HotelPuzzleWorkshop.cs), [担当変更 8505173](https://github.com/YSL-RyuDo/Puzzle-Spire/commit/8505173364c11e98730b2a61ad8503cb52bc9ccd), [HotelStoryProject.cs (main)](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/530565b67d90b3673159611170ddbaba4bb79af1/Assets/Game/Hotel/Content/HotelStoryProject.cs), [担当変更 8505173](https://github.com/YSL-RyuDo/Puzzle-Spire/commit/8505173364c11e98730b2a61ad8503cb52bc9ccd)
+
 ## 担当した内容
 
 調査・会話・パズルの進行を実装し、パズルのドメイン規則と画面表示を分離しました。
@@ -30,12 +64,6 @@
 推理アドベンチャーの調査・会話・パズルを連携し、新しい物語の制作・読み込み時に本編と保存状態が混ざらないよう構成しました。
 
 パズルのドメインルールと表示を分離し、クリア検証、物語の編集・書き出し、ローカルMODごとの独立した保存状態を実装しました。
-
-| 領域 | 実装 |
-|---|---|
-| ルール | パズルのドメインルールとクリア検証 |
-| 表示 | 調査・会話・パズルUI |
-| ストーリー | JSON・PNG読み込み、編集・出力、ローカルストーリー別の保存 |
 
 ## コードの動作と実装構造の理由
 

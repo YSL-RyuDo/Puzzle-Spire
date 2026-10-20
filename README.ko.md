@@ -11,6 +11,40 @@
 
 [개발 사례 보기](https://ysl-ryudo.github.io/ko/work/moonlit/), [Portfolio](https://ysl-ryudo.github.io/ko/)
 
+## 게임 전체에서 맡은 구현
+
+Moonlit Hotel은 조사와 이야기 진행, 매치 퍼즐 규칙, 사용자가 직접 만드는 제작 도구를 포함합니다. 규칙 Resolver와 MOD 형식 외에도 캠페인 흐름과 단서 수집, 퍼즐 표시, 이야기 편집과 퍼즐 시험을 구현했습니다.
+
+**플레이 흐름**
+
+호텔 탐색 → 조사와 단서 기록 → 대화와 수수께끼 → 퍼즐 해결 → 이야기 진행 → 새 콘텐츠 제작과 시험
+
+소스 링크는 확인한 버전에 고정하고 기여 링크는 제가 작성한 병합 외 변경을 가리킵니다. 공동 파일을 연결했다고 단독 작성이라는 뜻은 아닙니다. 비공개 소스는 저장소 접근 권한이 필요합니다.
+
+### 조사와 이야기 진행
+
+새 게임과 이어하기, 장소와 노드 진행, 대화와 수수께끼, 결말을 구현했습니다. 조사한 객체와 수첩 및 수집 항목을 기록해 월드 상호작용을 플레이어의 누적 단서에 연결했습니다.
+
+[HotelGame.cs (main)](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/530565b67d90b3673159611170ddbaba4bb79af1/Assets/Game/Hotel/Presentation/HotelGame.cs), [내 변경 65c3791](https://github.com/YSL-RyuDo/Puzzle-Spire/commit/65c379100887602f8a06cbcfb8edf00d0d512ea6), [HotelInvestigation.cs (main)](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/530565b67d90b3673159611170ddbaba4bb79af1/Assets/Game/Hotel/Presentation/HotelInvestigation.cs), [내 변경 26d8094](https://github.com/YSL-RyuDo/Puzzle-Spire/commit/26d8094e20e400818c2576b1406bdb24f4adf7cf)
+
+### 퍼즐 규칙과 턴 연출
+
+매치와 특수 블록, 장애물과 목표의 규칙 계층, 이동과 제거 및 효과의 표시 계층을 구현했습니다. 화면의 콜백만으로 규칙을 결정하지 않고 계산한 결과에 따라 턴을 표시합니다.
+
+[HotelPuzzle.cs (main)](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/530565b67d90b3673159611170ddbaba4bb79af1/Assets/Game/Hotel/Gameplay/HotelPuzzle.cs), [내 변경 8505173](https://github.com/YSL-RyuDo/Puzzle-Spire/commit/8505173364c11e98730b2a61ad8503cb52bc9ccd), [HotelPuzzlePresentation.cs (main)](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/530565b67d90b3673159611170ddbaba4bb79af1/Assets/Game/Hotel/Presentation/HotelPuzzlePresentation.cs), [내 변경 8505173](https://github.com/YSL-RyuDo/Puzzle-Spire/commit/8505173364c11e98730b2a61ad8503cb52bc9ccd)
+
+### Story Studio 이야기 제작
+
+이야기 노드와 선택지 편집, 조사와 수수께끼 입력 화면, 미리보기를 구현했습니다. 이야기 프로젝트를 검사하고 콘텐츠 팩으로 내보낼 수 있습니다. 이야기를 바꿀 때마다 개발자가 코드를 고치는 대신 제작과 시험을 제품 안에서 연결했습니다.
+
+[HotelStoryStudioEditing.cs (main)](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/530565b67d90b3673159611170ddbaba4bb79af1/Assets/Game/Hotel/Presentation/HotelStoryStudioEditing.cs), [내 변경 8505173](https://github.com/YSL-RyuDo/Puzzle-Spire/commit/8505173364c11e98730b2a61ad8503cb52bc9ccd), [HotelStoryProject.cs (main)](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/530565b67d90b3673159611170ddbaba4bb79af1/Assets/Game/Hotel/Content/HotelStoryProject.cs), [내 변경 8505173](https://github.com/YSL-RyuDo/Puzzle-Spire/commit/8505173364c11e98730b2a61ad8503cb52bc9ccd)
+
+### Puzzle Workshop과 콘텐츠 저장
+
+Puzzle Workshop에서 보드 편집과 프로젝트 저장 및 불러오기, 플레이 시험과 내보내기 검사를 구현했습니다. 외형만 바꾸는 테마와 내용을 바꾸는 콘텐츠의 저장 경계를 나눠 외형 변경 때문에 캠페인 진행이 불필요하게 분리되지 않도록 했습니다.
+
+[HotelPuzzleWorkshop.cs (main)](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/530565b67d90b3673159611170ddbaba4bb79af1/Assets/Game/Hotel/Presentation/HotelPuzzleWorkshop.cs), [내 변경 8505173](https://github.com/YSL-RyuDo/Puzzle-Spire/commit/8505173364c11e98730b2a61ad8503cb52bc9ccd), [HotelStoryProject.cs (main)](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/530565b67d90b3673159611170ddbaba4bb79af1/Assets/Game/Hotel/Content/HotelStoryProject.cs), [내 변경 8505173](https://github.com/YSL-RyuDo/Puzzle-Spire/commit/8505173364c11e98730b2a61ad8503cb52bc9ccd)
+
 ## 내 기여
 
 조사, 대화, 퍼즐 진행을 구현하고 퍼즐 규칙과 화면 표현을 분리했습니다.
@@ -30,12 +64,6 @@
 추리 어드벤처의 조사, 대화, 퍼즐을 연결하고, 새 이야기를 제작, 로드할 때 본편과 저장 상태가 섞이지 않도록 구성했습니다.
 
 퍼즐 도메인 규칙과 표현을 분리하고 클리어 검증, 이야기 편집, 내보내기와 로컬 MOD별 독립 저장 상태를 구현했습니다.
-
-| 영역 | 구현 |
-|---|---|
-| 규칙 | 퍼즐 도메인 규칙과 클리어 검증 |
-| 표현 | 조사, 대화, 퍼즐 UI |
-| 스토리 콘텐츠 | JSON, PNG 로딩, 편집, 내보내기, 로컬 스토리별 저장 |
 
 ## 코드의 동작과 구현 방식을 택한 이유
 
