@@ -1,33 +1,22 @@
-# Moonlit Hotel / 잔월 호텔
+# Moonlit Hotel
 
 [English](README.md) · [Korean](README.ko.md) · [Japanese](README.ja.md)
+
+조사·대화·퍼즐을 결합하고 로컬 스토리 제작을 지원하는 미스터리 어드벤처입니다.
 
 **C# · Unity · JSON / PNG** · 플레이 가능한 프로토타입
 
 [개발 사례 보기](https://ysl-ryudo.github.io/ko/work/moonlit/) · [Portfolio](https://ysl-ryudo.github.io/ko/)
 
+[Puzzle-Spire](https://github.com/YSL-RyuDo/Puzzle-Spire) (비공개 · 접근 권한 필요)
 
-Puzzle Spire 블록 퍼즐 규칙을 기반으로 한 플레이 가능한 Unity 추리 어드벤처 프로토타입으로, 게임 내 이야기·퍼즐 제작 도구를 포함합니다.
+## 시스템별 담당 내용
 
-![Moonlit Hotel / 잔월 호텔](Docs/Images/base-dialogue.png)
-
-## 해결하려던 문제
-
-추리 어드벤처의 조사·대화·퍼즐을 연결하고, 새 이야기를 제작·로드할 때 본편과 저장 상태가 섞이지 않도록 구성했습니다.
-
-## 내 구현과 설계
-
-퍼즐 도메인 규칙과 표현을 분리하고 클리어 검증, 이야기 편집·내보내기와 로컬 MOD별 독립 저장 상태를 구현했습니다.
-
-### 구현 개요 · 개념 흐름도
-
-```mermaid
-flowchart LR
-    N0["JSON / PNG content"] --> N1
-    N1["Puzzle domain rules"] --> N2
-    N2["Dialogue / presentation"] --> N3
-    N3["Independent save state"]
-```
+| 영역 | 구현 |
+|---|---|
+| 규칙 | 퍼즐 도메인 규칙과 클리어 검증 |
+| 표현 | 조사·대화·퍼즐 UI |
+| 스토리 콘텐츠 | JSON·PNG 로딩, 편집·내보내기, 로컬 스토리별 저장 |
 
 ## 내 기여
 
@@ -57,7 +46,3 @@ flowchart LR
 - [Docs/FullPlayVerification.md](Docs/FullPlayVerification.md)
 - [Docs/HotelPrototype.md](Docs/HotelPrototype.md)
 - [Docs/ThemeMods.md](Docs/ThemeMods.md)
-
-## 구현을 확인하는 방법
-
-2026-10-08 기록에는 EditMode 테스트 141개가 있습니다. 전체 플레이·스토리 MOD 점검 기록도 함께 볼 수 있으며, 규칙상 가능한 이동만으로 사람의 난이도나 재미를 입증하지는 않습니다.

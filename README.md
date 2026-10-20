@@ -1,33 +1,22 @@
-# Moonlit Hotel / 잔월 호텔
+# Moonlit Hotel
 
 [English](README.md) · [Korean](README.ko.md) · [Japanese](README.ja.md)
+
+A mystery adventure combining investigation, dialogue and puzzles with local story authoring.
 
 **C# · Unity · JSON / PNG** · Playable prototype
 
 [Explore the case](https://ysl-ryudo.github.io/en/work/moonlit/) · [Portfolio](https://ysl-ryudo.github.io/en/)
 
+[Puzzle-Spire](https://github.com/YSL-RyuDo/Puzzle-Spire) (Private · access required)
 
-A playable Unity mystery-adventure prototype built on Puzzle Spire's block-puzzle rules, with in-game story and puzzle authoring.
+## System responsibilities
 
-![Moonlit Hotel / 잔월 호텔](Docs/Images/base-dialogue.png)
-
-## The engineering problem
-
-A mystery adventure combines investigation, dialogue and puzzles. Authoring and loading new stories should not mix their save state with the base game.
-
-## My implementation
-
-I separated puzzle domain rules from presentation, implemented clear-validation and story editing/export, and gave local MOD stories independent save state.
-
-### Implementation overview · conceptual flow
-
-```mermaid
-flowchart LR
-    N0["JSON / PNG content"] --> N1
-    N1["Puzzle domain rules"] --> N2
-    N2["Dialogue / presentation"] --> N3
-    N3["Independent save state"]
-```
+| Area | Implementation |
+|---|---|
+| Rules | Puzzle domain rules and clear validation |
+| Presentation | Investigation, dialogue and puzzle UI |
+| Story content | JSON/PNG loading, editor/export and independent local-story saves |
 
 ## My contribution
 
@@ -57,7 +46,3 @@ Playable prototype. The README's 2026-10-08 record reports 141 EditMode tests; s
 - [Docs/FullPlayVerification.md](Docs/FullPlayVerification.md)
 - [Docs/HotelPrototype.md](Docs/HotelPrototype.md)
 - [Docs/ThemeMods.md](Docs/ThemeMods.md)
-
-## How to evaluate the work
-
-The 2026-10-08 record reports 141 EditMode tests. Read the full-play and story-MOD walkthrough records as well; legal moves do not by themselves establish human difficulty or enjoyment.
