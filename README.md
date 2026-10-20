@@ -23,7 +23,7 @@ The match-three board connects valid swaps, goal counts and the remaining move b
 
 Dialogue progresses through authored story nodes and character presentation.
 
-[Watch gameplay](https://ysl-ryudo.github.io/en/work/moonlit/#gameplay), First investigation, dialogue, puzzle, collected clue and save/resume, 0:40. Recorded in-engine with scripted inputs on 20 October 2026.
+[Watch gameplay](https://ysl-ryudo.github.io/en/work/moonlit/#gameplay), First investigation, dialogue, puzzle, collected clue and save/resume, 0:40. Captured in-engine on 20 October 2026.
 
 ## What I built across the game
 
