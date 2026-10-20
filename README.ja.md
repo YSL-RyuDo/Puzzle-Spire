@@ -1,6 +1,8 @@
 # Moonlit Hotel
 
-[English](README.md), [Korean](README.ko.md), [Japanese](README.ja.md)
+<!-- portfolio-languages -->
+[![English](https://ysl-ryudo.github.io/assets/diagrams/language-en.svg)](README.md) [![한국어](https://ysl-ryudo.github.io/assets/diagrams/language-ko.svg)](README.ko.md) [![日本語（選択中）](https://ysl-ryudo.github.io/assets/diagrams/language-ja-current.svg)](README.ja.md)
+<!-- /portfolio-languages -->
 
 調査・会話・パズルを組み合わせ、ローカルストーリー制作に対応するミステリーアドベンチャーです。
 
@@ -11,15 +13,23 @@
 
 [開発事例を見る](https://ysl-ryudo.github.io/ja/work/moonlit/), [Portfolio](https://ysl-ryudo.github.io/ja/)
 
+## ゲーム内の実装
+
+[![有効な交換、目標数、残り手数が連動するマッチ3パズル。](https://ysl-ryudo.github.io/assets/gameplay/moonlit-puzzle.webp)](https://ysl-ryudo.github.io/assets/gameplay/moonlit-puzzle.webp)
+
+有効な交換、目標数、残り手数が連動するマッチ3パズル。
+
+[![ストーリーノードの順序に沿って会話と人物表示が進行します。](https://ysl-ryudo.github.io/assets/gameplay/moonlit-dialogue.webp)](https://ysl-ryudo.github.io/assets/gameplay/moonlit-dialogue.webp)
+
+ストーリーノードの順序に沿って会話と人物表示が進行します。
+
+[プレイ動画を見る](https://ysl-ryudo.github.io/ja/work/moonlit/#gameplay), 最初の調査、会話、パズル、手がかり収集、保存後の再開、40秒。2026年10月20日にゲーム内の自動入力で収録。
+
 ## ゲーム全体で担当した実装
 
 Moonlit Hotelは調査・物語進行、マッチパズル規則、利用者向け制作ツールを含みます。ResolverとMOD形式に加え、キャンペーン・手掛かり収集・パズル表示・物語編集・試験を実装しました。
 
-**プレイの流れ**
-
-ホテル探索 → 調査と手掛かり記録 → 会話となぞ → パズル解決 → 物語進行 → 新規コンテンツ制作・試験
-
-ソースリンクは確認した版に固定し、担当リンクは自分のマージ以外の変更を示します。共同ファイルは単独著作を意味しません。非公開ソースには閲覧権限が必要です。
+[![担当実装の流れ](https://ysl-ryudo.github.io/assets/diagrams/moonlit-flow-ja.svg)](https://ysl-ryudo.github.io/assets/diagrams/moonlit-flow-ja.svg)
 
 ### 調査と物語進行
 
@@ -45,19 +55,11 @@ Puzzle Workshopで盤面編集、プロジェクト保存・読込、試遊、�
 
 [HotelPuzzleWorkshop.cs (main)](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/530565b67d90b3673159611170ddbaba4bb79af1/Assets/Game/Hotel/Presentation/HotelPuzzleWorkshop.cs), [担当変更 8505173](https://github.com/YSL-RyuDo/Puzzle-Spire/commit/8505173364c11e98730b2a61ad8503cb52bc9ccd), [HotelStoryProject.cs (main)](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/530565b67d90b3673159611170ddbaba4bb79af1/Assets/Game/Hotel/Content/HotelStoryProject.cs), [担当変更 8505173](https://github.com/YSL-RyuDo/Puzzle-Spire/commit/8505173364c11e98730b2a61ad8503cb52bc9ccd)
 
-## 担当した内容
-
-調査・会話・パズルの進行を実装し、パズルのドメイン規則と画面表示を分離しました。
-
-パズルのクリア検証、物語編集・書き出し、MODごとのセーブ分離を実装しました。
-
-ローカルJSON・PNGの読み込みとテーマ切り替えを実装しました。別プラットフォームのバックエンドは本クライアントの担当範囲に含めません。
-
 ## 貢献の根拠
 
 [Documented source baseline](https://github.com/YSL-RyuDo/Puzzle-Spire/tree/70129f77f42290735ff768192b63a08558fb2d84)
 
-コミットは記載した変更の根拠であり、貢献率の点数ではありません。外部素材・チームメンバーの貢献は区別します。
+外部素材・チームメンバーの貢献は区別します。
 
 ## 実装と設計
 
@@ -66,8 +68,6 @@ Puzzle Workshopで盤面編集、プロジェクト保存・読込、試遊、�
 パズルのドメインルールと表示を分離し、クリア検証、物語の編集・書き出し、ローカルMODごとの独立した保存状態を実装しました。
 
 ## コードの動作と実装構造の理由
-
-確認した実装が扱う制約と利点・代償を説明します。設計効果の説明はコード分析であり、比較する全代案を当時試作したという意味ではありません。担当リンクは共同制作内の変更を示し、ソースの閲覧権限は維持します。
 
 ### パズル規則を画面演出から分ける理由
 
@@ -85,7 +85,7 @@ PuzzleTurnResolverは盤面データに対して連結ブロック探索、削�
 
 **利点・代償と検証範囲**
 
-代わりにインターフェースと結果データが増え、ドメイン状態と演出進行の同期が必要です。規則テストの成功はシーン全体の演出タイミングや入力の正しさを意味せず、両方の検査が必要です。
+分離に伴いインターフェースと結果データが増えます。入力・アニメーション・次ターンが完了時点を共有するよう、規則の結果と演出を同期する必要があります。
 
 [Puzzle-Spire/PuzzleTurnResolver.cs](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/6374c613fbce11db7b1b0927098d372b480bd420/Assets/Game/Domain/Puzzle/Rules/PuzzleTurnResolver.cs)
 
@@ -105,7 +105,7 @@ PuzzleTurnResolverは盤面データに対して連結ブロック探索、削�
 
 **利点・代償と検証範囲**
 
-現状は同時に一つのMODを使うため、重複時の優先順位を減らせる一方、組合せは制限されます。パスと画像の検査は入力制約であり、任意スクリプトや公開オンラインワークショップ対応を意味しません。
+同時に1つのMODだけを適用し、上書き優先順位の衝突を減らす一方、組合せを制限します。内容変更には保存互換性と版管理の規則も必要です。
 
 [Puzzle-Spire/ThemeMods.md](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/6374c613fbce11db7b1b0927098d372b480bd420/Docs/ThemeMods.md)
 

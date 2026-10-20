@@ -1,6 +1,8 @@
 # Moonlit Hotel
 
-[English](README.md), [Korean](README.ko.md), [Japanese](README.ja.md)
+<!-- portfolio-languages -->
+[![English (current)](https://ysl-ryudo.github.io/assets/diagrams/language-en-current.svg)](README.md) [![한국어](https://ysl-ryudo.github.io/assets/diagrams/language-ko.svg)](README.ko.md) [![日本語](https://ysl-ryudo.github.io/assets/diagrams/language-ja.svg)](README.ja.md)
+<!-- /portfolio-languages -->
 
 A mystery adventure combining investigation, dialogue and puzzles with local story authoring.
 
@@ -11,15 +13,23 @@ A mystery adventure combining investigation, dialogue and puzzles with local sto
 
 [Explore the case](https://ysl-ryudo.github.io/en/work/moonlit/), [Portfolio](https://ysl-ryudo.github.io/en/)
 
+## Inside the game
+
+[![The match-three board connects valid swaps, goal counts and the remaining move budget.](https://ysl-ryudo.github.io/assets/gameplay/moonlit-puzzle.webp)](https://ysl-ryudo.github.io/assets/gameplay/moonlit-puzzle.webp)
+
+The match-three board connects valid swaps, goal counts and the remaining move budget.
+
+[![Dialogue progresses through authored story nodes and character presentation.](https://ysl-ryudo.github.io/assets/gameplay/moonlit-dialogue.webp)](https://ysl-ryudo.github.io/assets/gameplay/moonlit-dialogue.webp)
+
+Dialogue progresses through authored story nodes and character presentation.
+
+[Watch gameplay](https://ysl-ryudo.github.io/en/work/moonlit/#gameplay), First investigation, dialogue, puzzle, collected clue and save/resume, 0:40. Recorded in-engine with scripted inputs on 20 October 2026.
+
 ## What I built across the game
 
 Moonlit Hotel includes an investigation/story game, a match-puzzle domain and player-facing authoring tools. I implemented campaign flow, clue collection, puzzle presentation, story editing and puzzle testing, in addition to the rule resolver and MOD formats.
 
-**Player flow**
-
-Explore the hotel → inspect and record clues → dialogue and riddles → puzzle resolution → story progression → author and test new content
-
-Source links pin the inspected revision; contribution links identify my non-merge changes. Shared-file links do not imply sole authorship. Private source requires repository access.
+[![My implementation flow](https://ysl-ryudo.github.io/assets/diagrams/moonlit-flow-en.svg)](https://ysl-ryudo.github.io/assets/diagrams/moonlit-flow-en.svg)
 
 ### Investigation and story progression
 
@@ -45,19 +55,9 @@ Implemented board editing, project load/save, playtesting and export validation 
 
 [HotelPuzzleWorkshop.cs (main)](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/530565b67d90b3673159611170ddbaba4bb79af1/Assets/Game/Hotel/Presentation/HotelPuzzleWorkshop.cs), [My change 8505173](https://github.com/YSL-RyuDo/Puzzle-Spire/commit/8505173364c11e98730b2a61ad8503cb52bc9ccd), [HotelStoryProject.cs (main)](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/530565b67d90b3673159611170ddbaba4bb79af1/Assets/Game/Hotel/Content/HotelStoryProject.cs), [My change 8505173](https://github.com/YSL-RyuDo/Puzzle-Spire/commit/8505173364c11e98730b2a61ad8503cb52bc9ccd)
 
-## My contribution
-
-Implemented investigation/dialogue/puzzle progression and separated puzzle domain rules from presentation.
-
-Built puzzle clear-validation and story editing/export, with independent MOD save state.
-
-Implemented local JSON/PNG content loading and theme switching. The separate platform backend is not part of this client's contribution claim.
-
 ## Contribution evidence
 
 [Documented source baseline](https://github.com/YSL-RyuDo/Puzzle-Spire/tree/70129f77f42290735ff768192b63a08558fb2d84)
-
-Commits are evidence of the stated changes, not a percentage-of-authorship score. Third-party assets and teammates' work remain separately credited.
 
 ## Implementation and design
 
@@ -66,8 +66,6 @@ A mystery adventure combines investigation, dialogue and puzzles. Authoring and 
 I separated puzzle domain rules from presentation, implemented clear-validation and story editing/export, and gave local MOD stories independent save state.
 
 ## How the code works and why it is structured this way
-
-These notes connect the inspected implementation to the constraints it addresses and its tradeoffs. Explanations of design consequences are code analysis, not a claim that every alternative was prototyped. Contribution links identify my changes within team projects; source links retain their original access permissions.
 
 ### Puzzle rules do not depend on the animation finishing
 
@@ -85,7 +83,7 @@ Putting rules in MonoBehaviour callbacks minimizes boundaries in a small prototy
 
 **Tradeoffs and verification**
 
-The cost is more interfaces, result data and synchronization between domain state and presentation. A passing rule test does not establish correct animation timing or input behavior in the complete scene; both layers need their own checks.
+The separation adds interfaces and result data. Rule outcomes and presentation timing must be coordinated so input, animation and the next turn agree on when resolution is complete.
 
 [Puzzle-Spire/PuzzleTurnResolver.cs](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/6374c613fbce11db7b1b0927098d372b480bd420/Assets/Game/Domain/Puzzle/Rules/PuzzleTurnResolver.cs)
 
@@ -105,7 +103,7 @@ Isolating every MOD's save avoids sharing but needlessly separates progress for 
 
 **Tradeoffs and verification**
 
-The current design loads one MOD at a time, which avoids defining precedence across combinations but limits composition. Path and image checks constrain inputs; they do not establish support for arbitrary scripts or a published online workshop.
+Only one MOD is active at a time, reducing override-precedence conflicts but limiting combinations. Content changes also need save compatibility and versioning rules.
 
 [Puzzle-Spire/ThemeMods.md](https://github.com/YSL-RyuDo/Puzzle-Spire/blob/6374c613fbce11db7b1b0927098d372b480bd420/Docs/ThemeMods.md)
 
